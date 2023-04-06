@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { urlWeather } from "./endpoints";
+import { Navbar, Hero } from "./components";
+import { background } from "./assets";
 
 const App = () => {
   useEffect(() => {
@@ -10,9 +12,9 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <h1>elo</h1>
-      <p>Communcationg with ASP.NET Core</p>
+    <div className="w-full h-full bg-fill bg-[url('./assets/background.jpg')]">
+      <Navbar />
+      <Hero />
     </div>
   );
 };

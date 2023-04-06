@@ -1,11 +1,13 @@
-// Stałe ułatwiające ułatwiające pracę
+// Stałe ułatwiające pracę
 
 export const styles = {
   boxWidth: "xl:max-w-[1280px] w-full",
 
   logo: "font-poppins font-bold xs:text-[30px] text-[24px] gradient",
+  heading:
+    "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[60px] leading-[60px] w-full",
   heading2:
-    "font-poppins font-semibold xs:text-[48px] text-[40px] text-white xs:leading-[76.8px] leading-[66.8px] w-full",
+    "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[60px] leading-[60px] w-full",
   paragraph:
     "font-poppins text-dimWhite font-normal text-[18px] leading-[30.8px]",
   icons: "font-poppins text__gradient text-[68px]",
@@ -32,5 +34,3 @@ export const layout = {
 
   sectionInfo: `flex-1 ${styles.flexStart} flex-col`,
 };
-
-export default styles;

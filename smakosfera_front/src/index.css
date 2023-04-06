@@ -3,3 +3,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html, body, #root{
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  scroll-behavior: smooth !important;
+  box-sizing: border-box;
+}
+bg-dark {
+  background-color: #1e1e1e;
+}
+.bg-black-gradient {
+  background: linear-gradient(
+    144.39deg,
+    #ffffff -278.56%,
+    #6d6d6d -78.47%,
+    #000000 91.61%
+  );
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}
+a:hover{
+  text-decoration: none;
+  color: inherit;
+}
+
+
