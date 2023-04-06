@@ -1,16 +1,16 @@
 import axios from "axios";
 import { useEffect } from "react";
-import React from "react";
+import { urlWeather } from "./endpoints";
 
 const App = () => {
   useEffect(() => {
-    axios.get("https://localhost:7031/WeatherForecast").then((response) => {
+    axios.get(urlWeather).then((response) => {
       console.log(response.data);
     });
   }, []);
 
   return (
-    <div className="">
+    <div>
       <h1>elo</h1>
       <p>Communcationg with ASP.NET Core</p>
     </div>
