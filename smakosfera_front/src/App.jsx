@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { urlWeather } from "./endpoints";
-import { Navbar, Hero } from "./components";
-import { background } from "./assets";
+import { Navbar, Hero, RegisterForm } from "./components";
 
 const App = () => {
   useEffect(() => {
@@ -11,11 +10,17 @@ const App = () => {
     });
   }, []);
 
-  return (
-    <div className="w-full h-full bg-fill bg-[url('./assets/background.jpg')]">
+
+  {/*<div className="w-full h-full bg-fill bg-[url('./assets/background.jpg')]">
       <Navbar />
       <Hero />
+  </div>*/}
+
+  return (
+    <div className="w-full h-full flex flex-row items-center bg-fill bg-[url('./assets/background.jpg')]">
+      <RegisterForm />
     </div>
+    
   );
 };
 

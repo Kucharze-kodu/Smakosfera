@@ -19,7 +19,7 @@ const Hero = () => {
         speed = {50}
         deletionSpeed = {50}
         cursor = {false}
-        className={`${styles.heading} my-12  text-white`}
+        className={`${styles.heading} my-12 text-white`}
       /> 
       <div className="flex flex-row">
         <Button text="Zaloguj się!" />

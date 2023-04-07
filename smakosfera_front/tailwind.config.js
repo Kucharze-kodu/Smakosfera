@@ -9,8 +9,8 @@ export default {
         secondary: "#00f6ff",
         dimWhite: "rgba(255, 255, 255, 0.7)",
         dimBlue: "rgba(9, 151, 124, 0.1)",
-        red: "rgba(250, 66, 56, 0.8)",
-        dimRed: "rgba(250, 66, 56, 0.5)",
+        red: "#fa4238cc",
+        dimRed: "#fa423880",
       },
       fontFamily:{
         poppins: ["Poppins", "sans-serif"],
