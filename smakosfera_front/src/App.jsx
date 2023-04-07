@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { urlWeather } from "./endpoints";
-import { Navbar, Hero, RegisterForm } from "./components";
+import { LandingPage, PageNotFound, RegisterForm, LoginForm } from "./components";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   useEffect(() => {
@@ -10,17 +11,15 @@ const App = () => {
     });
   }, []);
 
-
-  {/*<div className="w-full h-full bg-fill bg-[url('./assets/background.jpg')]">
-      <Navbar />
-      <Hero />
-  </div>*/}
-
   return (
-    <div className="w-full h-full flex flex-row items-center bg-fill bg-[url('./assets/background.jpg')]">
-      <RegisterForm />
-    </div>
-    
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="RegisterForm" element={<RegisterForm />} />
+        <Route path="LoginForm" element={<LoginForm />} />
+        <Route path="*" element={<PageNotFound/>} />
+      </Routes>
+    </Router>
   );
 };
 
