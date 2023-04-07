@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
+import { styles } from "../style";
 
 const Button = ({ text }) => {
   return (
     <div
       type="button"
-      className="rounded-[10px] hover:border-orange-600 text-red border-red border-[2px] mx-2 border-solid cursor-pointer z-[1] p-6 font-poppins text-[18px] button-red"
+      className={`${styles.paragraph} rounded-[10px] text-red border-[2px] border-red hover:border-orange-600  mx-2 cursor-pointer p-6`}
     >
       {text}
     </div>

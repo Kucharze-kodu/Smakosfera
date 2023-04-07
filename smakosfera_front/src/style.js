@@ -5,9 +5,9 @@ export const styles = {
 
   logo: "font-poppins font-bold xs:text-[30px] text-[24px] gradient",
   heading:
-    "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[60px] leading-[60px] w-full",
+    "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] leading-[72px] w-full",
   heading2:
-    "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[60px] leading-[60px] w-full",
+    "font-poppins font-semibold xs:text-[3rem] text-[2rem] leading-[72px] w-full",
   paragraph:
     "font-poppins text-dimWhite font-normal text-[18px] leading-[30.8px]",
   icons: "font-poppins text__gradient text-[68px]",
