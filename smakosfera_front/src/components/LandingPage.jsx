@@ -1,9 +1,10 @@
-import Navbar from "./Navbar";
+import Navbar from "./Logo";
 import Hero from "./Hero";
+import { styles } from "../style";
 
 const LandingPage = () => {
   return (
-    <div className="w-full h-full bg-fill bg-[url('./assets/background.jpg')]">
+    <div className={`${styles.background}`}>
       <Navbar />
       <Hero />
     </div>

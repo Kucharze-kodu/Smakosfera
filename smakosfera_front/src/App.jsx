@@ -5,11 +5,13 @@ import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 
 // lazyLoading, dynamiczne ładowanie komponentów tylko wtedy, gdy są potrzebne
-const LandingPage = lazy(() => wait(1000).then(() => import("./components/LandingPage")))
-const LoginForm = lazy(() => wait(1000).then(() => import("./components/LoginForm")))
-const RegisterForm = lazy(() => wait(1000).then(() => import("./components/RegisterForm")))
+const LandingPage = lazy(() => import("./components/LandingPage"))
+const LoginForm = lazy(() => import("./components/LoginForm"))
+const RegisterForm = lazy(() => import("./components/RegisterForm"))
 const LoadingScreen = lazy(() => import("./components/LoadingScreen"))
 const PageNotFound = lazy(() => import("./components/PageNotFound"))
+const Home = lazy(() => import("./components/Home"))
+
 
 const App = () => {
   // fetchowanie z backendu
@@ -22,18 +24,12 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Suspense fallback={<LoadingScreen />}><LandingPage /></Suspense>} />
-      <Route path="RegisterForm" element={<Suspense fallback={<LoadingScreen />}><RegisterForm /></Suspense>} />
-      <Route path="LoginForm" element={<Suspense fallback={<LoadingScreen />}><LoginForm /></Suspense>} />
+      <Route path="register" element={<Suspense fallback={<LoadingScreen />}><RegisterForm /></Suspense>} />
+      <Route path="login" element={<Suspense fallback={<LoadingScreen />}><LoginForm /></Suspense>} />
+      <Route path="home" element={<Suspense fallback={<LoadingScreen />}> <Home /> </Suspense>}>  </Route>
       <Route path="*" element={<Suspense fallback={<LoadingScreen />}> <PageNotFound /> </Suspense>}>  </Route>
     </Routes>
   );
 };
-
-// zasymulowanie opóźnienia internetowego podczas ładowania strony
-function wait(time) {
-  return new Promise (resolve => {
-    setTimeout(resolve, time)
-  })
-}
 
 export default App;

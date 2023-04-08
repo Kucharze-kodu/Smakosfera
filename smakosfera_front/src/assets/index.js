@@ -1,4 +1,5 @@
 import logo from "./logo.png";
+import avatar from "./avatar.png";
 import background from "./background.jpg";
 
-export { logo, background };
+export { logo, avatar, background };

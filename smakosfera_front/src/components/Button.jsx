@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
 import { styles } from "../style";
 
-const Button = ({ text }) => {
+const Button = ({ text, padding, margin, color }) => {
   return (
     <div
       type="button"
-      className={`${styles.paragraph} rounded-[10px] text-red border-[2px] border-red hover:border-orange-600  mx-2 cursor-pointer p-6`}
+      className={`${styles.paragraph} ${padding} ${margin} ${color} text-center rounded-lg border-[2px]  cursor-pointer `}
     >
       {text}
     </div>
@@ -13,6 +13,9 @@ const Button = ({ text }) => {
 };
 Button.propTypes = {
   text: PropTypes.string.isRequired,
+  padding: PropTypes.string.isRequired,
+  margin: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
 };
 
 export default Button;
