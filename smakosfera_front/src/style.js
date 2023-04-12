@@ -1,13 +1,15 @@
 // Stałe ułatwiające pracę
 
 export const styles = {
+  background: "w-full h-full bg-fill bg-[url('./assets/background.jpg')]",
+  
   boxWidth: "xl:max-w-[1280px] w-full",
 
   logo: "font-poppins font-bold xs:text-[30px] text-[24px] gradient",
   heading:
-    "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] leading-[72px] w-full",
+    "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[100px] leading-[50px] w-full",
   heading2:
-    "font-poppins font-semibold xs:text-[3rem] text-[2rem] leading-[72px] w-full",
+    "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
   paragraph:
     "font-poppins text-dimWhite font-normal text-[18px] leading-[30.8px]",
   icons: "font-poppins text__gradient text-[68px]",

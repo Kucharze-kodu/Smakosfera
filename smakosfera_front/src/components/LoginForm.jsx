@@ -4,14 +4,15 @@ import { logo } from "../assets";
 
 const LoginForm = () => {
   return (
-    <div className="w-full h-full flex flex-row items-center bg-fill bg-[url('./assets/background.jpg')]">
-      <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-[white] mx-5 lg:mx-48">
-        <Link to="/" className="w-full h-full">
-          <div className="w-full h-full flex items-center md:items-top justify-center  md:h-full border-b-[1px] md:border-b-[0px] border-r-[0px] md:border-r-[1px] border-r-[dimWhite] border-b-[dimWhite] ">
-            <img className="h-[80%] md:h-[40%] p-5 " src={logo} />
+    <div className={`${styles.background} flex flex-row items-center`}>
+      <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
+        <Link to="/" className="w-full">
+          <div className="flex items-center md:items-top justify-center  md:h-full border-b-[1px] md:border-b-[0px] border-r-[0px] md:border-r-[1px] border-r-dimWhite border-b-dimWhite ">
+            <img className="sm:p-24 md:p-16 p-12" src={logo} />
           </div>
         </Link>
-        <div className="flex flex-col p-3 items-center w-full h-full justify-top md:my-10 text-center">
+
+        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zaloguj się!</div>
           <form className="flex flex-col w-[75%]">
             <input
@@ -19,7 +20,7 @@ const LoginForm = () => {
               id="login"
               name="login"
               title="Wprowadź login :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 mt-2border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
               placeholder="Login:"
               maxLength={100}
               required
@@ -41,10 +42,11 @@ const LoginForm = () => {
               Wyślij!
             </button>
           </form>
-          <Link to="/RegisterForm">
-            <a className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}>
-              Nie masz konta?
-            </a>
+          <Link
+            to="/register"
+            className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
+          >
+            Nie masz konta?
           </Link>
         </div>
       </div>

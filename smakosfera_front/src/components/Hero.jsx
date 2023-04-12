@@ -23,14 +23,14 @@ const Hero = () => {
         className={`${styles.heading} my-12 text-white`}
       />
       <div className="flex flex-row">
-        <Link to="/LoginForm">
-          <Button text="Zaloguj się!" />
+        <Link to="/login">
+          <Button text="Zaloguj się!" padding="p-4" margin="mx-2" color="text-red border-red hover:border-orange-600"/>
         </Link>
-        <Link to="/RegisterForm">
-          <Button text="Zarejestruj się!" />
+        <Link to="/register">
+          <Button text="Zarejestruj się!" padding="p-4" margin="mx-2" color="text-red border-red hover:border-orange-600"/>
         </Link>
       </div>
-      <Link to="/" className={`${styles.paragraph} hover:text-gray-400 my-1 opacity-60`}>
+      <Link to="/home" className={`${styles.paragraph} hover:text-gray-400 my-1 opacity-60`}>
         Kontynuuj bez zalogowania
       </Link>
     </div>
