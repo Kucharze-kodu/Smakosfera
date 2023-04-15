@@ -12,7 +12,6 @@ const LoadingScreen = lazy(() => import("./components/LoadingScreen"))
 const PageNotFound = lazy(() => import("./components/PageNotFound"))
 const Home = lazy(() => import("./components/Home"))
 
-
 const App = () => {
   // fetchowanie z backendu
   useEffect(() => {
@@ -26,7 +25,7 @@ const App = () => {
       <Route path="/" element={<Suspense fallback={<LoadingScreen />}><LandingPage /></Suspense>} />
       <Route path="register" element={<Suspense fallback={<LoadingScreen />}><RegisterForm /></Suspense>} />
       <Route path="login" element={<Suspense fallback={<LoadingScreen />}><LoginForm /></Suspense>} />
-      <Route path="home" element={<Suspense fallback={<LoadingScreen />}> <Home /> </Suspense>}>  </Route>
+      <Route path="home/*" element={<Suspense fallback={<LoadingScreen />}> <Home /> </Suspense>}>  </Route>
       <Route path="*" element={<Suspense fallback={<LoadingScreen />}> <PageNotFound /> </Suspense>}>  </Route>
     </Routes>
   );

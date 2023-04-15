@@ -7,6 +7,10 @@ import Button from './Button';
 import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import Home from './Home';
+import Recipes from './Recipes';
+import MyAccount from './MyAccount';
+import Favorites from './Favorites';
+import AddRecipe from './AddRecipe';
 import Footer from './Footer';
 
 export {
@@ -19,5 +23,9 @@ export {
     RegisterForm,
     LoginForm,
     Home,
+    Recipes,
+    MyAccount,
+    Favorites,
+    AddRecipe,
     Footer
 };
