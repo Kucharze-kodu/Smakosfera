@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace smakosfera_back.Controllers
+namespace Smakosfera.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,4 +1,4 @@
-namespace smakosfera_back
+namespace Smakosfera.WebAPI
 {
     public class WeatherForecast
     {

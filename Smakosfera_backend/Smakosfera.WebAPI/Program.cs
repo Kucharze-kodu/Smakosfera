@@ -8,9 +8,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: frontend_url,
         policy =>
-    {
-        policy.WithOrigins(frontend_url).AllowAnyMethod().AllowAnyHeader();
-    });
+        {
+            policy.WithOrigins(frontend_url).AllowAnyMethod().AllowAnyHeader();
+        });
 });
 
 // Add services to the container.
@@ -30,7 +30,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseCors(frontend_url);
