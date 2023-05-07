@@ -1,4 +1,7 @@
 // React's URL
+using Microsoft.EntityFrameworkCore;
+using Smakosfera.DataAccess.Repositories;
+
 var frontend_url = "http://127.0.0.1:5173";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +22,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<SmakosferaDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), 
+    r => r.MigrationsAssembly("Smakosfera.WebAPI")));
 
 var app = builder.Build();
 
