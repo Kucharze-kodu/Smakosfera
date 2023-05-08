@@ -19,7 +19,7 @@ namespace Smakosfera.DataAccess.Entities
         public string? PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
 
-        public int PermissionId { get; set; }
+        public int PermissionId { get; set; } = 1;
         public virtual Permission Permission { get; set; }
     }
 }
