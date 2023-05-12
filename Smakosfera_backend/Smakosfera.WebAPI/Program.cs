@@ -5,6 +5,9 @@ using Smakosfera.Services.Services;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.DataAccess.Seeder;
 using Smakosfera.WebAPI.Middlewares;
+using Smakosfera.WebAPI.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var frontend_url = "http://127.0.0.1:5173";
 
@@ -18,6 +21,30 @@ builder.Services.AddCors(options =>
         {
             policy.WithOrigins(frontend_url).AllowAnyMethod().AllowAnyHeader();
         });
+});
+
+// Configure Authentication
+var authenticationSettings = new AuthenticationSettings();
+
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+
+builder.Services.AddSingleton(authenticationSettings);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "Bearer";
+    options.DefaultScheme = "Bearer";
+    options.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+    };
 });
 
 // Add services to the container.
@@ -48,6 +75,8 @@ var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<SmakosferaSeeder>();
 seeder.Seed();
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
+app.UseAuthentication();
 
 app.UseHttpsRedirection();
 
