@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Smakosfera.Services\Smakosfera.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middlewares\" />
+  </ItemGroup>
+
 </Project>
