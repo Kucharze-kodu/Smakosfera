@@ -10,4 +10,12 @@
     <ProjectReference Include="..\Smakosfera.DataAccess\Smakosfera.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Authorization\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>
