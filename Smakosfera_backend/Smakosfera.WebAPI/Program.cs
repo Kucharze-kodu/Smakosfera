@@ -32,6 +32,7 @@ builder.Services.AddDbContext<SmakosferaDbContext>(options =>
 
 builder.Services.AddScoped<SmakosferaSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();

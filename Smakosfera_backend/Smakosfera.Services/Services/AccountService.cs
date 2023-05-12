@@ -15,10 +15,12 @@ namespace Smakosfera.Services.Services
     public class AccountService : IAccountService
     {
         private readonly SmakosferaDbContext _dbContext;
+        private readonly IEmailService _emailService;
 
-        public AccountService(SmakosferaDbContext dbContext)
+        public AccountService(SmakosferaDbContext dbContext, IEmailService emailService)
         {
             _dbContext = dbContext;
+            _emailService = emailService;
         }
 
         public void RegisterUser(UserRegisterDto dto)
@@ -43,7 +45,22 @@ namespace Smakosfera.Services.Services
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
 
+            SendVerifacation(user.Email, user.VerifacationToken);
 
+        }
+
+        public void VerifyUser(string token)
+        {
+            var user = _dbContext.Users
+                .FirstOrDefault(r => r.VerifacationToken == token);
+
+            if(user is null)
+            {
+                throw new BadRequestException("Nie można aktywować konta");
+            }
+
+            user.VerifiedAt = DateTime.UtcNow;
+            _dbContext.SaveChanges();
         }
 
         private byte[] CreateHash(string password)
@@ -58,6 +75,24 @@ namespace Smakosfera.Services.Services
         private string CreateRandomToken()
         {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+        }
+
+        private void SendVerifacation(string email, string veryficationToken)
+        {
+
+            StringBuilder stringBuilder = new StringBuilder("");
+            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"https://localhost:7000/api/account/verify/");
+            stringBuilder.Append(veryficationToken.ToString());
+            stringBuilder.Append("\" method=\"POST\">\r\n    <button>Aktywacja</button>\r\n</form>");
+
+            var message = new EmailDto()
+            {
+                To = email,
+                Subject = "Aktywacja konta - Smakosfera",
+                Body = stringBuilder.ToString()
+            };
+
+            _emailService.SendEmail(message);
         }
     }
 }

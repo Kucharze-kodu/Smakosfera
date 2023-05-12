@@ -22,5 +22,11 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok();
         }
 
+        [HttpPost("verify/{token}")]
+        public ActionResult VerifyAccount([FromRoute] string token)
+        {
+            _accountService.VerifyUser(token);
+            return Ok("Konto aktywowane");
+        }
     }
 }

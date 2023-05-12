@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.Services.Interfaces
 {
-    public interface IAccountService
+    public interface IEmailService
     {
-        void RegisterUser(UserRegisterDto dto);
-        void VerifyUser(string token);
+        void SendEmail(EmailDto dto);
     }
 }
