@@ -30,7 +30,7 @@ namespace Smakosfera.Services.Services
 
             if(isExist)
             {
-                throw new BadRequestException("Email is taken");
+                throw new BadRequestException("Email jest zajety");
             }
 
             var user = new User()
@@ -56,10 +56,46 @@ namespace Smakosfera.Services.Services
 
             if(user is null)
             {
-                throw new BadRequestException("Nie można aktywować konta");
+                throw new BadRequestException("Nie mozna aktywowac konta");
             }
 
             user.VerifiedAt = DateTime.UtcNow;
+            _dbContext.SaveChanges();
+        }
+
+        public void ForgotPassword(UserForgotPasswordDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(c => c.Email == dto.Email);
+
+            if(user is null)
+            {
+                throw new NotFoundException("Nie znaleziono emaila");
+            }
+
+            user.PasswordResetToken = CreateRandomToken();
+            user.ResetTokenExpires = DateTime.UtcNow.AddHours(1);
+            _dbContext.SaveChanges();
+
+            SendResetLink(user.Email, user.PasswordResetToken);
+        }
+
+        public void ResetPassword(string token, UserResetPasswordDto dto)
+        {
+            var user = _dbContext.Users.FirstOrDefault(c => c.PasswordResetToken == token);
+
+            if(user is null)
+            {
+                throw new BadRequestException("Nie mozna zresetowac hasla");
+            }
+
+            if(user.ResetTokenExpires < DateTime.UtcNow)
+            {
+                throw new BadRequestException("Link wygasl");
+            }
+
+            user.PasswordHash = CreateHash(dto.NewPassword);
+            user.PasswordResetToken = String.Empty;
+            user.ResetTokenExpires = null;
             _dbContext.SaveChanges();
         }
 
@@ -89,6 +125,23 @@ namespace Smakosfera.Services.Services
             {
                 To = email,
                 Subject = "Aktywacja konta - Smakosfera",
+                Body = stringBuilder.ToString()
+            };
+
+            _emailService.SendEmail(message);
+        }
+
+        private void SendResetLink(string email, string resetToken)
+        {
+            StringBuilder stringBuilder = new StringBuilder("");
+            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"https://localhost:7000/api/account/reset-password/");
+            stringBuilder.Append(resetToken.ToString());
+            stringBuilder.Append("\" method=\"GET\">\r\n<button>Ustaw nowe hasło</button>\r\n</form>");
+
+            var message = new EmailDto()
+            {
+                To = email,
+                Subject = "Reset hasła - Smakosfera",
                 Body = stringBuilder.ToString()
             };
 

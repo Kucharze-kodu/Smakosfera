@@ -11,5 +11,7 @@ namespace Smakosfera.Services.Interfaces
     {
         void RegisterUser(UserRegisterDto dto);
         void VerifyUser(string token);
+        void ForgotPassword(UserForgotPasswordDto dto);
+        void ResetPassword(string token, UserResetPasswordDto dto);
     }
 }
