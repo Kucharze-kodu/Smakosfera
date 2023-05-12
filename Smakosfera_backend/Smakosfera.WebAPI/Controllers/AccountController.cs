@@ -15,6 +15,13 @@ namespace Smakosfera.WebAPI.Controllers
             _accountService = accountService;
         }
 
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] UserLoginDto dto)
+        {
+            var token = _accountService.GenerateJWT(dto);
+            return Ok(token);
+        }
+
         [HttpPost("register")]
         public ActionResult Register([FromBody] UserRegisterDto dto)
         {
