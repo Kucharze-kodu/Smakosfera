@@ -1,6 +1,7 @@
 // React's URL
 using Microsoft.EntityFrameworkCore;
 using Smakosfera.DataAccess.Repositories;
+using Smakosfera.DataAccess.Seeder;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.services;
 using Smakosfera.WebAPI.Controllers;
@@ -40,6 +41,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<SmakosferaSeeder>();
+seeder.Seed();
 
 app.UseHttpsRedirection();
 
