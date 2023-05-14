@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.DataAccess.Entities
 {
-    public class DificultyLevel
+    public class DifficultyLevel
     {
-        public int Id   { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

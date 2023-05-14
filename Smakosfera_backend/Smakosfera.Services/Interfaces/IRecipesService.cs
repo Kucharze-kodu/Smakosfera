@@ -10,10 +10,10 @@ namespace Smakosfera.Services.Interfaces
 {
     public interface IRecipesService    
     {   
-        RecipeDto Get(int recipeId);
+        RecipeDto GetRecipe(int recipeId);
         IEnumerable<Recipe> Browse();
         void Add(RecipeDto dto);
-        void Update(int recipeId, RecipeDto dto);
-        void Delete(int recipeId);
+        bool Update(int recipeId, RecipeDto dto);
+        bool Delete(int recipeId);
     }
 }

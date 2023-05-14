@@ -22,7 +22,7 @@ namespace Smakosfera.WebAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.DificultyLevel", b =>
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.DifficultyLevel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,9 +74,6 @@ namespace Smakosfera.WebAPI.Migrations
                     b.Property<int>("DifficultyLevelId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("DificultyLevelId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("boolean");
 
@@ -92,7 +89,7 @@ namespace Smakosfera.WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DificultyLevelId");
+                    b.HasIndex("DifficultyLevelId");
 
                     b.HasIndex("UserId");
 
@@ -152,9 +149,9 @@ namespace Smakosfera.WebAPI.Migrations
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
                 {
-                    b.HasOne("Smakosfera.DataAccess.Entities.DificultyLevel", "DificultyLevel")
+                    b.HasOne("Smakosfera.DataAccess.Entities.DifficultyLevel", "DifficultyLevel")
                         .WithMany()
-                        .HasForeignKey("DificultyLevelId")
+                        .HasForeignKey("DifficultyLevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -164,7 +161,7 @@ namespace Smakosfera.WebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DificultyLevel");
+                    b.Navigation("DifficultyLevel");
 
                     b.Navigation("User");
                 });
