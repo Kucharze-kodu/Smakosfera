@@ -7,7 +7,7 @@ using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
-using Smakosfera.WebAPI.Authentication;
+using Smakosfera.Services.Settings;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -24,15 +24,18 @@ namespace Smakosfera.Services.Services
         private readonly SmakosferaDbContext _dbContext;
         private readonly IEmailService _emailService;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly HostSettings _host;
 
         public AccountService(
             SmakosferaDbContext dbContext,
             IEmailService emailService,
-            AuthenticationSettings authenticationSettings)
+            AuthenticationSettings authenticationSettings,
+            HostSettings host)
         {
             _dbContext = dbContext;
             _emailService = emailService;
             _authenticationSettings = authenticationSettings;
+            _host = host;
         }
 
         public string GenerateJWT(UserLoginDto dto)
@@ -177,7 +180,9 @@ namespace Smakosfera.Services.Services
         {
 
             StringBuilder stringBuilder = new StringBuilder("");
-            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"https://localhost:7000/api/account/verify/");
+            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"");
+            stringBuilder.Append(_host.Url.ToString());
+            stringBuilder.Append("api/account/verify/");
             stringBuilder.Append(veryficationToken.ToString());
             stringBuilder.Append("\" method=\"POST\">\r\n    <button>Aktywacja</button>\r\n</form>");
 
@@ -194,7 +199,9 @@ namespace Smakosfera.Services.Services
         private void SendResetLink(string email, string resetToken)
         {
             StringBuilder stringBuilder = new StringBuilder("");
-            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"https://localhost:7000/api/account/reset-password/");
+            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"");
+            stringBuilder.Append(_host.Url.ToString());
+            stringBuilder.Append("api/account/reset-password/");
             stringBuilder.Append(resetToken.ToString());
             stringBuilder.Append("\" method=\"GET\">\r\n<button>Ustaw nowe hasło</button>\r\n</form>");
 

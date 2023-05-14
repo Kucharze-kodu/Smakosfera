@@ -1,4 +1,4 @@
-﻿namespace Smakosfera.WebAPI.Authentication
+﻿namespace Smakosfera.Services.Settings
 {
     public class AuthenticationSettings
     {
