@@ -5,7 +5,7 @@ using Smakosfera.Services.Services;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.DataAccess.Seeder;
 using Smakosfera.WebAPI.Middlewares;
-using Smakosfera.WebAPI.Controllers;
+using Smakosfera.Services.services;
 
 var frontend_url = "http://127.0.0.1:5173";
 

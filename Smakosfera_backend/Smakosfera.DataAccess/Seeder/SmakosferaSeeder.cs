@@ -61,8 +61,8 @@ namespace Smakosfera.DataAccess.Seeder
 
             return permissions;
         }
-        
-       
+
+
         private IEnumerable<DificultyLevel> GetDificultyLevels()
         {
             var dificultyLevels = new List<DificultyLevel>()
@@ -93,6 +93,6 @@ namespace Smakosfera.DataAccess.Seeder
 
             return dificultyLevels;
 
-
+        }
     }
 }
