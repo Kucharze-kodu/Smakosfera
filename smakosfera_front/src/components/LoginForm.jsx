@@ -1,27 +1,28 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
-import { useState } from "react";
+import  useForm  from '../hooks/useForm';
+
+const getFreshModel = () =>({
+  email:'',
+  password:''
+})
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange
+  } = useForm(getFreshModel);
+  
+  const handleSubmit= e=>{
+    e.preventDefault();
+    console.log(values);
+  }
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
-
-//const LoginForm = () => {
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -39,8 +40,8 @@ const LoginForm = () => {
               id="email"
               name="email"
               title=""
-              value={email}
-              onChange={handleEmailChange}
+              value={values.email}
+              onChange={handleInputChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
               placeholder="Email:"
               maxLength={100}
@@ -51,8 +52,8 @@ const LoginForm = () => {
               id="password"
               name="password"
               title=""
-              value={password}
-              onChange={handlePasswordChange}
+              value={values.password}
+              onChange={handleInputChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
