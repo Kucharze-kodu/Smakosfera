@@ -1,5 +1,6 @@
 ﻿using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
+using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using System;
@@ -26,7 +27,7 @@ namespace Smakosfera.Services.services
             var result = new RecipeDto();
             if (recipe.IsConfirmed == false) 
             {
-                return result;
+                throw new BadRequestException("Przepis nie potwierdzony");
             }
 
             result = new RecipeDto
