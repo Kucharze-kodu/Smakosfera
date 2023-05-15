@@ -20,7 +20,16 @@ const LoginForm = () => {
   
   const handleSubmit= e=>{
     e.preventDefault();
-    console.log(values);
+    if(validate())
+      console.log(values);
+  }
+
+  const validate = () =>{
+    let temp = {}
+    temp.email = (/\S+@\S+\.\S+/).test(values.email)?"":"Email nie jest poprawny."
+    temp.name = values.name!=""?"":"Pole wymagane."
+    setErrors(temp)
+    return Object.values(temp).every(x=> x == "")
   }
 
   return (
