@@ -29,7 +29,7 @@ const RegisterForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Name:", name);
-    console.log("Surname:", nazwisko);
+    console.log("Surname:", surname);
     console.log("Email:", email);
     console.log("Password:", password);
   };
