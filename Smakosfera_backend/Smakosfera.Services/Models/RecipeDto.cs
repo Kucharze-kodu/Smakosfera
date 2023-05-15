@@ -21,5 +21,6 @@ namespace Smakosfera.Services.Models
         [Required]
         public int PreparationTime { get; set; }
 
+        public bool CommunityRecipe { get; set; } = true; // zmiany?
     }
 }

@@ -23,22 +23,41 @@ namespace Smakosfera.Services.services
         {
             var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
-            var result = new RecipeDto
+            var result = new RecipeDto();
+            if (recipe.IsConfirmed == false) 
+            {
+                return result;
+            }
+
+            result = new RecipeDto
             {
                 Name = recipe.Name,
                 Description = recipe.Description,
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
+                CommunityRecipe = recipe.CommunityRecipe
             };
 
             return result;
         }
 
-        public IEnumerable<Recipe> Browse()
+        public IEnumerable<RecipeDto> Browse()
         {
             var date = _Recipes.Recipes.ToList();
 
-            return date;
+
+            var result = date.FindAll(r => r.IsConfirmed == true)
+                             .Select(r => new RecipeDto()
+                {
+                    Name = r.Name,
+                    Description = r.Description,
+                    DifficultyLevelId = r.DifficultyLevelId,
+                    PreparationTime = r.PreparationTime,
+                    CommunityRecipe = r.CommunityRecipe
+                });
+
+
+            return result;
         }
 
         public void Add(RecipeDto dto)

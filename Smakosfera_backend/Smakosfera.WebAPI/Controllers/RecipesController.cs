@@ -9,7 +9,7 @@ namespace Smakosfera.WebAPI.Controllers
 {
 
     [ApiController]
-    [Route("[/controller/recipe]")]
+    [Route("api/recipe")]
     public class RecipesController : ControllerBase
     {
         private readonly IRecipesService _recipesService;
@@ -20,15 +20,15 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
 
-        [HttpGet("/{id}")]
-        public ActionResult<RecipeDto> Get(int id) 
+        [HttpGet("{id}")]
+        public ActionResult<RecipeDto> Get(int id)
         {
             RecipeDto result = _recipesService.GetRecipe(id);
 
-            return Ok(result); 
+            return Ok(result);
         }
 
-        [HttpGet("/all")]
+        [HttpGet]
         public ActionResult<IEnumerable<RecipeDto>> GetAll()
         {
             var result = _recipesService.Browse();
@@ -36,33 +36,28 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
 
-        [HttpPost("/add")]
+        [HttpPost]
         public ActionResult PostRecipes([FromBody] RecipeDto dto)
         {
             _recipesService.Add(dto);
-            return Created($"controller/recipe/_ADD_Recipe", null);
+            return Created($"ADD Recipe", null);
         }
 
-        [HttpPut("/set{idRecipe}")]
+        [HttpPut("{idRecipe}")]
         public ActionResult Update([FromRoute] int idRecipe, [FromBody] RecipeDto dto)
         {
             var isUpdated = _recipesService.Update(idRecipe, dto);
 
 
-            return Created($"controller/recipe/_Update_Recipe", isUpdated);
+            return Ok("Update Recipe" + isUpdated);
         }
 
-        [HttpDelete("/{id}")]
+        [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
             var isDeleted = _recipesService.Delete(id);
 
-            /*            if (isDeleted) 
-                        {
-                               return NoContent();
-                        }
-                        return NotFound();*/
-            return Created($"controller/recipe/_Update_Recipe", isDeleted);
+            return Ok("Delete Recipe" + isDeleted);
         }
     }
 }
