@@ -26,8 +26,8 @@ const LoginForm = () => {
 
   const validate = () =>{
     let temp = {}
-    temp.email = (/\S+@\S+\.\S+/).test(values.email)?"":"Email nie jest poprawny."
-    temp.name = values.name!=""?"":"Pole wymagane."
+    temp.email = (/\S+@\S+\.\S+/).test(values.email)?"":"Emai nie jest poprawny."
+    temp.password = values.passward!=""?"":"Pole wymagane."
     setErrors(temp)
     return Object.values(temp).every(x=> x == "")
   }
@@ -55,6 +55,8 @@ const LoginForm = () => {
               placeholder="Email:"
               maxLength={100}
               required
+              {...(errors.email && {error:true, helpertext:errors.email})}
+              helperText=".."
             ></input>
             <input
               type="password"
@@ -67,6 +69,7 @@ const LoginForm = () => {
               placeholder="Hasło:"
               maxLength={250}
               required
+              {...(errors.password && {error:true, helpertext:errors.password})}
             ></input>
             <button
               type="submit"
