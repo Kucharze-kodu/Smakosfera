@@ -19,7 +19,7 @@ const RegisterForm = () => {
                 type="text"
                 id="name"
                 name="name"
-                title="Wprowadź imie :)"
+                title=""
                 className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
                 placeholder="Imię:"
                 maxLength={50}
@@ -29,7 +29,7 @@ const RegisterForm = () => {
                 type="text"
                 id="surname"
                 name="surname"
-                title="Wprowadź nazwisko :)"
+                title=""
                 className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 ml-1 mt-3  border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
                 placeholder="Nazwisko:"
                 maxLength={50}
@@ -37,32 +37,32 @@ const RegisterForm = () => {
               ></input>
             </div>
             <input
-              type="text"
-              id="login"
-              name="login"
-              title="Wprowadź login :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 mt-2border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Login (nick):"
-              maxLength={100}
+              type="email"
+              id="email"
+              name="email"
+              title=""
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              placeholder="Email:"
+              maxLength={250}
               required
             ></input>
             <input
               type="password"
               id="password"
               name="password"
-              title="Wprowadź hasło :)"
+              title=""
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
               required
             ></input>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              title="Wprowadź email :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Email:"
+                        <input
+              type="password"
+              id="password"
+              name="password"
+              title=""
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
+              placeholder="Potwierdź hasło:"
               maxLength={250}
               required
             ></input>

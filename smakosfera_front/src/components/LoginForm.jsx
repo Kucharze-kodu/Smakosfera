@@ -1,8 +1,27 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
+import { useState } from "react";
 
 const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Email:", email);
+    console.log("Password:", password);
+  };
+
+//const LoginForm = () => {
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -14,14 +33,16 @@ const LoginForm = () => {
 
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zaloguj się!</div>
-          <form className="flex flex-col w-[75%]">
+          <form className="flex flex-col w-[75%]" onSubmit={handleSubmit}>
             <input
               type="text"
-              id="login"
-              name="login"
-              title="Wprowadź login :)"
+              id="email"
+              name="email"
+              title=""
+              value={email}
+              onChange={handleEmailChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Login:"
+              placeholder="Email:"
               maxLength={100}
               required
             ></input>
@@ -29,7 +50,9 @@ const LoginForm = () => {
               type="password"
               id="password"
               name="password"
-              title="Wprowadź hasło :)"
+              title=""
+              value={password}
+              onChange={handlePasswordChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
