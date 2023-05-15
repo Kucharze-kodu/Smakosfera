@@ -29,7 +29,7 @@ const LoginForm = () => {
     temp.email = (/\S+@\S+\.\S+/).test(values.email)?"":"Emai nie jest poprawny."
     temp.password = values.passward!=""?"":"Pole wymagane."
     setErrors(temp)
-    return Object.values(temp).every(x=> x == "")
+    return Object.values(temp).every(x => x == "")
   }
 
   return (
@@ -55,8 +55,9 @@ const LoginForm = () => {
               placeholder="Email:"
               maxLength={100}
               required
-              {...(errors.email && {error:true, helpertext:errors.email})}
-              helperText=".."
+              //TODO - DISPLAY ERROR
+              //{...(errors.email && {error:true, helpertext:errors.email})}
+              
             ></input>
             <input
               type="password"
@@ -69,7 +70,8 @@ const LoginForm = () => {
               placeholder="Hasło:"
               maxLength={250}
               required
-              {...(errors.password && {error:true, helpertext:errors.password})}
+              //TODO - DISPLAY ERROR
+              //{...(errors.password && {error:true, helpertext:errors.password})}
             ></input>
             <button
               type="submit"
