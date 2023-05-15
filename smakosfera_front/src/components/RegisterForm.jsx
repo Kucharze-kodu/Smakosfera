@@ -1,10 +1,44 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
-import { useState } from "react";
+import  useForm  from "../hooks/useForm";
 
+const getFreshModel = () =>({
+  name:'',
+  surname:'',
+  email:'',
+  password:'',
+  repeat_password:''
+})
 
 const RegisterForm = () => {
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange
+  } = useForm(getFreshModel);
+  
+  const handleSubmit= e=>{
+    e.preventDefault();
+    if(validate())
+      console.log(values);
+  }
+
+  const validate = () =>{
+    let temp = {}
+    temp.name = values.passward!=""?"":"Pole wymagane."
+    temp.surname = values.passward!=""?"":"Pole wymagane."
+    temp.email = (/\S+@\S+\.\S+/).test(values.email)?"":"Email nie jest poprawny."
+    temp.password = values.passward!=""?"":"Pole wymagane."
+    temp.repeat_password = values.repeat_passward!=""?"":"Pole wymagane."
+    //TODO test for same as password? idfk dlaczego nie dziala :D
+    temp.repeat_password = (values.repeat_passward!=values.password)?"":"Hasło nie zgodne z powtórzonym hasłem."  
+    setErrors(temp)
+    return Object.values(temp).every(x => x == "")
+  }
+
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -21,8 +55,8 @@ const RegisterForm = () => {
                 type="text"
                 id="name"
                 name="name"
-                value={name}
-                onChange={handleNameChange}
+                value={values.name}
+                onChange={handleInputChange}
                 title=""
                 className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
                 placeholder="Imię:"
@@ -33,8 +67,8 @@ const RegisterForm = () => {
                 type="text"
                 id="surname"
                 name="surname"
-                value={surname}
-                onChange={handleSurnameChange}
+                value={values.surname}
+                onChange={handleInputChange}
                 title=""
                 className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 ml-1 mt-3  border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
                 placeholder="Nazwisko:"
@@ -46,8 +80,8 @@ const RegisterForm = () => {
               type="email"
               id="email"
               name="email"
-              value={email}
-              onChange={handleEmailChange}
+              value={values.email}
+                onChange={handleInputChange}
               title=""
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
               placeholder="Email:"
@@ -58,8 +92,8 @@ const RegisterForm = () => {
               type="password"
               id="password"
               name="password"
-              value={password}
-              onChange={handlePasswordChange}
+              value={values.password}
+                onChange={handleInputChange}
               title=""
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
@@ -68,13 +102,16 @@ const RegisterForm = () => {
             ></input>
             <input
               type="password"
-              id="password"
-              name="password"
+              id="repeat_password"
+              name="repeat_password"
               title=""
+              value={values.repeat_password}
+              onChange={handleInputChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Potwierdź hasło:"
               maxLength={250}
               required
+              //TODO - DISPLAY ERROR
             ></input>
             <button
               type="submit"
