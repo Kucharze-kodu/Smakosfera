@@ -1,8 +1,37 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
+import  useForm  from '../hooks/useForm';
+
+const getFreshModel = () =>({
+  email:'',
+  password:''
+})
 
 const LoginForm = () => {
+  
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange
+  } = useForm(getFreshModel);
+  
+  const handleSubmit= e=>{
+    e.preventDefault();
+    if(validate())
+      console.log(values);
+  }
+
+  const validate = () =>{
+    let temp = {}
+    temp.email = (/\S+@\S+\.\S+/).test(values.email)?"":"Emai nie jest poprawny."
+    temp.password = values.passward!=""?"":"Pole wymagane."
+    setErrors(temp)
+    return Object.values(temp).every(x => x == "")
+  }
+
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -14,26 +43,35 @@ const LoginForm = () => {
 
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zaloguj się!</div>
-          <form className="flex flex-col w-[75%]">
+          <form className="flex flex-col w-[75%]" onSubmit={handleSubmit}>
             <input
               type="text"
-              id="login"
-              name="login"
-              title="Wprowadź login :)"
+              id="email"
+              name="email"
+              title=""
+              value={values.email}
+              onChange={handleInputChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Login:"
+              placeholder="Email:"
               maxLength={100}
               required
+              //TODO - DISPLAY ERROR
+              //{...(errors.email && {error:true, helpertext:errors.email})}
+              
             ></input>
             <input
               type="password"
               id="password"
               name="password"
-              title="Wprowadź hasło :)"
+              title=""
+              value={values.password}
+              onChange={handleInputChange}
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
               required
+              //TODO - DISPLAY ERROR
+              //{...(errors.password && {error:true, helpertext:errors.password})}
             ></input>
             <button
               type="submit"
