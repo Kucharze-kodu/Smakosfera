@@ -25,6 +25,10 @@ namespace Smakosfera.Services.services
             var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             var result = new RecipeDto();
+            if (recipe == null) 
+            {
+                throw new NotFoundException("Przepisu nie znaleziono");
+            }
             if (recipe.IsConfirmed == false) 
             {
                 throw new BadRequestException("Przepis nie potwierdzony");
@@ -57,6 +61,10 @@ namespace Smakosfera.Services.services
                     CommunityRecipe = r.CommunityRecipe
                 });
 
+            if (result.Any() == false)
+            {
+                throw new BadRequestException("Przepisow są nie potwierdzony");
+            }
 
             return result;
         }
@@ -72,19 +80,18 @@ namespace Smakosfera.Services.services
                 UserId = 23 // zmiana
             };
 
-            Console.WriteLine(one);
             _Recipes.Recipes.Add(one);
             _Recipes.SaveChanges();
 
         }
 
-        public bool Update(int recipeId, RecipeDto dto)
+        public void Update(int recipeId, RecipeDto dto)
         {
             var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             if (result == null) 
             {
-                return false;
+                throw new NotFoundException("Przepisu nie znaleziono");
             }
 
             result.Name = dto.Name;
@@ -94,20 +101,19 @@ namespace Smakosfera.Services.services
 
             _Recipes.SaveChanges();
 
-            return true;
         }
-        public bool Delete(int recipeId)
+        public void Delete(int recipeId)
         {
             var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
-            if( result != null)
+
+            if(result == null)
             {
-                _Recipes.Recipes.Remove(result);
-                _Recipes.SaveChanges();
-                return true;
+                throw new NotFoundException("Przepisu nie znaleziono");
             }
-            return false;
+
+            _Recipes.Recipes.Remove(result);
+            _Recipes.SaveChanges();
+
         }
-
-
     }
 }
