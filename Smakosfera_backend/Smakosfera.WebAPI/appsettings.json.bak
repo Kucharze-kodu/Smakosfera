@@ -1,0 +1,17 @@
+{
+  "Email": {
+    "Host": "",
+    "Username": "",
+    "Password": ""
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "User Id=postgres;Password=ZdałemBazyDanych;Server=db.nkeoqeftlkxfufeichna.supabase.co;Port=5432;Database=postgres"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
