@@ -21,12 +21,21 @@ namespace Smakosfera.DataAccess.Seeder
         {
             if (_dbContext.Database.CanConnect())
             {
+
                 if (!_dbContext.Permissions.Any())
                 {
                     var permissions = GetPermissions();
                     _dbContext.Permissions.AddRange(permissions);
                     _dbContext.SaveChanges();
                 }
+
+                if (!_dbContext.Dificulty_Levels.Any())
+                {
+                    var dificultyLevel = GetDificultyLevels();
+                    _dbContext.Dificulty_Levels.AddRange(dificultyLevel);
+                    _dbContext.SaveChanges();
+                }
+            
             }
         }
 
@@ -51,6 +60,39 @@ namespace Smakosfera.DataAccess.Seeder
             };
 
             return permissions;
+        }
+
+
+        private IEnumerable<DifficultyLevel> GetDificultyLevels()
+        {
+            var dificultyLevels = new List<DifficultyLevel>()
+            {
+                new DifficultyLevel()
+                {
+                    Name = "very easy"
+                },
+
+                new DifficultyLevel()
+                {
+                    Name = "easy"
+                },
+
+                new DifficultyLevel()
+                {
+                    Name = "medium"
+                },
+                new DifficultyLevel()
+                {
+                    Name = "hard"
+                },
+                new DifficultyLevel()
+                {
+                    Name = "very hard"
+                }
+            };
+
+            return dificultyLevels;
+
         }
     }
 }

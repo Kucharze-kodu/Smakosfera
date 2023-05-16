@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 
 namespace Smakosfera.WebAPI.Controllers
 {
@@ -19,7 +22,8 @@ namespace Smakosfera.WebAPI.Controllers
         public ActionResult Login([FromBody] UserLoginDto dto)
         {
             var token = _accountService.GenerateJWT(dto);
-            return Ok(token);
+            var json = JsonConvert.SerializeObject(token);
+            return Ok(json);
         }
 
         [HttpPost("register")]

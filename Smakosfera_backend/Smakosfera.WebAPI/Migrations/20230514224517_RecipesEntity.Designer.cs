@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Smakosfera.DataAccess.Repositories;
@@ -11,9 +12,11 @@ using Smakosfera.DataAccess.Repositories;
 namespace Smakosfera.WebAPI.Migrations
 {
     [DbContext(typeof(SmakosferaDbContext))]
-    partial class SmakosferaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230514224517_RecipesEntity")]
+    partial class RecipesEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,9 +116,9 @@ namespace Smakosfera.WebAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("bytea");
 
                     b.Property<string>("PasswordResetToken")
                         .HasColumnType("text");

@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Smakosfera.Services.Settings;
 
+
 var frontend_url = "http://127.0.0.1:5173";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,12 +60,15 @@ builder.Services.AddSingleton(urlBackend);
 // Add services to the container.
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IRecipesService, RecipeService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SmakosferaDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
     r => r.MigrationsAssembly("Smakosfera.WebAPI")));
+
 
 builder.Services.AddScoped<SmakosferaSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();

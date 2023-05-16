@@ -1,3 +1,3 @@
-const API_URL = 'https://localhost:7031';
+const API_URL = 'https://localhost:7000';
 
-export const urlWeather = `${API_URL}/WeatherForecast`;
+export const urlLogin = `${API_URL}/api/account/login`;

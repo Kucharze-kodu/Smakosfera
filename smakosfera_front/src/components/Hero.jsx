@@ -31,7 +31,7 @@ const Hero = () => {
         </Link>
       </div>
       <Link to="/home" className={`${styles.paragraph} hover:text-gray-400 my-1 opacity-60`}>
-        Kontynuuj bez zalogowania
+        Wejdź na stronę!
       </Link>
     </div>
   );
