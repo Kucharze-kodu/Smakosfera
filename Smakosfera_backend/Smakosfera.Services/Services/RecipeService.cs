@@ -26,13 +26,8 @@ namespace Smakosfera.Services.services
         {
             var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
-<<<<<<< Updated upstream
-            var result = new RecipeDto();
-
-            if (recipe.IsConfirmed == false) 
-=======
             if (recipe is null)
->>>>>>> Stashed changes
+
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
