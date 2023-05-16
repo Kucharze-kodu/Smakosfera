@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smakosfera.Services.services
+namespace Smakosfera.Services.Services
 {
     public class RecipeService : IRecipesService
     {
@@ -52,13 +52,13 @@ namespace Smakosfera.Services.services
 
             var result = date.FindAll(r => r.IsConfirmed == true)
                              .Select(r => new RecipeDto()
-                {
-                    Name = r.Name,
-                    Description = r.Description,
-                    DifficultyLevelId = r.DifficultyLevelId,
-                    PreparationTime = r.PreparationTime,
-                    CommunityRecipe = r.CommunityRecipe
-                });
+                             {
+                                 Name = r.Name,
+                                 Description = r.Description,
+                                 DifficultyLevelId = r.DifficultyLevelId,
+                                 PreparationTime = r.PreparationTime,
+                                 CommunityRecipe = r.CommunityRecipe
+                             });
 
             if (result.Any() == false)
             {
@@ -106,11 +106,11 @@ namespace Smakosfera.Services.services
         {
             var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
-            if (result is null) 
+            if (result is null)
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
-             
+
             _Recipes.Recipes.Remove(result);
             _Recipes.SaveChanges();
 
