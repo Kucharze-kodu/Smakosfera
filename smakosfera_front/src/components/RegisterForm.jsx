@@ -2,6 +2,7 @@ import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
 import  useForm  from "../hooks/useForm";
+import { saveAs } from 'file-saver';
 
 const getFreshModel = () =>({
   name:'',
@@ -22,9 +23,19 @@ const RegisterForm = () => {
   
   const handleSubmit= e=>{
     e.preventDefault();
-    if(validate())
+    if(validate()){
       console.log(values);
+      handleSave();
+    }
   }
+
+  const handleSave = () => {
+    const jsonStr = JSON.stringify(values, null, 2);
+
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+
+    saveAs(blob, 'data.json'); 
+  };
 
   const validate = () =>{
     let temp = {}
