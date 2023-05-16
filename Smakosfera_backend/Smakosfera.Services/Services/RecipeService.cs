@@ -1,4 +1,5 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Org.BouncyCastle.Bcpg;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
@@ -6,6 +7,7 @@ using Smakosfera.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,14 +26,18 @@ namespace Smakosfera.Services.services
         {
             var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
+<<<<<<< Updated upstream
             var result = new RecipeDto();
 
             if (recipe.IsConfirmed == false) 
+=======
+            if (recipe is null)
+>>>>>>> Stashed changes
             {
-                throw new BadRequestException("Przepis nie potwierdzony");
+                throw new NotFoundException("Przepis nie istnieje");
             }
 
-            result = new RecipeDto
+            var result = new RecipeDto
             {
                 Name = recipe.Name,
                 Description = recipe.Description,
@@ -41,6 +47,7 @@ namespace Smakosfera.Services.services
             };
 
             return result;
+
         }
 
         public IEnumerable<RecipeDto> Browse()
@@ -58,6 +65,10 @@ namespace Smakosfera.Services.services
                     CommunityRecipe = r.CommunityRecipe
                 });
 
+            if (result.Any() == false)
+            {
+                throw new BadRequestException("Przepisy są nie potwierdzone");
+            }
 
             return result;
         }
@@ -73,42 +84,41 @@ namespace Smakosfera.Services.services
                 UserId = 23 // zmiana
             };
 
-            Console.WriteLine(one);
             _Recipes.Recipes.Add(one);
             _Recipes.SaveChanges();
 
         }
 
-        public bool Update(int recipeId, RecipeDto dto)
+        public void Update(int recipeId, RecipeDto dto)
         {
-            var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+            var result = _Recipes.Recipes.FirstOrDefault(c => c.Id == recipeId);//SingleOrDefault(c => c.Id == recipeId);
 
-            if (result == null) 
+
+            if (result is null)
             {
-                return false;
+                throw new NotFoundException("Przepis nie istnieje");
             }
 
             result.Name = dto.Name;
             result.Description = dto.Description;
-            result.DifficultyLevel.Id = dto.DifficultyLevelId;
+            result.DifficultyLevelId = dto.DifficultyLevelId;
             result.PreparationTime = dto.PreparationTime;
 
             _Recipes.SaveChanges();
 
-            return true;
         }
-        public bool Delete(int recipeId)
+        public void Delete(int recipeId)
         {
             var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
-            if( result != null)
+
+            if (result is null) 
             {
-                _Recipes.Recipes.Remove(result);
-                _Recipes.SaveChanges();
-                return true;
+                throw new NotFoundException("Przepis nie istnieje");
             }
-            return false;
+             
+            _Recipes.Recipes.Remove(result);
+            _Recipes.SaveChanges();
+
         }
-
-
     }
 }

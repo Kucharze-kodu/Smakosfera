@@ -13,7 +13,7 @@ namespace Smakosfera.Services.Interfaces
         RecipeDto GetRecipe(int recipeId);
         IEnumerable<RecipeDto> Browse();
         void Add(RecipeDto dto);
-        bool Update(int recipeId, RecipeDto dto);
-        bool Delete(int recipeId);
+        void Update(int recipeId, RecipeDto dto);
+        void Delete(int recipeId);
     }
 }
