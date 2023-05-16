@@ -46,18 +46,18 @@ namespace Smakosfera.WebAPI.Controllers
         [HttpPut("{idRecipe}")]
         public ActionResult Update([FromRoute] int idRecipe, [FromBody] RecipeDto dto)
         {
-            _recipesService.Update(idRecipe, dto);
+            var isUpdated = _recipesService.Update(idRecipe, dto);
 
 
-            return Created($"Update Recipe" , null);
+            return Ok("Update Recipe" + isUpdated);
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            _recipesService.Delete(id);
+            var isDeleted = _recipesService.Delete(id);
 
-            return Created($"Update Recipe", null);
+            return Ok("Delete Recipe" + isDeleted);
         }
     }
 }
