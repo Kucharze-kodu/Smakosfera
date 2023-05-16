@@ -34,7 +34,7 @@ const RegisterForm = () => {
     temp.password = values.passward!=""?"":"Pole wymagane."
     temp.repeat_password = values.repeat_passward!=""?"":"Pole wymagane."
     //TODO test for same as password? idfk dlaczego nie dziala :D
-    temp.repeat_password = (values.repeat_passward!=values.password)?"":"Hasło nie zgodne z powtórzonym hasłem."  
+    temp.repeat_password = (values.repeat_password==values.password)?"":"Hasło nie zgodne z powtórzonym hasłem."  
     setErrors(temp)
     return Object.values(temp).every(x => x == "")
   }
