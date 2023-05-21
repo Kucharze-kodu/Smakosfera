@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.DataAccess.Entities
 {
-    public class Type
+    public class EnumType
     {
         public int Id { get; set; }
         public string Name { get; set; }

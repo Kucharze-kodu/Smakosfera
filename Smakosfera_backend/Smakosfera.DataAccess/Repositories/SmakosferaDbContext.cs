@@ -18,12 +18,15 @@ namespace Smakosfera.DataAccess.Repositories
 
         public DbSet<User> Users { get; set; }
         public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<DificultyLevel> Dificulty_Levels { get; set; }
-        public DbSet<RecipeIngredient> Recipes_Ingredients { get; set; }
-        //public DbSet<Type> Types { get; set; }
-        public DbSet<DifficultyLevel> Dificulty_Levels { get; set; }
 
+        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<DifficultyLevel> Difficulty_Levels { get; set; }
+
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipeIngredient> Recipes_Ingredients { get; set; }
+
+        public DbSet<Recipetype> Recipetypes { get; set; }
+        public DbSet<EnumType> EnumTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

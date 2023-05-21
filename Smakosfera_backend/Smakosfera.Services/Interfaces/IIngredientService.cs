@@ -9,8 +9,10 @@ namespace Smakosfera.Services.Interfaces
 {
     public interface IIngredientService
     {
+        IngredientDto GetIngredient(int ingredientId);
+        IEnumerable<IngredientDto> Browse();
         public void AddIngredient(IngredientDto dto);
-        public void EditIngredient(int id, IngredientDto dto);
-        public void DeleteIngredient(int id);
+        public void EditIngredient(int Id, IngredientDto dto);
+        public void DeleteIngredient(int Id);
     }
 }
