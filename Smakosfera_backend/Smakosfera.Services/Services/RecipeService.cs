@@ -1,14 +1,17 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Org.BouncyCastle.Bcpg;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
+using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smakosfera.Services.services
+namespace Smakosfera.Services.Services
 {
     public class RecipeService : IRecipesService
     {
@@ -19,9 +22,15 @@ namespace Smakosfera.Services.services
             _Recipes = recipes;
         }
 
-        RecipeDto IRecipesService.Get(int recipeId)
+        public RecipeDto GetRecipe(int recipeId)
         {
             var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+
+            if (recipe is null)
+
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
 
             var result = new RecipeDto
             {
@@ -29,64 +38,82 @@ namespace Smakosfera.Services.services
                 Description = recipe.Description,
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
+                CommunityRecipe = recipe.CommunityRecipe
             };
+
+            return result;
+
+        }
+
+        public IEnumerable<RecipeDto> Browse()
+        {
+            var date = _Recipes.Recipes.ToList();
+
+
+            var result = date.FindAll(r => r.IsConfirmed == true)
+                             .Select(r => new RecipeDto()
+                             {
+                                 Name = r.Name,
+                                 Description = r.Description,
+                                 DifficultyLevelId = r.DifficultyLevelId,
+                                 PreparationTime = r.PreparationTime,
+                                 CommunityRecipe = r.CommunityRecipe
+                             });
+
+            if (result.Any() == false)
+            {
+                throw new BadRequestException("Przepisy są nie potwierdzone");
+            }
 
             return result;
         }
 
-        public IEnumerable<Recipe> Browse()
-        {
-            var date = _Recipes.Recipes.ToList();
-
-            return date;
-        }
-
         public void Add(RecipeDto dto)
         {
-
-            var recipe = new RecipeDto
+            var one = new Recipe
             {
                 Name = dto.Name,
                 Description = dto.Description,
                 DifficultyLevelId = dto.DifficultyLevelId,
                 PreparationTime = dto.PreparationTime,
-                UserId = 5
-
-
-/*        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public level DifficultyLevel { get; set; }
-        public TimeOnly Preparation_time { get; set; }
-        public bool Community_recipe { get; set; } = true;
-        public bool Is_confirmed { get; set; } = false;
-        public int UserId { get; set; }*/
-
-    };
-            var one = new Recipe
-            {
-                Name = recipe.Name,
-                Description = recipe.Description,
-                DifficultyLevelId = recipe.DifficultyLevelId,
-                PreparationTime = recipe.PreparationTime,
-                UserId = recipe.UserId
+                UserId = 23 // zmiana
             };
-
 
             _Recipes.Recipes.Add(one);
             _Recipes.SaveChanges();
 
         }
 
-        void IRecipesService.Update(int recipeId, RecipeDto dto)
+        public void Update(int recipeId, RecipeDto dto)
         {
+            var result = _Recipes.Recipes.FirstOrDefault(c => c.Id == recipeId);//SingleOrDefault(c => c.Id == recipeId);
+
+
+            if (result is null)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            result.Name = dto.Name;
+            result.Description = dto.Description;
+            result.DifficultyLevelId = dto.DifficultyLevelId;
+            result.PreparationTime = dto.PreparationTime;
+
+            _Recipes.SaveChanges();
 
         }
-        void IRecipesService.Delete(int recipeId)
+        public void Delete(int recipeId)
         {
+            var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+
+            if (result is null)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            _Recipes.Recipes.Remove(result);
+            _Recipes.SaveChanges();
 
         }
-
-
     }
 }

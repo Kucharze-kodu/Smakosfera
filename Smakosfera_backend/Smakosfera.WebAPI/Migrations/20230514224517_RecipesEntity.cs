@@ -36,15 +36,14 @@ namespace Smakosfera.WebAPI.Migrations
                     CommunityRecipe = table.Column<bool>(type: "boolean", nullable: false),
                     IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     DifficultyLevelId = table.Column<int>(type: "integer", nullable: false),
-                    DificultyLevelId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Recipes_Dificulty_Levels_DificultyLevelId",
-                        column: x => x.DificultyLevelId,
+                        name: "FK_Recipes_Dificulty_Levels_DifficultyLevelId",
+                        column: x => x.DifficultyLevelId,
                         principalTable: "Dificulty_Levels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -57,9 +56,9 @@ namespace Smakosfera.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipes_DificultyLevelId",
+                name: "IX_Recipes_DifficultyLevelId",
                 table: "Recipes",
-                column: "DificultyLevelId");
+                column: "DifficultyLevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recipes_UserId",

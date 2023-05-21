@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
@@ -8,7 +9,7 @@ namespace Smakosfera.WebAPI.Controllers
 {
 
     [ApiController]
-    [Route("[/controller/recipe]")]
+    [Route("api/recipe")]
     public class RecipesController : ControllerBase
     {
         private readonly IRecipesService _recipesService;
@@ -19,15 +20,15 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
 
-        [HttpGet("/{id}")]
-        public ActionResult<RecipeDto> Get(int id) 
+        [HttpGet("{id}")]
+        public ActionResult<RecipeDto> Get(int id)
         {
-            RecipeDto result = _recipesService.Get(id);
+            RecipeDto result = _recipesService.GetRecipe(id);
 
-            return Ok(result); 
+            return Ok(result);
         }
 
-        [HttpGet("/all")]
+        [HttpGet]
         public ActionResult<IEnumerable<RecipeDto>> GetAll()
         {
             var result = _recipesService.Browse();
@@ -35,13 +36,28 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
 
-        [HttpPost("/add")]
-        public ActionResult Post([FromBody] RecipeDto dto)
+        [HttpPost]
+        public ActionResult PostRecipes([FromBody] RecipeDto dto)
         {
             _recipesService.Add(dto);
-            return Created($"controller/recipe/_ADD_Recipe", null);
+            return Created($"ADD Recipe", null);
         }
 
+        [HttpPut("{idRecipe}")]
+        public ActionResult Update([FromRoute] int idRecipe, [FromBody] RecipeDto dto)
+        {
+            _recipesService.Update(idRecipe, dto);
 
+
+            return Created($"Update Recipe" , null);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            _recipesService.Delete(id);
+
+            return Created($"Update Recipe", null);
+        }
     }
 }

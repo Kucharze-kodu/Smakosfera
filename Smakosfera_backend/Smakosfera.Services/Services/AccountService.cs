@@ -1,11 +1,18 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Utilities;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
+using Smakosfera.Services.Settings;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +23,61 @@ namespace Smakosfera.Services.Services
     {
         private readonly SmakosferaDbContext _dbContext;
         private readonly IEmailService _emailService;
+        private readonly AuthenticationSettings _authenticationSettings;
+        private readonly HostSettings _host;
 
-        public AccountService(SmakosferaDbContext dbContext, IEmailService emailService)
+        public AccountService(
+            SmakosferaDbContext dbContext,
+            IEmailService emailService,
+            AuthenticationSettings authenticationSettings,
+            HostSettings host)
         {
             _dbContext = dbContext;
             _emailService = emailService;
+            _authenticationSettings = authenticationSettings;
+            _host = host;
+        }
+
+        public string GenerateJWT(UserLoginDto dto)
+        {
+            var user = _dbContext.Users
+                .Include(r => r.Permission)
+                .FirstOrDefault(c => c.Email == dto.Email);
+
+            var hashedPassword = CreateHash(dto.Password);
+
+            if(user is null || user.PasswordHash != hashedPassword)
+            {
+                throw new BadRequestException("Nieprawidlowy email lub haslo");
+            }
+
+            if(user.VerifiedAt is null) 
+            {
+                throw new BadRequestException("Konto nie zostalo aktywowane");
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, dto.Email),
+                new Claim(ClaimTypes.Name, $"{user.Name} {user.Surname}"),
+                new Claim(ClaimTypes.Role, user.Permission.Name),
+                new Claim("Subscription", user.Subscription.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+
+            var token = new JwtSecurityToken(
+                _authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtIssuer,
+                claims,
+                expires: expires,
+                signingCredentials: cred);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
         }
 
         public void RegisterUser(UserRegisterDto dto)
@@ -60,6 +117,7 @@ namespace Smakosfera.Services.Services
             }
 
             user.VerifiedAt = DateTime.UtcNow;
+            user.VerifacationToken = null;
             _dbContext.SaveChanges();
         }
 
@@ -94,18 +152,23 @@ namespace Smakosfera.Services.Services
             }
 
             user.PasswordHash = CreateHash(dto.NewPassword);
-            user.PasswordResetToken = String.Empty;
+            user.PasswordResetToken = null;
             user.ResetTokenExpires = null;
             _dbContext.SaveChanges();
         }
 
-        private byte[] CreateHash(string password)
+        private string CreateHash(string password)
         {
-            using(var md5 = MD5.Create())
+            using (var md5 = MD5.Create())
             {
-                var result = md5.ComputeHash(Encoding.ASCII.GetBytes(password));
-                return result;
+                return string.Join("", md5.ComputeHash(Encoding.ASCII.GetBytes(password))
+                    .Select(x => x.ToString("X2")));
             }
+            //using (var md5 = MD5.Create())
+            //{
+            //    var result = md5.ComputeHash(Encoding.ASCII.GetBytes(password));
+            //    return Encoding.ASCII.GetString(result);
+            //}
         }
 
         private string CreateRandomToken()
@@ -117,7 +180,9 @@ namespace Smakosfera.Services.Services
         {
 
             StringBuilder stringBuilder = new StringBuilder("");
-            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"https://localhost:7000/api/account/verify/");
+            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"");
+            stringBuilder.Append(_host.Url.ToString());
+            stringBuilder.Append("api/account/verify/");
             stringBuilder.Append(veryficationToken.ToString());
             stringBuilder.Append("\" method=\"POST\">\r\n    <button>Aktywacja</button>\r\n</form>");
 
@@ -134,7 +199,9 @@ namespace Smakosfera.Services.Services
         private void SendResetLink(string email, string resetToken)
         {
             StringBuilder stringBuilder = new StringBuilder("");
-            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"https://localhost:7000/api/account/reset-password/");
+            stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"");
+            stringBuilder.Append(_host.Url.ToString());
+            stringBuilder.Append("api/account/reset-password/");
             stringBuilder.Append(resetToken.ToString());
             stringBuilder.Append("\" method=\"GET\">\r\n<button>Ustaw nowe hasło</button>\r\n</form>");
 

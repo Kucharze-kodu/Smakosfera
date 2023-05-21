@@ -22,6 +22,7 @@ namespace Smakosfera.DataAccess.Repositories
         public DbSet<DificultyLevel> Dificulty_Levels { get; set; }
         public DbSet<RecipeIngredient> Recipes_Ingredients { get; set; }
         //public DbSet<Type> Types { get; set; }
+        public DbSet<DifficultyLevel> Dificulty_Levels { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

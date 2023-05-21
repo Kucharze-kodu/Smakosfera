@@ -1,8 +1,49 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
+import { useState } from "react";
+import { urlLogin } from "../endpoints";
 
 const LoginForm = () => {
+  const[email, setEmail] = useState("");
+  const[password, setPassword] = useState("");
+  const[message, setMessage] = useState("");
+  
+  let handleSubmit = async (e) => {
+    
+    e.preventDefault();
+    try{
+      let res = await fetch(urlLogin, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+      let resJson = await res.json();
+
+      const currentDate = new Date();
+      const expirationDate = new Date(currentDate.getTime() + (24 * 60 * 60 * 1000));
+
+      document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
+      
+      if(res.status === 200){
+        setEmail("");
+        setPassword("");
+        setMessage("Sukces!");
+      }
+      else{
+        setMessage("Błąd!");
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  };
+  
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -14,19 +55,22 @@ const LoginForm = () => {
 
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zaloguj się!</div>
-          <form className="flex flex-col w-[75%]">
+          <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
             <input
-              type="text"
-              id="login"
-              name="login"
-              title="Wprowadź login :)"
+              type="email"
+              value={email}
+              id="email"
+              name="email"
+              title="Wprowadź email :)"
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Login:"
+              placeholder="Email:"
               maxLength={100}
               required
+              onChange={(e) => setEmail(e.target.value)}
             ></input>
             <input
               type="password"
+              value={password}
               id="password"
               name="password"
               title="Wprowadź hasło :)"
@@ -34,6 +78,7 @@ const LoginForm = () => {
               placeholder="Hasło:"
               maxLength={250}
               required
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
             <button
               type="submit"
@@ -41,6 +86,7 @@ const LoginForm = () => {
             >
               Wyślij!
             </button>
+            <div className="">{message ? <p>{message}</p> : null}</div>
           </form>
           <Link
             to="/register"
