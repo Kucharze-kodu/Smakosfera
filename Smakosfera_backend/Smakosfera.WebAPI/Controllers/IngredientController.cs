@@ -22,7 +22,7 @@ namespace Smakosfera.WebAPI.Controllers
 
 
 
-        /*[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public ActionResult<IEnumerable<IngredientDto>> Get(int id)
         {
             var result = _ingredientService.GetIngredient(id);
@@ -56,6 +56,6 @@ namespace Smakosfera.WebAPI.Controllers
             _ingredientService.DeleteIngredient(IdIngredient);
 
             return Created($"Delete Ingredient", null);
-        }*/
+        }
     }
 }

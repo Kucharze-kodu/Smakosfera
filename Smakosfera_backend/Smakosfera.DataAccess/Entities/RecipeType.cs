@@ -10,6 +10,7 @@ namespace Smakosfera.DataAccess.Entities
     {
         public int RecipeId { get; set; }
         public virtual Recipe Recipe { get; set; }
+
         public int TypeId { get; set; }
         public virtual Type Type { get; set; }
     }
