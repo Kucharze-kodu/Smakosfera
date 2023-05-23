@@ -30,20 +30,20 @@ const LoginForm = () => {
 
       document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
       
-      if(res.status === 200){
+      if(resJson.status === 200){
         setEmail("");
         setPassword("");
         setMessage("Sukces!");
       }
       else{
-        setMessage("Błąd!");
+        setMessage("Nieporawny email lub hasło!");
       }
     }
     catch(err){
       console.log(err);
     }
   };
-  
+  console.log(message);
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
