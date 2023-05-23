@@ -1,6 +1,7 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
+import { useState } from "react";
 import { urlRegister } from "../endpoints";
 
 const RegisterForm = () => {
@@ -61,39 +62,40 @@ const RegisterForm = () => {
           </div>
         </Link>
 
-        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start  md:my-10 text-center">
+        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zarejestruj się!</div>
           <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
-            
-              <input
-                type="text"
-                id="name"
-                name="name"
-                title="Imię:"
-                className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-                placeholder="Imię:"
-                maxLength={50}
-                required
-                onChange={(e) => setName(e.target.value)}
-              ></input>
-              <input
-                type="text"
-                id="surname"
-                name="surname"
-                title="Nazwisko:"
-                className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 ml-1 mt-3  border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-                placeholder="Nazwisko:"
-                maxLength={50}
-                required
-                onChange={(e) => setSurname(e.target.value)}
-              ></input>
-            
+            <input
+              type="text"
+              value={name}
+              id="name"
+              name="name"
+              title="Imię:"
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              placeholder="Imię:"
+              maxLength={50}
+              required
+              onChange={(e) => setName(e.target.value)}
+            ></input>
+            <input
+              type="text"
+              value={surname}
+              id="surname"
+              name="surname"
+              title="Nazwisko:"
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              placeholder="Nazwisko:"
+              maxLength={50}
+              required
+              onChange={(e) => setSurname(e.target.value)}
+            ></input>
             <input
               type="email"
+              value={email}
               id="email"
               name="email"
               title="Email:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 mt-2border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
               placeholder="Email:"
               maxLength={250}
               required
@@ -101,6 +103,7 @@ const RegisterForm = () => {
             ></input>
             <input
               type="password"
+              value={password}
               id="password"
               name="password"
               title="Hasło:"
@@ -112,6 +115,7 @@ const RegisterForm = () => {
             ></input>
             <input
               type="password"
+              value={confirmPassword}
               id="confirmPassword"
               name="confirmPassword"
               title="Powtórz hasło:"
@@ -127,6 +131,7 @@ const RegisterForm = () => {
             >
               Wyślij!
             </button>
+            <div className="">{message ? <p>{message}</p> : null}</div>
           </form>
           <Link
             to="/login"
