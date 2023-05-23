@@ -12,7 +12,7 @@ using Smakosfera.DataAccess.Repositories;
 namespace Smakosfera.WebAPI.Migrations
 {
     [DbContext(typeof(SmakosferaDbContext))]
-    [Migration("20230514224517_RecipesEntity")]
+    [Migration("20230523164438_RecipesEntity")]
     partial class RecipesEntity
     {
         /// <inheritdoc />
@@ -116,9 +116,9 @@ namespace Smakosfera.WebAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("text");
 
                     b.Property<string>("PasswordResetToken")
                         .HasColumnType("text");
