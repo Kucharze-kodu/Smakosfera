@@ -29,10 +29,10 @@ namespace Smakosfera.DataAccess.Seeder
                     _dbContext.SaveChanges();
                 }
 
-                if (!_dbContext.Dificulty_Levels.Any())
+                if (!_dbContext.Difficulty_Levels.Any())
                 {
-                    var dificultyLevel = GetDificultyLevels();
-                    _dbContext.Dificulty_Levels.AddRange(dificultyLevel);
+                    var difficultyLevel = GetDificultyLevels();
+                    _dbContext.Difficulty_Levels.AddRange(difficultyLevel);
                     _dbContext.SaveChanges();
                 }
             
