@@ -70,6 +70,12 @@ namespace Smakosfera.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ingredients_Name",
+                table: "Ingredients",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recipes_Ingredients_IngredientId",
                 table: "Recipes_Ingredients",
                 column: "IngredientId");

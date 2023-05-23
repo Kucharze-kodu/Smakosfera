@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Smakosfera.DataAccess.Entities;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using Smakosfera.Services.Services;
@@ -8,22 +6,20 @@ using Smakosfera.Services.Services;
 namespace Smakosfera.WebAPI.Controllers
 {
 
-    [Route("api/Ingredient")]
     [ApiController]
+    [Route("api/Ingredient")]
     public class IngredientController : ControllerBase
     {
         private readonly IIngredientService _ingredientService;
 
-
-        public IngredientController(IngredientService Service)
+        public IngredientController(IIngredientService Service)
         {
             _ingredientService = Service;
         }
 
 
-
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<IngredientDto>> Get(int id)
+        public ActionResult<IngredientDto> Get(int id)
         {
             var result = _ingredientService.GetIngredient(id);
             return Ok(result);

@@ -12,7 +12,7 @@ using Smakosfera.DataAccess.Repositories;
 namespace Smakosfera.WebAPI.Migrations
 {
     [DbContext(typeof(SmakosferaDbContext))]
-    [Migration("20230523170044_IngredientEntity")]
+    [Migration("20230523184205_IngredientEntity")]
     partial class IngredientEntity
     {
         /// <inheritdoc />
@@ -55,6 +55,9 @@ namespace Smakosfera.WebAPI.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Ingredients");
                 });

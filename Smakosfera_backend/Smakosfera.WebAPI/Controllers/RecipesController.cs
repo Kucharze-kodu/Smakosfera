@@ -14,7 +14,7 @@ namespace Smakosfera.WebAPI.Controllers
     {
         private readonly IRecipesService _recipesService;
 
-        public RecipesController(SmakosferaDbContext smakosfera, IRecipesService recipesService)
+        public RecipesController(IRecipesService recipesService)
         {
             _recipesService = recipesService;
         }

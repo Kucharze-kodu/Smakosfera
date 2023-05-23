@@ -3,11 +3,7 @@ using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Smakosfera.Services.Services
 {
@@ -15,22 +11,16 @@ namespace Smakosfera.Services.Services
     {
         private readonly SmakosferaDbContext _Ingredient;
 
-        public IngredientService(SmakosferaDbContext recipes)
+        public IngredientService(SmakosferaDbContext ingredient)
         {
-            _Ingredient = recipes;
+            _Ingredient = ingredient;
         }
 
         public void AddIngredient(IngredientDto dto)
         {
-
-            var resultDto = new IngredientDto
-            {
-                 Name = dto.Name
-            };
-
             var result = new Ingredient
             {
-                Name = resultDto.Name
+                Name = dto.Name
             };
 
             _Ingredient.Ingredients.Add(result);
