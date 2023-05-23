@@ -1,6 +1,7 @@
 
 import { styles } from "../style";
 import React, { useState } from 'react';
+import { urlAddRecipe } from "../endpoints";
 
 const DodawaniePrzepisu = () => {
   
@@ -23,23 +24,46 @@ const DodawaniePrzepisu = () => {
     setskladnik([...skladnik, { nazwa: '', ilosc: '' }]);         //dodane skladniki 
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
+    
+    try{
+      let res = await fetch(urlAddRecipe, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Nazwa: Nazwa,
+          skladnik: skladnik,
+        }),
+      });
+      let resJson = await res.json();
 
-    // Tu trzeba bekent
+      const currentDate = new Date();
+      const expirationDate = new Date(currentDate.getTime() + (24 * 60 * 60 * 1000));
 
-    // Zresetuj formularz
-    setNazwa('');
-    setskladnik([{ nazwa: '', ilosc: '' }]);
+      document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
+      
+      if(res.status === 200){
+        setNazwa('');
+        setskladnik([{ nazwa: '', ilosc: '' }])}
+      else{
+        console.log("Błąd!");
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
     
   };
 
   return (
-    <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center Hover:text-black">
-    <div className={`${styles.heading2 } hover:text-black"` }>Dodaj Przepis !!</div>
+    <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
+    <div className={`${styles.heading2 } text-white "` }>Dodaj Przepis !!</div>
     
     <form onSubmit={handleSubmit}>
-      <label className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-1 text-center Hover:text-black">
+      <label className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-1 text-center">
         <input type="text" value={Nazwa} onChange={handleNazwa} placeholder="Nazwa przepisu:" />
       </label>
 
