@@ -10,7 +10,6 @@ namespace Smakosfera.DataAccess.Entities
 {
     public class RecipeIngredient
     {
-        [Key]
         public int RecipeId { get; set; }
         public virtual Recipe Recipe { get; set; }
 
@@ -18,5 +17,9 @@ namespace Smakosfera.DataAccess.Entities
         public virtual Ingredient Ingredient { get; set; }
         public int Amount { get; set; }
         public string Unit { get; set; } = string.Empty;
+
+
+        [Key]
+        public int RecipeIngredientId { get; set; }
     }
 }

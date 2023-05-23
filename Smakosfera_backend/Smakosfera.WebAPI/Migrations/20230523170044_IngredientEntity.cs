@@ -45,16 +45,16 @@ namespace Smakosfera.WebAPI.Migrations
                 name: "Recipes_Ingredients",
                 columns: table => new
                 {
-                    RecipeId = table.Column<int>(type: "integer", nullable: false)
+                    RecipeIngredientId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RecipeId1 = table.Column<int>(type: "integer", nullable: false),
+                    RecipeId = table.Column<int>(type: "integer", nullable: false),
                     IngredientId = table.Column<int>(type: "integer", nullable: false),
                     Amount = table.Column<int>(type: "integer", nullable: false),
                     Unit = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Recipes_Ingredients", x => x.RecipeId);
+                    table.PrimaryKey("PK_Recipes_Ingredients", x => x.RecipeIngredientId);
                     table.ForeignKey(
                         name: "FK_Recipes_Ingredients_Ingredients_IngredientId",
                         column: x => x.IngredientId,
@@ -62,8 +62,8 @@ namespace Smakosfera.WebAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Recipes_Ingredients_Recipes_RecipeId1",
-                        column: x => x.RecipeId1,
+                        name: "FK_Recipes_Ingredients_Recipes_RecipeId",
+                        column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -75,9 +75,9 @@ namespace Smakosfera.WebAPI.Migrations
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipes_Ingredients_RecipeId1",
+                name: "IX_Recipes_Ingredients_RecipeId",
                 table: "Recipes_Ingredients",
-                column: "RecipeId1");
+                column: "RecipeId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Recipes_Difficulty_Levels_DifficultyLevelId",

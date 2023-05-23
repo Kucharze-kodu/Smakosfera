@@ -115,11 +115,11 @@ namespace Smakosfera.WebAPI.Migrations
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.RecipeIngredient", b =>
                 {
-                    b.Property<int>("RecipeId")
+                    b.Property<int>("RecipeIngredientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RecipeId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RecipeIngredientId"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
@@ -127,18 +127,18 @@ namespace Smakosfera.WebAPI.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RecipeId1")
+                    b.Property<int>("RecipeId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("RecipeId");
+                    b.HasKey("RecipeIngredientId");
 
                     b.HasIndex("IngredientId");
 
-                    b.HasIndex("RecipeId1");
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("Recipes_Ingredients");
                 });
@@ -216,14 +216,14 @@ namespace Smakosfera.WebAPI.Migrations
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.RecipeIngredient", b =>
                 {
                     b.HasOne("Smakosfera.DataAccess.Entities.Ingredient", "Ingredient")
-                        .WithMany()
+                        .WithMany("Recipes")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId1")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -241,6 +241,16 @@ namespace Smakosfera.WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Permission");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Ingredient", b =>
+                {
+                    b.Navigation("Recipes");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
+                {
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,5 +10,7 @@ namespace Smakosfera.DataAccess.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<RecipeIngredient> Recipes { get; set; }
     }
 }

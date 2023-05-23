@@ -40,6 +40,18 @@ namespace Smakosfera.DataAccess.Repositories
                 .IsRequired()
                 .HasMaxLength(50);
 
+            modelBuilder.Entity<RecipeIngredient>()
+                    .HasKey(ri => ri.RecipeIngredientId);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Recipe)
+                .WithMany(r => r.Ingredients)
+                .HasForeignKey(ri => ri.RecipeId);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Ingredient)
+                .WithMany(i => i.Recipes)
+                .HasForeignKey(ri => ri.IngredientId);
         }
 
     }
