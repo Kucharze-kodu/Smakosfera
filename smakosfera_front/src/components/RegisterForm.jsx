@@ -1,6 +1,7 @@
 import { styles } from "../style";
 import { Link } from "react-router-dom";
 import { logo } from "../assets";
+import { urlRegister } from "../endpoints";
 
 const RegisterForm = () => {
   const[name, setName] = useState("");
@@ -14,7 +15,7 @@ const RegisterForm = () => {
     
     e.preventDefault();
     try{
-      let res = await fetch(urlLogin, {
+      let res = await fetch(urlRegister, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,6 +51,7 @@ const RegisterForm = () => {
       console.log(err);
     }
   };
+
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -58,10 +60,11 @@ const RegisterForm = () => {
             <img className="sm:p-24 md:p-16 p-12" src={logo} />
           </div>
         </Link>
+
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start  md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zarejestruj się!</div>
           <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
-            <div className="flex flex-row">
+            
               <input
                 type="text"
                 id="name"
@@ -84,7 +87,7 @@ const RegisterForm = () => {
                 required
                 onChange={(e) => setSurname(e.target.value)}
               ></input>
-            </div>
+            
             <input
               type="email"
               id="email"
