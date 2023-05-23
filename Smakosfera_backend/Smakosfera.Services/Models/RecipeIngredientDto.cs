@@ -10,8 +10,6 @@ namespace Smakosfera.Services.Models
     public class RecipeIngredientDto
     {
         [Required]
-        public int IngredientId { get; set; }
-        [Required]
         public int Amount { get; set; }
         [Required]
         public string Unit { get; set; }
