@@ -3,6 +3,53 @@ import { Link } from "react-router-dom";
 import { logo } from "../assets";
 
 const RegisterForm = () => {
+  const[name, setName] = useState("");
+  const[surname, setSurname] = useState("");
+  const[email, setEmail] = useState("");
+  const[password, setPassword] = useState("");
+  const[confirmPassword, setConfirmPassword] = useState("");
+  const[message, setMessage] = useState("");
+  
+  let handleSubmit = async (e) => {
+    
+    e.preventDefault();
+    try{
+      let res = await fetch(urlLogin, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          surname: surname,
+          email: email,
+          password: password,
+          confirmPassword: confirmPassword,
+        }),
+      });
+      let resJson = await res.json();
+
+      //const currentDate = new Date();
+      //const expirationDate = new Date(currentDate.getTime() + (24 * 60 * 60 * 1000));
+
+      //document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
+      
+      if(res.status === 200){
+        setName("");
+        setSurname("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setMessage("Sukces!");
+      }
+      else{
+        setMessage("Email już istnieje lub niepoprawne hasła!");
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  };
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -13,58 +60,63 @@ const RegisterForm = () => {
         </Link>
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start  md:my-10 text-center">
           <div className={`${styles.heading2}`}>Zarejestruj się!</div>
-          <form className="flex flex-col w-[75%]">
+          <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
             <div className="flex flex-row">
               <input
                 type="text"
                 id="name"
                 name="name"
-                title="Wprowadź imie :)"
+                title="Imię:"
                 className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
                 placeholder="Imię:"
                 maxLength={50}
                 required
+                onChange={(e) => setName(e.target.value)}
               ></input>
               <input
                 type="text"
                 id="surname"
                 name="surname"
-                title="Wprowadź nazwisko :)"
+                title="Nazwisko:"
                 className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 ml-1 mt-3  border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
                 placeholder="Nazwisko:"
                 maxLength={50}
                 required
+                onChange={(e) => setSurname(e.target.value)}
               ></input>
             </div>
             <input
-              type="text"
-              id="login"
-              name="login"
-              title="Wprowadź login :)"
+              type="email"
+              id="email"
+              name="email"
+              title="Email:"
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 mt-2border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Login (nick):"
-              maxLength={100}
+              placeholder="Email:"
+              maxLength={250}
               required
+              onChange={(e) => setEmail(e.target.value)}
             ></input>
             <input
               type="password"
               id="password"
               name="password"
-              title="Wprowadź hasło :)"
+              title="Hasło:"
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
               required
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
             <input
-              type="email"
-              id="email"
-              name="email"
-              title="Wprowadź email :)"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              title="Powtórz hasło:"
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
-              placeholder="Email:"
+              placeholder="Powtórz hasło:"
               maxLength={250}
               required
+              onChange={(e) => setConfirmPassword(e.target.value)}
             ></input>
             <button
               type="submit"
