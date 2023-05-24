@@ -62,7 +62,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IRecipesService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
-builder.Services.AddScoped<IRecipeIngredientService,  RecipeIngredientService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
