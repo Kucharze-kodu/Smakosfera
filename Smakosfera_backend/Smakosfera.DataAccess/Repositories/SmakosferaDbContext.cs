@@ -18,8 +18,16 @@ namespace Smakosfera.DataAccess.Repositories
 
         public DbSet<User> Users { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<DifficultyLevel> Difficulty_Levels { get; set; }
+
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipeIngredient> Recipes_Ingredients { get; set; }
+
+/*        public DbSet<Recipetype> Recipetypes { get; set; }
+        public DbSet<EnumType> EnumTypes { get; set; }*/
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +41,22 @@ namespace Smakosfera.DataAccess.Repositories
                 .IsRequired()
                 .HasMaxLength(50);
 
+            modelBuilder.Entity<Ingredient>()
+                .HasIndex(i => i.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasKey(ri => ri.RecipeIngredientId);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Recipe)
+                .WithMany(r => r.Ingredients)
+                .HasForeignKey(ri => ri.RecipeId);
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Ingredient)
+                .WithMany(i => i.Recipes)
+                .HasForeignKey(ri => ri.IngredientId);
         }
 
     }
