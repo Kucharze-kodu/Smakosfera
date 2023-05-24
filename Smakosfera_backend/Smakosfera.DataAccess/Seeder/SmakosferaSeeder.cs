@@ -70,7 +70,7 @@ namespace Smakosfera.DataAccess.Seeder
         }
 
 
-        private IEnumerable<DifficultyLevel> GetDificultyLevels()
+        private IEnumerable<DifficultyLevel> GetDifficultyLevels()
         {
             var dificultyLevels = new List<DifficultyLevel>()
             {
