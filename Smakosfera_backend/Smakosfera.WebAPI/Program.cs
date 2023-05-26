@@ -61,6 +61,7 @@ builder.Services.AddSingleton(urlBackend);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IRecipesService, RecipeService>();
+builder.Services.AddScoped<IIngredientService, IngredientService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

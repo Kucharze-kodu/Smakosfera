@@ -31,10 +31,17 @@ namespace Smakosfera.DataAccess.Seeder
 
                 if (!_dbContext.Difficulty_Levels.Any())
                 {
-                    var difficultyLevel = GetDificultyLevels();
+                    var difficultyLevel = GetDifficultyLevels();
                     _dbContext.Difficulty_Levels.AddRange(difficultyLevel);
+
                     _dbContext.SaveChanges();
                 }
+               /* if (!_dbContext.EnumTypes.Any())
+                {
+                    var enumTypes = GetEnumTypes();
+                    _dbContext.EnumTypes.AddRange(enumTypes);
+                    _dbContext.SaveChanges();
+                }*/
             
             }
         }
@@ -63,7 +70,7 @@ namespace Smakosfera.DataAccess.Seeder
         }
 
 
-        private IEnumerable<DifficultyLevel> GetDificultyLevels()
+        private IEnumerable<DifficultyLevel> GetDifficultyLevels()
         {
             var dificultyLevels = new List<DifficultyLevel>()
             {
@@ -92,6 +99,38 @@ namespace Smakosfera.DataAccess.Seeder
             };
 
             return dificultyLevels;
+
+        }
+
+        private IEnumerable<EnumType> GetEnumTypes()
+        {
+            var enumTypes = new List<EnumType>()
+            {
+                new EnumType()
+                {
+                    Name = "vegetarian"
+                },
+
+                new EnumType()
+                {
+                    Name = "vegan"
+                },
+
+                new EnumType()
+                {
+                    Name = "meat"
+                },
+                new EnumType()
+                {
+                    Name = "fast food"
+                },
+                new EnumType()
+                {
+                    Name = "other"
+                }
+            };
+
+            return enumTypes;
 
         }
     }
