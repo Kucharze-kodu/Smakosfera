@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, lazy } from "react";
+import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 
@@ -12,13 +11,6 @@ const PageNotFound = lazy(() => import("./components/PageNotFound"))
 const Home = lazy(() => import("./components/Home"))
 
 const App = () => {
-  // fetchowanie z backendu
-  //useEffect(() => {
-    //axios.get(urlWeather).then((response) => {
-      //console.log(response.data);
-    //});
-  //}, []);
-
   return (
     <Routes>
       <Route path="/" element={<Suspense fallback={<LoadingScreen />}><LandingPage /></Suspense>} />
