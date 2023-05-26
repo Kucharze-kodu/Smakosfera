@@ -29,7 +29,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RecipeDto>> GetAll()
+        public ActionResult<IEnumerable<RecipeIDDto>> GetAll()
         {
             var result = _recipesService.Browse();
             return Ok(result);
