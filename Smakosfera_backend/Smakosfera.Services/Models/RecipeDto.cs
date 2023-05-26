@@ -17,7 +17,7 @@ namespace Smakosfera.Services.Models
         [Required]
         public string Description { get; set; }
         [Required]
-        public int DifficultyLevelId { get; set; }
+        public int DifficultyLevelId { get; set; } = 1;
         [Required]
         public int PreparationTime { get; set; }
 

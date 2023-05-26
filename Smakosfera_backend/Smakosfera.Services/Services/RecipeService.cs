@@ -1,4 +1,6 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
@@ -73,9 +75,23 @@ namespace Smakosfera.Services.Services
                 UserId = 23 // zmiana
             };
 
-            _Recipes.Recipes.Add(one);
-            _Recipes.SaveChanges();
+            try
+            {
+                _Recipes.Recipes.Add(one);
+                _Recipes.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is PostgresException postgresException)
+                {
 
+                    throw new NotFoundException("ta sama nazwa");
+                }
+                else
+                {
+                    throw new NotFoundException("nie ma takiego levelu trudnosci");
+                }
+            }
         }
 
         public void Update(int recipeId, RecipeDto dto)
