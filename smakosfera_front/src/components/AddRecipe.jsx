@@ -2,12 +2,15 @@
 import { styles } from "../style";
 import React, { useState } from 'react';
 import { urlAddRecipe } from "../endpoints";
+import { urlIngredient } from "../endpoints";
 
 const DodawaniePrzepisu = () => {
   
   const [Nazwa, setNazwa] = useState('');
   const [skladnik, setskladnik] = useState([{nazwa: '', ilosc: ''}]);
-  
+  const [trudnosc, setTrudnosc]= useState('');
+  const [opis, setOpis]= useState('');
+  const [czas, setCzas]= useState('');
 
   const handleNazwa = (event) => {        //nazwa
     setNazwa(event.target.value);
@@ -17,6 +20,21 @@ const DodawaniePrzepisu = () => {
     const updatedskladnik = [...skladnik];
     updatedskladnik[index][key] = event.target.value;   // składkik i ilosc
     setskladnik(updatedskladnik);
+  };
+
+  const handleTrudnosc = (event) => {
+    setTrudnosc(event.target.value);
+
+  };
+
+  const handleOpis = (event) => {
+    setOpis(event.target.value);
+
+  };
+
+  const handleCzas = (event) => {
+    setCzas(event.target.value);
+
   };
 
  
@@ -34,8 +52,12 @@ const DodawaniePrzepisu = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          Nazwa: Nazwa,
+          name: Nazwa,
+          description: opis,
+          difficulty: trudnosc,
+          preparationTime: czas,
           skladnik: skladnik,
+      
         }),
       });
       let resJson = await res.json();
@@ -60,11 +82,36 @@ const DodawaniePrzepisu = () => {
 
   return (
     <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
-    <div className={`${styles.heading2 } text-white "` }>Dodaj Przepis !!</div>
+    <div className={`${styles.heading2 } text-white "` }>Dodaj Przepis </div>
     
     <form onSubmit={handleSubmit}>
-      <label className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-1 text-center">
-        <input type="text" value={Nazwa} onChange={handleNazwa} placeholder="Nazwa przepisu:" />
+      <label className="text-center">
+        <input type="text" value={Nazwa} onChange={handleNazwa} className="w-100 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500" placeholder="Nazwa przepisu:" />
+      </label>
+
+      
+
+      <label>
+      <h2>Opis przepisu:</h2>
+      <textarea
+        value={opis}
+        onChange={handleOpis}
+        className="w-full h-40 px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+        placeholder="Wprowadź opis przepisu..."
+      />
+      </label>
+     
+      <label>
+      <h2 className="text-xl font-bold mb-2">Wybierz trudność przepisu:</h2>
+      <select value={trudnosc} onChange={handleTrudnosc} className="w-48 px-4 py-2 mb-10 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500">
+        <option value="">Wybierz trudność</option>
+        <option value="latwe">Łatwe</option>
+        <option value="srednie">Średnie</option>
+        <option value="trudne">Trudne</option>
+      </select>
+
+      <input type="text" value={czas} onChange={handleCzas} className="w-48 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500" placeholder="Czas przygotowania:" />
+
       </label>
 
       <label>
@@ -76,6 +123,7 @@ const DodawaniePrzepisu = () => {
               type="text"
               value={ingredient.nazwa}
               onChange={(event) => handleSkladnik(event, index,'nazwa')}
+              className="w-48 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500"
             />
 
             <input
@@ -83,6 +131,7 @@ const DodawaniePrzepisu = () => {
               type="text"
               value={ingredient.quantity}
               onChange={(event) => handleSkladnik(event, index,'ilosc')}
+              className="w-48 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500"
             />
             
           </div>
