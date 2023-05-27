@@ -1,6 +1,19 @@
-import { styles } from "../style";
+import { styles, layout } from "../style";
+import axios from "axios";
+import { urlRecipes } from "../endpoints";
+import { useEffect, useState } from "react";
 
 const Recipes = () => {
+  const [recipes, setRecipes] = useState([]);
+
+  // displaying recipes
+  useEffect(() => {
+    axios.get(urlRecipes).then((response) => {
+      console.log(response.data)
+      setRecipes(response.data);
+    });
+  }, []);
+
   return (
     <>
       {/* Searchbar */}
@@ -40,43 +53,12 @@ const Recipes = () => {
         </form>
       </div>
       {/* Recipes section */}
-      <div className={`${styles.paragraph} p-2 `}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-        tincidunt, lorem sit amet pulvinar vehicula, risus libero aliquet nisi,
-        in finibus arcu sapien non mi. Etiamonsequat tempus dui,Lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Pellentesque tincidunt,
-        lorem sit amet pulvinar vehicula, risus libero aliquet nisi, in finibus
-        arcu sapien non mi. Etiam consequat tempus dui, viverra rhoncus dui
-        ornare id. Al consequat tempus dui,Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit. Pellentesque tincidunt, lorem sit amet
-        pulvinar vehicula, risus libero aliquet nisi, in finibus arcu sapien non
-        mi. Etiam consequat tempus dui, viverra rhoncus dui ornare id. Aliquam
-        ut fringilla justo. Aenean lobortis urna eget sapien fringilla dapibus.
-        Integer non velit vel magna imperdiet posuere a vitae mi. Morbi pharetra
-        auctor auctor. Proin ligula lorem, eleifend quis vehicula vitae, pretium
-        ac libero. Phasellus at dui orci. Sed sollicitudin aliquet rhoncus. Sed
-        sed ultrices diam, id feugiat nisl. Suspendisse tempor orci viverra
-        dolor tempor, ut ornare purus eleifend. Vestibulum cursus ornare magna,
-        eu lobortis felis imperdiet in. Curabitur finibus ornare volutpat.
-        Quisque pharetra bibendum ex, quis convallis purus sollicitudin eget.
-        Etiam condimentum libero quis nunc dignissim vestibulum. Pellentesque
-        habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas. Maecenas lectus dui, consequat nec lacus sed, maximus fermentum
-        arcu. Vestibulum id pharetra massa. Sed eros nunc, aliquet et dignissim
-        varius, molestie vel lacus. viverra rhoncus dui ornare id. Aliquam ut
-        fringilla justo. Aenean lobortis urna eget sapien fringilla dapibus.
-        Integer non velit vel magna imperdiet posuere a vitae mi. Morbi pharetra
-        auctor auctor. Proin ligula lorem, eleifend quis vehicula vitae, pretium
-        ac libero. Phasellus at dui orci. Sed sollicitudin aliquet rhoncus. Sed
-        sed ultrices diam, id feugiat nisl. Suspendisse tempor orci viverra
-        dolor tempor, ut ornare purus eleifend. Vestibulum cursus ornare magna,
-        eu lobortis felis imperdiet in. Curabitur finibus ornare volutpat.
-        Quisque pharetra bibendum ex, quis convallis purus sollicitudin eget.
-        Etiam condimentum libero quis nunc dignissim vestibulum. Pellentesque
-        habitant morbi tristique senectus et netus et malesuada fames ac turpis
-        egestas. Maecenas lectus dui, consequat nec lacus sed, maximus fermentum
-        arcu. Vestibulum id pharetra massa. Sed eros nunc, aliquet et dignissim
-        varius, molestie vel lacus.
+      <div className={`${layout.sectionImg} ${styles.paragraph} `}>
+        {recipes.map((recipe) => (
+          <div key={recipe.name}>
+            <p>{recipe.description}</p>
+          </div>
+        ))}
       </div>
     </>
   );

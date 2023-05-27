@@ -1,11 +1,9 @@
 import { Footer, Button } from "../components";
-import axios from "axios";
-import { urlRecipes } from "../endpoints";
 import { styles } from "../style";
 import { logo, avatar } from "../assets";
 import { BiHome, BiUser, BiHeartCircle, BiPlusCircle, BiLogOut } from "react-icons/bi";
 import { Route, Routes, Link } from "react-router-dom";
-import { useEffect, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 
 const Recipes = lazy(() => import("./Recipes"))
 const MyAccount = lazy(() => import("./MyAccount"))
@@ -14,13 +12,6 @@ const AddRecipe = lazy(() => import("./AddRecipe"))
 const LoadingScreen = lazy(() => import("./LoadingScreen"))
 
 const Home = () => {
-  // displaying recipes
-  useEffect(() => {
-    axios.get(urlRecipes).then((response) => {
-      console.log(response.data);
-    });
-  }, []);
-
   return (
     <div className={`${styles.background} py-5 px-5 overflow-auto`}>
       <div className="flex xs:h-[95%] h-[90%] ">
