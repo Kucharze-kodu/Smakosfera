@@ -41,14 +41,15 @@ namespace Smakosfera.Services.Services
 
         }
 
-        public IEnumerable<RecipeDto> Browse()
+        public IEnumerable<RecipeIDDto> Browse()
         {
             var date = _Recipes.Recipes.ToList();
 
 
             var result = date.FindAll(r => r.IsConfirmed == true)
-                             .Select(r => new RecipeDto()
+                             .Select(r => new RecipeIDDto()
                              {
+                                 Id = r.Id,
                                  Name = r.Name,
                                  Description = r.Description,
                                  DifficultyLevelId = r.DifficultyLevelId,
