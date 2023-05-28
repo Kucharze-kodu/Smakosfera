@@ -8,6 +8,7 @@ import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import Home from './Home';
 import Recipes from './Recipes';
+import RecipeDetails from './RecipeDetails';
 import MyAccount from './MyAccount';
 import Favorites from './Favorites';
 import AddRecipe from './AddRecipe';
@@ -24,6 +25,7 @@ export {
     LoginForm,
     Home,
     Recipes,
+    RecipeDetails,
     MyAccount,
     Favorites,
     AddRecipe,

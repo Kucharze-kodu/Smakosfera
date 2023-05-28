@@ -1,4 +1,4 @@
-import { Footer, Button } from "../components";
+import { Footer, Button, RecipeDetails } from "../components";
 import { styles } from "../style";
 import { logo, avatar } from "../assets";
 import { BiHome, BiUser, BiHeartCircle, BiPlusCircle, BiLogOut } from "react-icons/bi";
@@ -29,9 +29,9 @@ const Home = () => {
               <img src={logo} className="h-[100%] p-5" />
           </div>
           {/* Sidebar */}
-          <div className="hidden xs:block w-[20%] border-r-[1px] border-r-dimWhite">
-              <img src={logo} className="p-5 border-b-[1px] border-b-dimWhite" />
-            <img src={avatar} className="w-[75%] mx-auto" />
+          <div className="sidebar hidden xs:block overflow-y-scroll pb-2 w-[20%] border-r-[1px] border-r-dimWhite">
+            <img src={logo} className="p-5 top-0 sticky bg-black border-b-[1px] border-b-dimWhite" />
+            <img src={avatar} className="w-[65%] mx-auto" />
             <Link to="/home">
               <Button
                 text="Strona główna"
@@ -75,6 +75,7 @@ const Home = () => {
 
             <Routes>
               <Route path="/" element={<Suspense fallback={<LoadingScreen />}> <Recipes /> </Suspense>}></Route>
+              <Route path=":recipeId"  element={<Suspense fallback={<LoadingScreen />}> <RecipeDetails /> </Suspense>}></Route>
               <Route path="my-account" element={<Suspense fallback={<LoadingScreen />}> <MyAccount /> </Suspense>}></Route>
               <Route path="favorites" element={<Suspense fallback={<LoadingScreen />}> <Favorites /> </Suspense>}></Route>
               <Route path="add-recipe" element={<Suspense fallback={<LoadingScreen />}> <AddRecipe /> </Suspense>}></Route>

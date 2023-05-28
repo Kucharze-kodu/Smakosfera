@@ -1,7 +1,10 @@
-import { styles, layout } from "../style";
+import { styles } from "../style";
 import axios from "axios";
 import { urlRecipes } from "../endpoints";
 import { useEffect, useState } from "react";
+import Button from "./Button";
+import { Link } from "react-router-dom";
+import { cooking_book } from "../assets";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -9,7 +12,7 @@ const Recipes = () => {
   // displaying recipes
   useEffect(() => {
     axios.get(urlRecipes).then((response) => {
-      console.log(response.data)
+      console.log(response.data);
       setRecipes(response.data);
     });
   }, []);
@@ -53,10 +56,25 @@ const Recipes = () => {
         </form>
       </div>
       {/* Recipes section */}
-      <div className={`${layout.sectionImg} ${styles.paragraph} `}>
+      <div className={`flex flex-col xs:grid xs:grid-cols-4 xs:gap-4 m-2 rounded-lg`}>
         {recipes.map((recipe) => (
-          <div key={recipe.name}>
-            <p>{recipe.description}</p>
+          <div key={recipe.id} className="recipe overflow-y-scroll border text-center p-2 border-dimWhite">
+            <Link to={`/home/${recipe.id}`}>
+              <img className="mx-auto" src={cooking_book} alt="przepis" />
+            </Link>
+            <div className="">
+              <h5 className={`${styles.heading3} text-white`}>{recipe.name}</h5>
+              <Link to={`/home/${recipe.id}`}>
+                <i>
+                <Button 
+                  text="Pokaż przepis!"
+                  padding="p-1"
+                  margin="my-2 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                ></Button>
+                </i>
+              </Link>
+            </div>
           </div>
         ))}
       </div>
