@@ -26,15 +26,11 @@ const RegisterForm = () => {
           surname: surname,
           email: email,
           password: password,
-          confirmPassword: confirmPassword,
+          confirmPassword: confirmPassword
         }),
       });
-      let resJson = await res.json();
 
-      //const currentDate = new Date();
-      //const expirationDate = new Date(currentDate.getTime() + (24 * 60 * 60 * 1000));
-
-      //document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
+      // let resJson = await res.json();
       
       if(res.status === 200){
         setName("");
@@ -45,8 +41,9 @@ const RegisterForm = () => {
         setMessage("Sukces!");
       }
       else{
-        setMessage("Email już istnieje lub niepoprawne hasła!");
+        setMessage("Email jest już zajęty lub hasła się nie zgadzają!");
       }
+    
     }
     catch(err){
       console.log(err);
