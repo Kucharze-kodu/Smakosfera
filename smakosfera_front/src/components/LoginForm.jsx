@@ -1,8 +1,10 @@
 import { styles } from "../style";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { logo } from "../assets";
 import { useState } from "react";
 import { urlLogin } from "../endpoints";
+
+const history = useHistory();
 
 const LoginForm = () => {
   const[email, setEmail] = useState("");
@@ -30,10 +32,11 @@ const LoginForm = () => {
 
       document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
       
-      if(resJson.status === 200){
+      if(res.status === 200){
         setEmail("");
         setPassword("");
-        setMessage("Sukces!");
+        setMessage("");
+        // TODO redirect to home page
       }
       else{
         setMessage("Nieporawny email lub hasło!");
@@ -43,7 +46,7 @@ const LoginForm = () => {
       console.log(err);
     }
   };
-  console.log(message);
+
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -54,7 +57,7 @@ const LoginForm = () => {
         </Link>
 
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
-          <div className={`${styles.heading2}`}>Zaloguj się!</div>
+          <div className={`${styles.heading2} text-white`}>Zaloguj się!</div>
           <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
             <input
               type="email"
@@ -62,7 +65,7 @@ const LoginForm = () => {
               id="email"
               name="email"
               title="Wprowadź email :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black text-black hover:text-white focus:text-white`}
               placeholder="Email:"
               maxLength={100}
               required
@@ -74,7 +77,7 @@ const LoginForm = () => {
               id="password"
               name="password"
               title="Wprowadź hasło :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black text-black hover:text-white focus:text-white`}
               placeholder="Hasło:"
               maxLength={250}
               required
@@ -86,7 +89,7 @@ const LoginForm = () => {
             >
               Wyślij!
             </button>
-            <div className="">{message ? <p>{message}</p> : null}</div>
+            <div className="text-white">{message ? <p>{message}</p> : null}</div>
           </form>
           <Link
             to="/register"

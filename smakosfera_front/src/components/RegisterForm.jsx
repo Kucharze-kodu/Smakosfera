@@ -36,24 +36,22 @@ const RegisterForm = () => {
       // let resJson = await res.json();
       
       if(res.status === 200){
-        // setName("");
-        // setSurname("");
-        // setEmail("");
-        // setPassword("");
-        // setConfirmPassword("");
-        // setMessage("Sukces!");
+        setName("");
+        setSurname("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setMessage("");
         setIsPopupOpen(true);
       }
       else{
         setMessage("Email jest już zajęty lub hasła się nie zgadzają!");
       }
-    
     }
-    catch(err){
-      console.log(err);
+     catch (error) {
     }
   };
-
+  
   const closePopup = () => {
     setIsPopupOpen(false);
   };
