@@ -41,6 +41,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Created($"ADD Comment", null);
         }
 
+        [HttpPut("{CommentId}")]
         public ActionResult Update([FromRoute] int CommentId, [FromBody] CommentDto comment)
         {
             _commentService.Update(CommentId, comment);
