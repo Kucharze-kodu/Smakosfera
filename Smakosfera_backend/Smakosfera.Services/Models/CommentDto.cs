@@ -20,7 +20,6 @@ namespace Smakosfera.Services.Models
         [Required]
         public int RecipeId { get; set; }
 
-        [Required]
         public int? CommentBossId { get; set; } = null;
 
     }

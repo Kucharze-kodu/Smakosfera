@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Smakosfera.DataAccess.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Smakosfera.DataAccess.Repositories;
@@ -20,7 +21,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpGet("{CommentId}")]
-        public ActionResult<CommentDto> Get(int CommentId)
+        public ActionResult<CommentDto> Get([FromRoute] int CommentId)
         {
             CommentDto comment = _commentService.GetComment(CommentId);
 
@@ -28,7 +29,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpGet("{RecipeId}")]
-        public ActionResult<IEnumerable<CommentDto>> GetAll([FromBody] int RecipeId)
+        public ActionResult<IEnumerable<Comment>> GetAll(int RecipeId)
         {
             var comments = _commentService.GetComments(RecipeId);
             return Ok(comments);

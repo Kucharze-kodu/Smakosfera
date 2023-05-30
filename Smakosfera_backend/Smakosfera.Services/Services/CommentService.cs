@@ -7,6 +7,7 @@ using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,7 +45,14 @@ namespace Smakosfera.Services.Services
 
         public IEnumerable<Comment> GetComments(int RecipeId)
         {
-            return _Comments.Comments.ToList().FindAll(c => c.RecipeId == RecipeId);
+            var comments = _Comments.Comments.ToList().FindAll(c => c.RecipeId == RecipeId);
+
+            if (comments is null)
+            {
+                throw new NotFoundException("Brak komentarzy w przepisie");
+            }
+
+            return comments;
         }
 
         public void Add(CommentDto comment)
@@ -61,8 +69,17 @@ namespace Smakosfera.Services.Services
                 RecipeId = comment.RecipeId,
                 CommentBossId = comment.CommentBossId
             };
-            _Comments.Comments.Add(newComment);
-            _Comments.SaveChanges();
+
+            try
+            {
+                _Comments.Comments.Add(newComment);
+                _Comments.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
+            }
+            
         }
 
         public void Update(int CommentId, CommentDto comment)
