@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.DataAccess.Entities
 {
-    public class RecipeType
+    public class Type
     {
         public int Id { get; set; }
-        public int RecipeId { get; set; }
-        public virtual Recipe Recipe { get; set; }
+        public string Name { get; set; }
 
-        public int TypeId { get; set; }
-        public virtual Type Type { get; set; }
+        public virtual ICollection<RecipeType> Recipes { get; set; }
     }
 }

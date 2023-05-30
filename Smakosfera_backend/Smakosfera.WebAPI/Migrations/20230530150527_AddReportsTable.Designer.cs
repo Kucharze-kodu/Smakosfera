@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Smakosfera.DataAccess.Repositories;
@@ -11,9 +12,11 @@ using Smakosfera.DataAccess.Repositories;
 namespace Smakosfera.WebAPI.Migrations
 {
     [DbContext(typeof(SmakosferaDbContext))]
-    partial class SmakosferaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230530150527_AddReportsTable")]
+    partial class AddReportsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,41 +24,6 @@ namespace Smakosfera.WebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CommentBossId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentBossId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.DifficultyLevel", b =>
                 {
@@ -94,29 +62,6 @@ namespace Smakosfera.WebAPI.Migrations
                     b.ToTable("Ingredients");
                 });
 
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Like", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Likes");
-                });
-
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Permission", b =>
                 {
                     b.Property<int>("Id")
@@ -135,35 +80,6 @@ namespace Smakosfera.WebAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("Permissions");
-                });
-
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Rate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
@@ -369,69 +285,6 @@ namespace Smakosfera.WebAPI.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Comment", b =>
-                {
-                    b.HasOne("Smakosfera.DataAccess.Entities.Comment", "CommentBoss")
-                        .WithMany()
-                        .HasForeignKey("CommentBossId");
-
-                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommentBoss");
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Like", b =>
-                {
-                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Rate", b =>
-                {
-                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
