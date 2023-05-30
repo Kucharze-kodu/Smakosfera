@@ -4,6 +4,8 @@ import { logo } from "../assets";
 import { useState } from "react";
 import { urlRegister } from "../endpoints";
 
+const whiteSpaceText = '\u00A0';
+
 const RegisterForm = () => {
   const[name, setName] = useState("");
   const[surname, setSurname] = useState("");
@@ -66,16 +68,39 @@ const RegisterForm = () => {
           </div>
         </Link>
 
-        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
-          <div className={`${styles.heading2}`}>Zarejestruj się!</div>
-          <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
+        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center text-white ">
+          {isPopupOpen ? (
+            <div className="popup">
+              <div className="popup-content">
+                <div className="text-container">
+                  <div style={{ lineHeight: '1.75' }} className={`${styles.heading3}`}>
+                    Aktywuj konto poprzez link aktywacyjny wysłany na adres
+                    email, a następnie zaloguj się.
+                    </div>
+                </div>
+                    <div style={{ lineHeight: '1.75' }} className={`${styles.heading3}`}>
+                      {whiteSpaceText}
+                    </div>
+                <div className="link-container">
+                  <Link
+                    to="/login"
+                    className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
+                  >
+                    OK
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+          <form onSubmit={handleSubmit} className="flex flex-col w-[75%] text-white">
+            <div className={`${styles.heading2}`}>Zarejestruj się!</div>
             <input
               type="text"
               value={name}
               id="name"
               name="name"
               title="Imię:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Imię:"
               maxLength={50}
               required
@@ -87,7 +112,7 @@ const RegisterForm = () => {
               id="surname"
               name="surname"
               title="Nazwisko:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Nazwisko:"
               maxLength={50}
               required
@@ -99,9 +124,9 @@ const RegisterForm = () => {
               id="email"
               name="email"
               title="Email:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Email:"
-              maxLength={250}
+              maxLength={256}
               required
               onChange={(e) => setEmail(e.target.value)}
             ></input>
@@ -111,9 +136,9 @@ const RegisterForm = () => {
               id="password"
               name="password"
               title="Hasło:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Hasło:"
-              maxLength={250}
+              maxLength={32}
               required
               onChange={(e) => setPassword(e.target.value)}
             ></input>
@@ -123,37 +148,29 @@ const RegisterForm = () => {
               id="confirmPassword"
               name="confirmPassword"
               title="Powtórz hasło:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Powtórz hasło:"
-              maxLength={250}
+              maxLength={256}
               required
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></input>
             <button
-              type="submit"
-              className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
-            >
-              Wyślij!
-            </button>
-            <div className="">{message ? <p>{message}</p> : null}</div>
-
-                {isPopupOpen && (
-            <div className="popup">
-              <div className="popup-content">
-                <p>Aktywuj konto poprzez link aktywacyjny wysłany na adres email, a następne zaloguj się.</p>
-                  {/* <button onClick={closePopup}> */}
-                  <Link to="/login" >OK</Link>
-                  {/* </button> */}
-              </div>
-            </div>
+                type="submit"
+                className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
+              >
+                Wyślij!
+              </button>
+              <div className="">{message ? <p>{message}</p> : null}</div>
+              <Link
+              to="/login"
+              className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
+              >
+              Masz już konto?
+              </Link>
+            </form>
           )}
-          </form>
-          <Link
-            to="/login"
-            className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
-          >
-            Masz już konto?
-          </Link>
+
+
         </div>
       </div>
     </div>
