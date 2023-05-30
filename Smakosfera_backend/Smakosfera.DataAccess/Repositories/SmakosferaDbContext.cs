@@ -28,6 +28,7 @@ namespace Smakosfera.DataAccess.Repositories
         public DbSet<Type> Types { get; set; }
         public DbSet<RecipeType> Recipes_Types { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         /*        public DbSet<Recipetype> Recipetypes { get; set; }
                 public DbSet<EnumType> EnumTypes { get; set; }*/
 
