@@ -11,6 +11,7 @@ const RegisterForm = () => {
   const[password, setPassword] = useState("");
   const[confirmPassword, setConfirmPassword] = useState("");
   const[message, setMessage] = useState("");
+  const[isPopupOpen, setIsPopupOpen] = useState(false);
   
   let handleSubmit = async (e) => {
     
@@ -33,12 +34,13 @@ const RegisterForm = () => {
       // let resJson = await res.json();
       
       if(res.status === 200){
-        setName("");
-        setSurname("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setMessage("Sukces!");
+        // setName("");
+        // setSurname("");
+        // setEmail("");
+        // setPassword("");
+        // setConfirmPassword("");
+        // setMessage("Sukces!");
+        setIsPopupOpen(true);
       }
       else{
         setMessage("Email jest już zajęty lub hasła się nie zgadzają!");
@@ -49,6 +51,11 @@ const RegisterForm = () => {
       console.log(err);
     }
   };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
 
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
@@ -129,6 +136,17 @@ const RegisterForm = () => {
               Wyślij!
             </button>
             <div className="">{message ? <p>{message}</p> : null}</div>
+
+                {isPopupOpen && (
+            <div className="popup">
+              <div className="popup-content">
+                <p>Aktywuj konto poprzez link aktywacyjny wysłany na adres email, a następne zaloguj się.</p>
+                  {/* <button onClick={closePopup}> */}
+                  <Link to="/login" >OK</Link>
+                  {/* </button> */}
+              </div>
+            </div>
+          )}
           </form>
           <Link
             to="/login"
