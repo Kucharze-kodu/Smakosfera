@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Type = Smakosfera.DataAccess.Entities.Type;
 
 namespace Smakosfera.DataAccess.Seeder
 {
@@ -36,12 +37,18 @@ namespace Smakosfera.DataAccess.Seeder
 
                     _dbContext.SaveChanges();
                 }
-               /* if (!_dbContext.EnumTypes.Any())
+                /* if (!_dbContext.EnumTypes.Any())
+                 {
+                     var enumTypes = GetEnumTypes();
+                     _dbContext.EnumTypes.AddRange(enumTypes);
+                     _dbContext.SaveChanges();
+                 }*/
+                if (!_dbContext.Types.Any())
                 {
-                    var enumTypes = GetEnumTypes();
-                    _dbContext.EnumTypes.AddRange(enumTypes);
+                    var types = GetTypes();
+                    _dbContext.Types.AddRange(types);
                     _dbContext.SaveChanges();
-                }*/
+                }
             
             }
         }
@@ -102,35 +109,35 @@ namespace Smakosfera.DataAccess.Seeder
 
         }
 
-        private IEnumerable<Entities.Type> GetEnumTypes()
+        private IEnumerable<Type> GetTypes()
         {
-            var enumTypes = new List<Entities.Type>()
+            var types = new List<Type>()
             {
-                new Entities.Type()
+                new Type()
                 {
                     Name = "vegetarian"
                 },
 
-                new Entities.Type()
+                new Type()
                 {
                     Name = "vegan"
                 },
 
-                new Entities.Type()
+                new Type()
                 {
                     Name = "meat"
                 },
-                new Entities.Type()
+                new Type()
                 {
                     Name = "fast food"
                 },
-                new Entities.Type()
+                new Type()
                 {
                     Name = "other"
                 }
             };
 
-            return enumTypes;
+            return types;
 
         }
     }
