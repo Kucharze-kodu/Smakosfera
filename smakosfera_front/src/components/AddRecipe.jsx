@@ -79,7 +79,7 @@ const DodawaniePrzepisu = () => {
 
           "name": "Przykładowy przepis",
           "description": "Opis przepisu",
-          "difficultyLevelId": 2,
+          "difficultyLevelId": trudnosc,
           "preparationTime": 30,
           "communityRecipe": true,                                // PRZYKLADKOWE DANE 
           "skladniki": ["skladnik1", "skladnik2"]
@@ -139,7 +139,7 @@ const DodawaniePrzepisu = () => {
         <option value="3">Trudne</option>
       </select>
 
-      <input type="number" value={czas} onChange={handleCzas} className="w-48 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500" placeholder="Czas przygotowania:" />
+      <input type="number" min="0" value={czas} onChange={handleCzas} className="w-48 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500" placeholder="Czas przygotowania:" />
 
       </label>
 
@@ -161,6 +161,7 @@ const DodawaniePrzepisu = () => {
           <input
             placeholder="Ilosc:"
             type="number"
+            min="0"
             value={ingredient.ilosc}
             onChange={(event) => handleSkladnik(event, index, 'ilosc')}
             className="w-48 px-4 py-2 mb-2 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500"
