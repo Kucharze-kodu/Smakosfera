@@ -13,6 +13,7 @@ import MyAccount from './MyAccount';
 import Favorites from './Favorites';
 import AddRecipe from './AddRecipe';
 import Footer from './Footer';
+import Logout from './Logout';
 
 export {
     LandingPage,
@@ -29,5 +30,6 @@ export {
     MyAccount,
     Favorites,
     AddRecipe,
-    Footer
+    Footer,
+    Logout,
 };

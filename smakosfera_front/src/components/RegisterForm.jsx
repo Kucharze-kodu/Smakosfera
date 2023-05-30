@@ -12,7 +12,7 @@ const RegisterForm = () => {
           </div>
         </Link>
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start  md:my-10 text-center">
-          <div className={`${styles.heading2}`}>Zarejestruj się!</div>
+          <div className={`${styles.heading2} text-white`}>Zarejestruj się!</div>
           <form className="flex flex-col w-[75%]">
             <div className="flex flex-row">
               <input
@@ -20,7 +20,7 @@ const RegisterForm = () => {
                 id="name"
                 name="name"
                 title="Wprowadź imie :)"
-                className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+                className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
                 placeholder="Imię:"
                 maxLength={50}
                 required
@@ -30,7 +30,7 @@ const RegisterForm = () => {
                 id="surname"
                 name="surname"
                 title="Wprowadź nazwisko :)"
-                className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 ml-1 mt-3  border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+                className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 ml-1 mt-3  border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
                 placeholder="Nazwisko:"
                 maxLength={50}
                 required
@@ -41,7 +41,7 @@ const RegisterForm = () => {
               id="login"
               name="login"
               title="Wprowadź login :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 mt-2border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 mt-2border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Login (nick):"
               maxLength={100}
               required
@@ -51,7 +51,7 @@ const RegisterForm = () => {
               id="password"
               name="password"
               title="Wprowadź hasło :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black ] focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
               required
@@ -61,21 +61,21 @@ const RegisterForm = () => {
               id="email"
               name="email"
               title="Wprowadź email :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Email:"
               maxLength={250}
               required
             ></input>
             <button
               type="submit"
-              className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
+              className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] text-dimWhite hover:text-white focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
             >
               Wyślij!
             </button>
           </form>
           <Link
             to="/login"
-            className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
+            className={`${styles.paragraph} my-1 cursor-pointer opacity-50 text-dimWhite hover:text-white`}
           >
             Masz już konto?
           </Link>

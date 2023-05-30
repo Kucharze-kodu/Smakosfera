@@ -7,15 +7,15 @@ export const styles = {
 
   logo: "font-poppins font-bold xs:text-[30px] text-[24px] gradient",
   heading:
-    "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[100px] leading-[50px] w-full",
+    "font-poppins text-dimWhite font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[100px] leading-[50px] w-full",
   heading2:
-    "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
+    "font-poppins text-dimWhite font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
   heading3:
-    "font-poppins font-semibold xs:text-[2rem] text-[1.5rem] xs:leading-[60px] leading-[50px] w-full",
+    "font-poppins text-dimWhite font-semibold xs:text-[1.5rem] text-[1.5rem] xs:leading-[60px] leading-[50px] w-full",
   paragraph:
-    "font-poppins text-dimWhite font-normal text-[18px] leading-[30.8px]",
+    "font-poppins font-normal text-[18px] leading-[30.8px]",
   paragraph2:
-    "font-poppins text-dimWhite font-normal text-[12px] leading-[25.8px]",
+    "font-poppins font-normal text-[12px] leading-[25.8px]",
   icons: "font-poppins text__gradient text-[68px]",
   socialIcons: "font-poppins text-dimWhite text-[32px]",
 

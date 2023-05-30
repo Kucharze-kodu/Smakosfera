@@ -1,18 +1,23 @@
 import { styles } from "../style";
-import { Link } from "react-router-dom";
+import { Link, json, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
-import { useState } from "react";
 import { urlLogin } from "../endpoints";
+import { useCookies } from "react-cookie";
+import { useState } from "react";
 
 const LoginForm = () => {
-  const[email, setEmail] = useState("");
-  const[password, setPassword] = useState("");
-  const[message, setMessage] = useState("");
-  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
+  const [cookieName, setCookieName] = useCookies(["resJson_name"]);
+  const [cookiePermission, setCookiePermission] = useCookies(["resJson_permission"]);
+
   let handleSubmit = async (e) => {
-    
     e.preventDefault();
-    try{
+    try {
       let res = await fetch(urlLogin, {
         method: "POST",
         headers: {
@@ -25,25 +30,36 @@ const LoginForm = () => {
       });
       let resJson = await res.json();
 
+      // current time
       const currentDate = new Date();
-      const expirationDate = new Date(currentDate.getTime() + (24 * 60 * 60 * 1000));
+      // current time + 30 days
+      const expirationDate = new Date(
+        currentDate.getTime() + 24 * 60 * 60 * 1000 * 30
+      );
+      setCookieName("resJson_name", resJson.name, {
+        path: "/",
+        expires: expirationDate,
+      });
+      setCookiePermission("resJson_permission", resJson.permissionName, {
+        path: "/",
+        expires: expirationDate,
+      });
 
-      document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`
-      
-      if(res.status === 200){
+      if (res.status === 200) {
         setEmail("");
         setPassword("");
         setMessage("Sukces!");
+
+        navigate("/home");
+      } else {
+        setErrorMessage("Nieprawidłowy login lub hasło!");
       }
-      else{
-        setMessage("Błąd!");
-      }
-    }
-    catch(err){
+    } catch (err) {
+      setErrorMessage("Nieprawidłowy login lub hasło!");
       console.log(err);
     }
   };
-  
+
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -54,7 +70,7 @@ const LoginForm = () => {
         </Link>
 
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center">
-          <div className={`${styles.heading2}`}>Zaloguj się!</div>
+          <div className={`${styles.heading2} text-white`}>Zaloguj się!</div>
           <form onSubmit={handleSubmit} className="flex flex-col w-[75%]">
             <input
               type="email"
@@ -62,7 +78,7 @@ const LoginForm = () => {
               id="email"
               name="email"
               title="Wprowadź email :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph} text-black bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black hover:text-white focus:text-white focus:bg-black`}
               placeholder="Email:"
               maxLength={100}
               required
@@ -74,7 +90,7 @@ const LoginForm = () => {
               id="password"
               name="password"
               title="Wprowadź hasło :)"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black ] focus:bg-black`}
+              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black text-black hover:text-white focus:text-white focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
               required
@@ -82,15 +98,20 @@ const LoginForm = () => {
             ></input>
             <button
               type="submit"
-              className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
+              className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] text-dimWhite hover:text-white border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
             >
               Wyślij!
             </button>
-            <div className="">{message ? <p>{message}</p> : null}</div>
+            <div className={`${styles.paragraph} text-green-600`}>
+              {message ? <p>{message}</p> : null}
+            </div>
+            <div className={`${styles.paragraph} text-red`}>
+              {errorMessage ? <p>{errorMessage}</p> : null}
+            </div>
           </form>
           <Link
             to="/register"
-            className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
+            className={`${styles.paragraph} my-1 cursor-pointer opacity-50 text-dimWhite hover:text-white`}
           >
             Nie masz konta?
           </Link>

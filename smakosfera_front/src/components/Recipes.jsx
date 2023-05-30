@@ -5,24 +5,48 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
+import { useCookies } from "react-cookie";
+import ScrollAnimation from "react-animate-on-scroll";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
+  const [displayedRecipes, setDisplayedRecipes] = useState(8);
 
-  // displaying recipes
+  const handleShowMore = () => {
+    setDisplayedRecipes((prevCount) => prevCount + 8);
+  };
+
+  // GET recipes
   useEffect(() => {
     axios.get(urlRecipes).then((response) => {
-      console.log(response.data);
       setRecipes(response.data);
     });
   }, []);
 
+  // cookies
+  const [resJson, setResJson] = useState(null);
+  const [cookie] = useCookies(["resJson_name"]);
+
+  useEffect(() => {
+    // Read the value of resJson from cookies
+    const storedResJson = cookie.resJson_name;
+    if (storedResJson) {
+      // If it exists, update the value in the context
+      setResJson(storedResJson);
+    }
+  }, []);
+
+  const isLoggedIn = () => {
+    if (resJson != null) return true;
+    else return false;
+  };
+
   return (
     <>
       {/* Searchbar */}
-      <div className={`${styles.paragraph} p-2 border-b-[1px]`}>
+      <div className={`${styles.paragraph} text-gray hover:text-black p-2 `}>
         <form>
-          <div className={`relative`}>
+          <div className={`relative `}>
             <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
               <svg
                 aria-hidden="true"
@@ -43,41 +67,75 @@ const Recipes = () => {
               type="text"
               id="search"
               name="search"
-              className="rounded-lg w-full pr-[5.3rem] pl-10 p-2 border-[1px] border-dimWhite hover:border-white"
+              className="rounded-lg w-full pr-[5.3rem] placeholder:text-gray  hover:text-black text-gray  pl-10 p-2 border-[1px] border-dimWhite hover:border-white"
               placeholder="Wyszukaj przepis..."
             />
             <button
               type="submit"
-              className="hover:text-white absolute right-3 top-2 ring-0 border-0 hover:border-0 focus:border-0 outline-none hover:outline-none focus:outline-none"
+              className="hover:text-black text-gray absolute right-3 top-2 ring-0 border-0 hover:border-0 focus:border-0 outline-none hover:outline-none focus:outline-none"
             >
               Search
             </button>
           </div>
         </form>
       </div>
+
       {/* Recipes section */}
-      <div className={`flex flex-col xs:grid xs:grid-cols-4 xs:gap-4 m-2 rounded-lg`}>
-        {recipes.map((recipe) => (
-          <div key={recipe.id} className="recipe overflow-y-scroll border text-center p-2 border-dimWhite">
-            <Link to={`/home/${recipe.id}`}>
-              <img className="mx-auto" src={cooking_book} alt="przepis" />
-            </Link>
-            <div className="">
-              <h5 className={`${styles.heading3} text-white`}>{recipe.name}</h5>
-              <Link to={`/home/${recipe.id}`}>
-                <i>
-                <Button 
-                  text="Pokaż przepis!"
-                  padding="p-1"
-                  margin="my-2 mx-4"
-                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                ></Button>
-                </i>
-              </Link>
-            </div>
-          </div>
-        ))}
-      </div>
+      <ScrollAnimation animateIn="fadeIn" duration={1}>
+        <div
+          className={`flex flex-col h-full xs:grid xs:grid-cols-4 xs:gap-4 xs:mx-2 rounded-lg`}
+        >
+          {recipes
+            .slice(0, isLoggedIn() ? displayedRecipes : 4)
+            .map((recipe) => (
+              <div
+                key={recipe.id}
+                className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
+              >
+                <Link to={`/home/${recipe.id}`}>
+                  <img className="mx-auto" src={cooking_book} alt="przepis" />
+                </Link>
+                <div className="">
+                  <h5 className={`${styles.heading3} text-white`}>
+                    {recipe.name}
+                  </h5>
+                  <Link to={`/home/${recipe.id}`}>
+                    <i>
+                      <Button
+                        text="Pokaż przepis!"
+                        padding="p-1"
+                        margin="mx-4"
+                        color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                      ></Button>
+                    </i>
+                  </Link>
+                </div>
+              </div>
+            ))}
+        </div>
+      </ScrollAnimation>
+
+      {isLoggedIn() == false && (
+        <div
+          className={`text-center p-5 ${styles.paragraph} text-dimWhite hover:text-white`}
+        >
+          <Link to="/login">
+            Aby zobaczyć więcej przepisów musisz się zalogować...
+          </Link>
+        </div>
+      )}
+
+      {isLoggedIn() && (
+        <div
+          className={`text-center p-5 ${styles.paragraph} cursor-pointer text-dimWhite hover:text-white`}
+        >
+          {displayedRecipes >= recipes.length ? (
+            <div>Koniec przepisów...</div>
+          ) : (
+            <div onClick={handleShowMore}>Wyświetl więcej przepisów...</div>
+          )}
+        </div>
+      )}
     </>
   );
 };
