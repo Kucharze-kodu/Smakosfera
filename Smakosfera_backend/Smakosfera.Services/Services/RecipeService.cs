@@ -12,10 +12,12 @@ namespace Smakosfera.Services.Services
     public class RecipeService : IRecipesService
     {
         private readonly SmakosferaDbContext _Recipes;
+        private readonly IRecipeIngredientService _recipeIngredientService;
 
-        public RecipeService(SmakosferaDbContext recipes)
+        public RecipeService(SmakosferaDbContext recipes, IRecipeIngredientService recipeIngredientService)
         {
             _Recipes = recipes;
+            _recipeIngredientService = recipeIngredientService;
         }
 
         public RecipeDto GetRecipe(int recipeId)
@@ -34,28 +36,20 @@ namespace Smakosfera.Services.Services
                 Description = recipe.Description,
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
-                CommunityRecipe = recipe.CommunityRecipe
+                CommunityRecipe = recipe.CommunityRecipe,
+                ListIngredient = _recipeIngredientService.GetIngredient(recipeId)
             };
 
             return result;
 
         }
 
-        public IEnumerable<RecipeIDDto> Browse()
+        public IEnumerable<Recipe> Browse()
         {
             var date = _Recipes.Recipes.ToList();
 
 
-            var result = date.FindAll(r => r.IsConfirmed == true)
-                             .Select(r => new RecipeIDDto()
-                             {
-                                 Id = r.Id,
-                                 Name = r.Name,
-                                 Description = r.Description,
-                                 DifficultyLevelId = r.DifficultyLevelId,
-                                 PreparationTime = r.PreparationTime,
-                                 CommunityRecipe = r.CommunityRecipe
-                             });
+            var result = date.FindAll(r => r.IsConfirmed == true);
 
             if (result.Any() == false)
             {
@@ -78,8 +72,25 @@ namespace Smakosfera.Services.Services
 
             try
             {
-                _Recipes.Recipes.Add(one);
-                _Recipes.SaveChanges();
+                if (dto.ListIngredient != null)
+                {
+                    _Recipes.Recipes.Add(one);
+                    _Recipes.SaveChanges();
+                    var result = _Recipes.Recipes.SingleOrDefault(c => c.Name == dto.Name).Id;
+
+                    if(result != null)
+                    {
+                        List<RecipeIngredientDto> lista = dto.ListIngredient.ToList();
+                        foreach (var ing in lista)
+                        {
+                             _recipeIngredientService.AddRecipeIngredient(result, ing);
+                        }
+                    }
+
+                }
+
+
+                
             }
             catch (DbUpdateException ex)
             {

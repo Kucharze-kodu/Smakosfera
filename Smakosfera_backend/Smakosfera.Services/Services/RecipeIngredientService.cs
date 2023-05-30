@@ -9,10 +9,12 @@ namespace Smakosfera.Services.Services
     public class RecipeIngredientService : IRecipeIngredientService
     {
         private readonly SmakosferaDbContext _Recipes_Ingredient;
+        private readonly IIngredientService _IngredientService;
 
-        public RecipeIngredientService(SmakosferaDbContext ingredient)
+        public RecipeIngredientService(SmakosferaDbContext ingredient, IIngredientService ingredientService)
         {
             _Recipes_Ingredient = ingredient;
+            _IngredientService = ingredientService;
         }
 
         public IEnumerable<RecipeIngredientDto> GetIngredient(int idRecipe)
@@ -23,20 +25,34 @@ namespace Smakosfera.Services.Services
             var ingredients = date.FindAll(r => r.RecipeId == idRecipe)
                              .Select(r => new RecipeIngredientDto
                              {
+                                 Name = _IngredientService.GetIngredient(r.IngredientId).Name,
                                 Amount = r.Amount,
-                                Unit = r.Unit
-                             });
+                                 Unit = r.Unit
+                             }); ;
 
             return ingredients;
         }
 
-        public void AddRecipeIngredient(int idRecipe,int IngredientId, RecipeIngredientDto dto)
+        public void AddRecipeIngredient(int idRecipe, RecipeIngredientDto dto)
         {
+            var date = _IngredientService.Browse();
+
+            int? IdIngredient = date.FirstOrDefault(c => c.Name == dto.Name).Id;
+            if (IdIngredient == 0 || IdIngredient == null) 
+            {
+                var newADD = new IngredientDto
+                {
+                    Name = dto.Name
+                };
+                _IngredientService.AddIngredient(newADD);
+                IdIngredient = date.FirstOrDefault(c => c.Name == dto.Name).Id;
+            }
+
             var newIngredient = new RecipeIngredient
             {
                 Amount = dto.Amount,
                 Unit = dto.Unit,
-                IngredientId = IngredientId,
+                IngredientId = (int)IdIngredient,
                 RecipeId = idRecipe
             };
 

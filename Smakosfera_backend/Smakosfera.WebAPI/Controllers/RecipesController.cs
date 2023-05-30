@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
@@ -29,7 +30,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RecipeIDDto>> GetAll()
+        public ActionResult<IEnumerable<Recipe>> GetAll()
         {
             var result = _recipesService.Browse();
             return Ok(result);

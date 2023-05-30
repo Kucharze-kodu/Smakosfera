@@ -18,7 +18,7 @@ namespace Smakosfera.DataAccess.Entities
 
         public int PreparationTime { get; set; }
         public bool CommunityRecipe { get; set; } = true;
-        public bool IsConfirmed { get; set; } = false;
+        public bool IsConfirmed { get; set; } = true;
 
         public int DifficultyLevelId { get; set; }
         public virtual DifficultyLevel DifficultyLevel { get; set; }

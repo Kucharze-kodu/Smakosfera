@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.Services.Interfaces
 {
-    public interface IRecipesService    
+    public interface IRecipesService 
     {   
         RecipeDto GetRecipe(int recipeId);
-        IEnumerable<RecipeIDDto> Browse();
+        IEnumerable<Recipe> Browse();
         void Add(RecipeDto dto);
         void Update(int recipeId, RecipeDto dto);
         void Delete(int recipeId);

@@ -48,13 +48,14 @@ namespace Smakosfera.Services.Services
         }
 
 
-        public IEnumerable<IngredientDto> Browse()
+        public IEnumerable<Ingredient> Browse()
         {
             var date = _Ingredient.Ingredients.ToList();
 
 
-            var result = date.Select(r => new IngredientDto()
+            var result = date.Select(r => new Ingredient()
                              {
+                                 Id = r.Id,      
                                  Name = r.Name
                              });
 

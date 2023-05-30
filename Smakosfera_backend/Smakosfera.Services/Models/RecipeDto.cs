@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Smakosfera.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,17 +23,7 @@ namespace Smakosfera.Services.Models
         public int PreparationTime { get; set; }
 
         public bool CommunityRecipe { get; set; } = true; // zmiany?
-    }
-
-    public class RecipeIDDto
-    {
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int DifficultyLevelId { get; set; } = 1;
-        public int PreparationTime { get; set; }
-
-        public bool CommunityRecipe { get; set; } = true; // zmiany?
+        [Required]
+        public IEnumerable<RecipeIngredientDto> ListIngredient { get; set; }
     }
 }
