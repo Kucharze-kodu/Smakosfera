@@ -68,7 +68,7 @@ const RegisterForm = () => {
           </div>
         </Link>
 
-        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center text-white ">
+        <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center text-white">
           {isPopupOpen ? (
             <div className="popup">
               <div className="popup-content">
@@ -92,15 +92,15 @@ const RegisterForm = () => {
               </div>
             </div>
           ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col w-[75%] text-white">
-            <div className={`${styles.heading2}`}>Zarejestruj się!</div>
+          <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
+            <div className={`${styles.heading2} text-white `}>Zarejestruj się!</div>
             <input
               type="text"
               value={name}
               id="name"
               name="name"
               title="Imię:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black   hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Imię:"
               maxLength={50}
               required
@@ -112,7 +112,7 @@ const RegisterForm = () => {
               id="surname"
               name="surname"
               title="Nazwisko:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white hover:bg-black focus:text-white focus:bg-black text-black`}
               placeholder="Nazwisko:"
               maxLength={50}
               required
@@ -124,7 +124,7 @@ const RegisterForm = () => {
               id="email"
               name="email"
               title="Email:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Email:"
               maxLength={256}
               required
@@ -136,7 +136,7 @@ const RegisterForm = () => {
               id="password"
               name="password"
               title="Hasło:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Hasło:"
               maxLength={32}
               required
@@ -148,7 +148,7 @@ const RegisterForm = () => {
               id="confirmPassword"
               name="confirmPassword"
               title="Powtórz hasło:"
-              className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Powtórz hasło:"
               maxLength={256}
               required

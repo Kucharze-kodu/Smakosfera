@@ -11,9 +11,11 @@ export const styles = {
   heading2:
     "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
   heading3:
-    "font-poppins font-semibold xs:text-[2.25rem] text-[1.5rem] xs:leading-[100px] leading-[50px] w-full line-height [15]",
+    "font-poppins font-semibold xs:text-[2.25rem] text-[1.5rem] xs:leading-[100px] leading-[50px] w-full ",
   paragraph:
     "font-poppins text-dimWhite font-normal text-[18px] leading-[30.8px]",
+  paragraph2:
+    "font-poppins font-normal text-[18px] leading-[30.8px]",
   icons: "font-poppins text__gradient text-[68px]",
   socialIcons: "font-poppins text-dimWhite text-[32px]",
 
