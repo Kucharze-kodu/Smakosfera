@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.DataAccess.Entities
 {
-    public class Recipetype
+    public class RecipeType
     {
+        public int Id { get; set; }
         public int RecipeId { get; set; }
         public virtual Recipe Recipe { get; set; }
 

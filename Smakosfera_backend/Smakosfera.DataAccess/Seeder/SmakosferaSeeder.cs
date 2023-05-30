@@ -102,29 +102,29 @@ namespace Smakosfera.DataAccess.Seeder
 
         }
 
-        private IEnumerable<EnumType> GetEnumTypes()
+        private IEnumerable<Entities.Type> GetEnumTypes()
         {
-            var enumTypes = new List<EnumType>()
+            var enumTypes = new List<Entities.Type>()
             {
-                new EnumType()
+                new Entities.Type()
                 {
                     Name = "vegetarian"
                 },
 
-                new EnumType()
+                new Entities.Type()
                 {
                     Name = "vegan"
                 },
 
-                new EnumType()
+                new Entities.Type()
                 {
                     Name = "meat"
                 },
-                new EnumType()
+                new Entities.Type()
                 {
                     Name = "fast food"
                 },
-                new EnumType()
+                new Entities.Type()
                 {
                     Name = "other"
                 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Smakosfera.DataAccess.Repositories;
@@ -11,9 +12,11 @@ using Smakosfera.DataAccess.Repositories;
 namespace Smakosfera.WebAPI.Migrations
 {
     [DbContext(typeof(SmakosferaDbContext))]
-    partial class SmakosferaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230530145105_AddRecipeTypeRelation")]
+    partial class AddRecipeTypeRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
