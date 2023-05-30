@@ -1,7 +1,7 @@
 
 import { styles } from "../style";
 import React, { useState,useEffect } from 'react';
-import { urlAddRecipe } from "../endpoints";
+import { urlRecipes } from "../endpoints";
 import { urlIngredient } from "../endpoints";
 import axios from 'axios';
 
@@ -64,7 +64,7 @@ const DodawaniePrzepisu = () => {
     event.preventDefault();
     
     try{
-      let res = await fetch(urlAddRecipe, {
+      let res = await fetch(urlRecipes, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
