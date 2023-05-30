@@ -10,6 +10,7 @@ import ScrollAnimation from "react-animate-on-scroll";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [displayedRecipes, setDisplayedRecipes] = useState(8);
 
   const handleShowMore = () => {
@@ -42,7 +43,7 @@ const Recipes = () => {
   };
 
   return (
-    <>
+    <div className="overflow-auto">
       {/* Searchbar */}
       <div className={`${styles.paragraph} text-gray hover:text-black p-2 `}>
         <form>
@@ -82,37 +83,41 @@ const Recipes = () => {
 
       {/* Recipes section */}
       <ScrollAnimation animateIn="fadeIn" duration={1}>
-        <div
-          className={`flex flex-col h-full xs:grid xs:grid-cols-4 xs:gap-4 xs:mx-2 rounded-lg`}
-        >
-          {recipes
-            .slice(0, isLoggedIn() ? displayedRecipes : 4)
-            .map((recipe) => (
-              <div
-                key={recipe.id}
-                className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
-              >
-                <Link to={`/home/${recipe.id}`}>
-                  <img className="mx-auto" src={cooking_book} alt="przepis" />
-                </Link>
-                <div className="">
-                  <h5 className={`${styles.heading3} text-white`}>
-                    {recipe.name}
-                  </h5>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <div
+            className={`flex flex-col h-full xs:grid xs:grid-cols-4 xs:gap-4 xs:mx-2 rounded-lg`}
+          >
+            {recipes
+              .slice(0, isLoggedIn() ? displayedRecipes : 8)
+              .map((recipe) => (
+                <div
+                  key={recipe.id}
+                  className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
+                >
                   <Link to={`/home/${recipe.id}`}>
-                    <i>
-                      <Button
-                        text="Pokaż przepis!"
-                        padding="p-1"
-                        margin="mx-4"
-                        color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                      ></Button>
-                    </i>
+                    <img className="mx-auto" src={cooking_book} alt="przepis" />
                   </Link>
+                  <div className="">
+                    <h5 className={`${styles.heading3} text-white`}>
+                      {recipe.name}
+                    </h5>
+                    <Link to={`/home/${recipe.id}`}>
+                      <i>
+                        <Button
+                          text="Pokaż przepis!"
+                          padding="p-1"
+                          margin="mx-4"
+                          color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                        ></Button>
+                      </i>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-        </div>
+              ))}
+          </div>
+        )}
       </ScrollAnimation>
 
       {isLoggedIn() == false && (
@@ -136,7 +141,7 @@ const Recipes = () => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
