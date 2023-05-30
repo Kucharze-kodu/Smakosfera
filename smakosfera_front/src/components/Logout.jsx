@@ -7,11 +7,11 @@ const Logout = () => {
     <div className={`${styles.background} `}>
       <Logo />
       <div
-        className={`${styles.heading} text-center p-16 sm:p-28`}
+        className={`${styles.heading}  text-white text-center py-16 sm:py-28`}
       >
         Zostałeś wylogowany!
         <div className={`${styles.paragraph} my-2`}>
-          <Link to="/" className="hover:text-gray-400">Wróc do strony głównej</Link>
+          <Link to="/" className="text-dimWhite">Wróc do strony głównej</Link>
         </div>
       </div>
     </div>

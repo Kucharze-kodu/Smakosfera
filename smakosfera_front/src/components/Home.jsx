@@ -8,9 +8,9 @@ import {
   BiPlusCircle,
   BiLogOut,
 } from "react-icons/bi";
-import { Route, Routes, Link, useNavigate } from "react-router-dom";
-import { Suspense, lazy, useEffect, useState } from "react";
-import useCookies from "react-cookie/cjs/useCookies";
+import { Route, Routes, Link } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { useAuth } from "./AuthContext";
 
 const Recipes = lazy(() => import("./Recipes"));
 const MyAccount = lazy(() => import("./MyAccount"));
@@ -19,60 +19,29 @@ const AddRecipe = lazy(() => import("./AddRecipe"));
 const LoadingScreen = lazy(() => import("./LoadingScreen"));
 
 const Home = () => {
-  const navigate = useNavigate();
-
-  const [resJsonName, setResJsonName] = useState(null);
-  const [cookieName, setCookieName, removeCookieName] = useCookies([
-    "resJson_name",
-  ]);
-  const [resJsonPermission, setResJsonPermission] = useState(null);
-  const [cookiePermission, setCookiePermission, removeCookiePermission] =
-    useCookies(["resJson_permission"]);
-
-  useEffect(() => {
-    // Read the value of resJson from cookies
-    const storedResJsonName = cookieName.resJson_name;
-    const storedResJsonPermission = cookiePermission.resJson_permission;
-    if (storedResJsonName) {
-      // If it exists, update the value in the context
-      setResJsonName(storedResJsonName);
-    }
-    if (storedResJsonPermission) {
-      setResJsonPermission(storedResJsonPermission);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    // Remove the cookies and clear the context
-    removeCookieName("resJson_name", { path: "/" });
-    removeCookiePermission("resJson_permission", { path: "/" });
-    setResJsonName(null);
-    setResJsonPermission(null);
-    navigate("/logout");
-  };
-
-  const isLoggedIn = () => {
-    if (resJsonName != null && resJsonPermission != null) return true;
-    else return false;
-  };
+  // Check if user is logged in
+  const {isLoggedIn} = useAuth();
+  const {handleLogout} = useAuth();
+  const {getResJsonName} = useAuth();
 
   return (
     <div
       className={`${styles.background} xs:py-5 xs:px-5 overflow-y-scroll xs:overflow-hidden`}
     >
       <div className="flex xs:h-[95%] h-full">
-        <div className="flex xs:flex-row flex-col xs:border-[2px] border-dimWhite">
+        <div className=" flex xs:flex-row flex-col xs:border-[2px] border-dimWhite">
           {/* Logout (only for phones)*/}
           {isLoggedIn() && (
             <div
-              className={`flex xs:hidden h-[0%] pt-2 pr-2 justify-end ${styles.heading} text-dimWhite`}
+              onClick={handleLogout}
+              className={`z-0 flex xs:hidden h-[0%] pt-2 pr-2 justify-end ${styles.heading} text-dimWhite`}
             >
               <BiLogOut />
             </div>
           )}
 
           {/* Logo (only for phones) */}
-          <div className="xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
+          <div className="z-1 xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
             <Link to="/">
               <img src={logo} alt="logo" className="h-[100%] p-5" />
             </Link>
@@ -84,7 +53,7 @@ const Home = () => {
               <img
                 src={logo}
                 alt="logo"
-                className="p-5 top-0 sticky bg-black border-b-[1px] border-b-dimWhite"
+                className="p-5 top-0 sticky border-b-[1px] border-b-dimWhite"
               />
             </Link>
             <img src={avatar} alt="avatar" className="w-[65%] mx-auto" />
@@ -137,7 +106,7 @@ const Home = () => {
                   <>
                     Witaj{" "}
                     <span className=" text-red underline underline-offset-4">
-                      {resJsonName}!
+                      {getResJsonName()}!
                     </span>
                   </>
                 )}
@@ -207,9 +176,9 @@ const Home = () => {
       {/* Bottom navbar (only for phones) */}
       {isLoggedIn() && (
         <div
-          className={`${styles.heading} fixed bottom-0 bg-black text-dimWhite xs:hidden h-[10%]`}
+          className={`${styles.heading} fixed bottom-0 bg-black text-white xs:hidden h-[10%]`}
         >
-          <div className="flex flex-row items-center justify-between border-[2px] h-full px-5 border-dimWhite">
+          <div className="flex flex-row items-center justify-between h-full px-5">
             <Link to="/home">
               <BiHome />
             </Link>
