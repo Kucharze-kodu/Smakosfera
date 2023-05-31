@@ -12,10 +12,12 @@ namespace Smakosfera.Services.Services
     public class RecipeService : IRecipesService
     {
         private readonly SmakosferaDbContext _Recipes;
+        private readonly IUserContextService _userContextService;
 
-        public RecipeService(SmakosferaDbContext recipes)
+        public RecipeService(SmakosferaDbContext recipes, IUserContextService userContextService)
         {
             _Recipes = recipes;
+            _userContextService = userContextService;
         }
 
         public RecipeDto GetRecipe(int recipeId)
@@ -73,7 +75,7 @@ namespace Smakosfera.Services.Services
                 Description = dto.Description,
                 DifficultyLevelId = dto.DifficultyLevelId,
                 PreparationTime = dto.PreparationTime,
-                UserId = 23 // zmiana
+                UserId = _userContextService.GetUserId // zmiana
             };
 
             try

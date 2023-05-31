@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using Smakosfera.Services.Services;
@@ -7,14 +8,14 @@ namespace Smakosfera.WebAPI.Controllers
 {
 
     [ApiController]
-    [Route("api/Ingredient")]
+    [Route("api/ingredient")]
     public class IngredientController : ControllerBase
     {
         private readonly IIngredientService _ingredientService;
 
-        public IngredientController(IIngredientService Service)
+        public IngredientController(IIngredientService ingredientService)
         {
-            _ingredientService = Service;
+            _ingredientService = ingredientService;
         }
 
 
@@ -33,6 +34,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPost("Ingredient(skladnik)")]
+        [Authorize]
         public ActionResult AddIngredient([FromBody] IngredientDto dto)
         {
             _ingredientService.AddIngredient(dto);
@@ -40,6 +42,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPut("{IdIngredient}")]
+        [Authorize]
         public ActionResult PostRecipes([FromRoute]int IdIngredient, [FromBody] IngredientDto dto)
         {
             _ingredientService.EditIngredient(IdIngredient, dto);
