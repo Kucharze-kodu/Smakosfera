@@ -9,7 +9,13 @@ export const styles = {
   heading:
     "font-poppins font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[100px] leading-[50px] w-full",
   heading2:
+<<<<<<< Updated upstream
     "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
+=======
+    "font-poppins text-dimWhite font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
+  heading3:
+    "font-poppins text-dimWhite font-semibold xs:text-[1.3rem] text-[1.5rem] xs:leading-[40px] leading-[30px] w-full",
+>>>>>>> Stashed changes
   paragraph:
     "font-poppins text-dimWhite font-normal text-[18px] leading-[30.8px]",
   icons: "font-poppins text__gradient text-[68px]",

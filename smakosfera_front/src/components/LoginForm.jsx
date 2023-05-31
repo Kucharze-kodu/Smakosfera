@@ -5,10 +5,23 @@ import { useState } from "react";
 import { urlLogin } from "../endpoints";
 
 const LoginForm = () => {
+<<<<<<< Updated upstream
   const[email, setEmail] = useState("");
   const[password, setPassword] = useState("");
   const[message, setMessage] = useState("");
   
+=======
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
+  
+  const [cookieName, setCookieName] = useCookies(["resJson_name"]);
+  const [cookiePermission, setCookiePermission] = useCookies(["resJson_permission"]);
+
+>>>>>>> Stashed changes
   let handleSubmit = async (e) => {
     
     e.preventDefault();

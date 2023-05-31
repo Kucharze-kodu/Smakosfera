@@ -1,9 +1,25 @@
 import { Footer, Button } from "../components";
 import { styles } from "../style";
+import axios from "axios";
+import { urlRecipes } from "../endpoints";
 import { logo, avatar } from "../assets";
+<<<<<<< Updated upstream
 import { BiHome, BiUser, BiHeartCircle, BiPlusCircle, BiLogOut } from "react-icons/bi";
 
 import { Route, Routes, Link } from "react-router-dom";
+=======
+import { useState, useEffect } from "react";
+
+import {
+  BiHome,
+  BiUser,
+  BiHeartCircle,
+  BiPlusCircle,
+  BiLogOut,
+} from "react-icons/bi";
+import { GiPerspectiveDiceFive } from "react-icons/gi";
+import { Route, Routes, Link, useNavigate } from "react-router-dom";
+>>>>>>> Stashed changes
 import { Suspense, lazy } from "react";
 
 const Recipes = lazy(() => import("./Recipes"))
@@ -13,6 +29,41 @@ const AddRecipe = lazy(() => import("./AddRecipe"))
 const LoadingScreen = lazy(() => import("./LoadingScreen"))
 
 const Home = () => {
+<<<<<<< Updated upstream
+=======
+  const navigate = useNavigate();
+
+  const [recipes, setRecipes] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  // Check if user is logged in
+  const { isLoggedIn } = useAuth();
+  const { handleLogout } = useAuth();
+  const { getResJsonName } = useAuth();
+
+  // GET recipes
+  useEffect(() => {
+    axios.get(urlRecipes).then((response) => {
+      setRecipes(response.data);
+      setIsDataLoaded(true);
+    });
+  }, []);
+
+  // Create an array of recipe IDs
+  const recipeIds = recipes.map((recipe) => recipe.id);
+  const handleRandomRecipe = () => {
+    // Implement logic to retrieve a random recipe ID
+    const randomRecipeId = getRandomRecipeId();
+    // Navigate to the random recipe details page
+    navigate(`/home/${randomRecipeId}`);
+  };
+
+  const getRandomRecipeId = () => {
+    const randomIndex = Math.floor(Math.random() * recipeIds.length);
+    return recipeIds[randomIndex];
+  };
+
+>>>>>>> Stashed changes
   return (
     <div className={`${styles.background} py-5 px-5 overflow-auto`}>
       <div className="flex xs:h-[95%] h-[90%] ">
@@ -65,12 +116,27 @@ const Home = () => {
                 color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
               />
             </Link>
+            <div onClick={handleRandomRecipe}>
+              {isLoggedIn() && (
+                <Button
+                  text="Losuj przepis"
+                  padding="p-1"
+                  margin="mt-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              )}
+            </div>
           </div>
+<<<<<<< Updated upstream
           <div className="flex flex-col xs:w-[80%] overflow-y-scroll">
+=======
+          <div className="flex flex-col xs:w-[80%]">
+>>>>>>> Stashed changes
             {/* Logout */}
             <div
               className={`xs:flex hidden h-[10%] p-5 ${styles.paragraph} justify-end items-center border-b-[1px] border-b-dimWhite`}
             >
+<<<<<<< Updated upstream
               Wyloguj się...
             </div>
 
@@ -79,12 +145,87 @@ const Home = () => {
               <Route path="my-account" element={<Suspense fallback={<LoadingScreen />}> <MyAccount /> </Suspense>}></Route>
               <Route path="favorites" element={<Suspense fallback={<LoadingScreen />}> <Favorites /> </Suspense>}></Route>
               <Route path="add-recipe" element={<Suspense fallback={<LoadingScreen />}> <AddRecipe /> </Suspense>}></Route>
+=======
+              <div className={`${styles.heading3}`}>
+                {isLoggedIn() && (
+                  <>
+                    Witaj{" "}
+                    <span className=" text-red underline underline-offset-4">
+                      {getResJsonName()}!
+                    </span>
+                  </>
+                )}
+                {isLoggedIn() == false && <>Witamy!</>}
+              </div>
+              <div className="w-full text-right mx-4">
+                {isLoggedIn() && (
+                  <a
+                    onClick={handleLogout}
+                    className="text-center cursor-pointer text-dimWhite hover:text-white"
+                  >
+                    Wyloguj się...
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <Recipes
+                      recipes={recipes}
+                      isDataLoaded={isDataLoaded}
+                    />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path=":recipeId"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <RecipeDetails recipes={recipes} />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="my-account"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <MyAccount />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="favorites"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <Favorites />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="add-recipe"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <AddRecipe />{" "}
+                  </Suspense>
+                }
+              ></Route>
+>>>>>>> Stashed changes
             </Routes>
           </div>
         </div>
       </div>
 
       {/* Bottom navbar (only for phones) */}
+<<<<<<< Updated upstream
       <div className={`${styles.heading} text-dimWhite xs:hidden h-[10%]`}>
         <div className="flex flex-row items-center justify-between border-[2px] p-2 border-dimWhite">
         <Link to="/home">
@@ -99,6 +240,29 @@ const Home = () => {
         <Link to="/home/add-recipe">
           <BiPlusCircle />
         </Link>
+=======
+      {isLoggedIn() && (
+        <div
+          className={`${styles.heading} fixed bottom-0 bg-black text-white xs:hidden h-[10%]`}
+        >
+          <div className="flex flex-row items-center justify-between h-full px-5">
+            <Link to="/home">
+              <BiHome />
+            </Link>
+            <Link to="/home/my-account">
+              <BiUser />
+            </Link>
+            <Link to="/home/favorites">
+              <BiHeartCircle />
+            </Link>
+            <Link to="/home/add-recipe">
+              <BiPlusCircle />
+            </Link>
+            <div onClick={handleRandomRecipe}>
+              <GiPerspectiveDiceFive />
+            </div>
+          </div>
+>>>>>>> Stashed changes
         </div>
       </div>
 
