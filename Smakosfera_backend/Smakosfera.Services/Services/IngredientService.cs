@@ -22,12 +22,12 @@ namespace Smakosfera.Services.Services
         {
             var result = new Ingredient
             {
-                Name = dto.Name
+                Name = dto.Name,
+                CreatedById = _userContextService.GetUserId,
             };
 
             _ingredient.Ingredients.Add(result);
             _ingredient.SaveChanges();
-
         }
 
         public IngredientDto GetIngredient(int ingredientId)
@@ -35,7 +35,6 @@ namespace Smakosfera.Services.Services
             var ingredient = _ingredient.Ingredients.SingleOrDefault(c => c.Id == ingredientId);
 
             if (ingredient is null)
-
             {
                 throw new NotFoundException("Składnik nie istnieje");
             }

@@ -33,7 +33,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("Ingredient(skladnik)")]
+        [HttpPost]
         [Authorize]
         public ActionResult AddIngredient([FromBody] IngredientDto dto)
         {
