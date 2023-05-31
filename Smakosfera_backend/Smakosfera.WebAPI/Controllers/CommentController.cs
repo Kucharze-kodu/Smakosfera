@@ -28,7 +28,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(comment);
         }
 
-        [HttpGet("{RecipeId}")]
+        [HttpGet("recipes/{RecipeId}")]
         public ActionResult<IEnumerable<Comment>> GetAll(int RecipeId)
         {
             var comments = _commentService.GetComments(RecipeId);
