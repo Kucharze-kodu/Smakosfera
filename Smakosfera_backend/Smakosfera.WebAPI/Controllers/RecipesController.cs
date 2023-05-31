@@ -24,7 +24,7 @@ namespace Smakosfera.WebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<RecipeDto> Get(int id)
         {
-            RecipeDto result = _recipesService.GetRecipe(id);
+            var result = _recipesService.GetRecipe(id);
 
             return Ok(result);
         }

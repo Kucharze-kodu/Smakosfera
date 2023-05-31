@@ -50,7 +50,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpDelete("{IdIngredient}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Delete([FromRoute] int IdIngredient)
         {
             _ingredientService.DeleteIngredient(IdIngredient);

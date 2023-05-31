@@ -10,7 +10,6 @@ namespace Smakosfera.Services.Models
 {
     public class RecipeDto
     {
-
         [Required]
         [MinLength(3)]
         public string Name { get; set; }
@@ -20,8 +19,7 @@ namespace Smakosfera.Services.Models
         public int DifficultyLevelId { get; set; } = 1;
         [Required]
         public int PreparationTime { get; set; }
-
-        public bool CommunityRecipe { get; set; } = true; // zmiany?
+        public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
     }
 
     public class RecipeIDDto
