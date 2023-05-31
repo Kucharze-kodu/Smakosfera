@@ -25,7 +25,6 @@ namespace Smakosfera.Services.Services
             var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             if (recipe is null)
-
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
@@ -40,7 +39,6 @@ namespace Smakosfera.Services.Services
             };
 
             return result;
-
         }
 
         public IEnumerable<RecipeIDDto> Browse()

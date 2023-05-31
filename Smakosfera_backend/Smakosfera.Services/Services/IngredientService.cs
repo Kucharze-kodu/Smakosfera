@@ -20,6 +20,13 @@ namespace Smakosfera.Services.Services
 
         public void AddIngredient(IngredientDto dto)
         {
+            var isExist = _ingredient.Ingredients.Any(r => r.Name == dto.Name);
+
+            if (isExist)
+            {
+                throw new BadRequestException("Taki składnik już istnieje");
+            }
+
             var result = new Ingredient
             {
                 Name = dto.Name,
@@ -32,11 +39,17 @@ namespace Smakosfera.Services.Services
 
         public IngredientDto GetIngredient(int ingredientId)
         {
-            var ingredient = _ingredient.Ingredients.SingleOrDefault(c => c.Id == ingredientId);
+            var ingredient = _ingredient.Ingredients
+                .SingleOrDefault(c => c.Id == ingredientId);
 
             if (ingredient is null)
             {
                 throw new NotFoundException("Składnik nie istnieje");
+            }
+
+            if(ingredient.IsConfirmed == false)
+            {
+                throw new NotAcceptableException("Składnik nie zatwierdzony");
             }
 
             var result = new IngredientDto
@@ -45,13 +58,12 @@ namespace Smakosfera.Services.Services
             };
 
             return result;
-
         }
 
 
         public IEnumerable<IngredientDto> Browse()
         {
-            var date = _ingredient.Ingredients.ToList();
+            var date = _ingredient.Ingredients.ToList().FindAll(r => r.IsConfirmed == true);
 
 
             var result = date.Select(r => new IngredientDto()
