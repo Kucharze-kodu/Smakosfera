@@ -1,26 +1,30 @@
 import { styles } from "../style";
 import { useState, useEffect } from "react";
-import { urlAddIngredient } from "../endpoints";
+//import { urlAddIngredient } from "../endpoints";
 import { useAuth } from "./AuthContext";
 
-const MyAccount = () => {
+const AddIngredient = () => {
 
     const [nazwa,setNazwa] = useState("");
 
     const {isLoggedIn} = useAuth();
 
+    const handleSkladnik = (event) =>{
+        setNazwa(event.target.value)
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
     
-        try {
-          let res = await fetch(urlAddIngredient, {
+       try {
+          let res = await fetch('https://localhost:7000/api/Ingredient/Ingredient(skladnik)', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
 
-              name: nazwa,
+              name: nazwa
 
             }),
           });
@@ -49,16 +53,16 @@ const MyAccount = () => {
       {isLoggedIn() ? (
         <div>
           <div className={`${styles.heading2} xs:my-0 my-4 text-white `}>
-            Dodaj Przepis
+            Dodaj Składnik
           </div>
           <form onSubmit={handleSubmit}>
             <label className="text-center">
               <input
                 type="text"
                 value={nazwa}
-                onChange={handleNazwa}
+                onChange={handleSkladnik}
                 className="w-full px-4 py-2 -++ rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-                placeholder="Nazwa przepisu:"
+                placeholder="Nazwa składnika:"  
               />
             </label>
             <button
@@ -79,4 +83,4 @@ const MyAccount = () => {
   );
 };
 
-export default MyAccount;
+export default AddIngredient;
