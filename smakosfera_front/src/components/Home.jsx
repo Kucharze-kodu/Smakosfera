@@ -23,6 +23,7 @@ const Favorites = lazy(() => import("./Favorites"));
 const AddRecipe = lazy(() => import("./AddRecipe"));
 const LoadingScreen = lazy(() => import("./LoadingScreen"));
 const RecipeDetails = lazy(() => import("./RecipeDetails"));
+const AddIngredient = lazy(() => import("./AddIngredient"));
 
 const Home = () => {
   const navigate = useNavigate();
@@ -122,6 +123,16 @@ const Home = () => {
                 />
               )}
             </div>
+            <Link to="/home/add-ingredient">
+              {isLoggedIn() && (
+                <Button
+                  text="Dodaj nowy składnik"
+                  padding="p-1"
+                  margin="mt-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              )}
+            </Link>
           </div>
           <div className="flex flex-col xs:w-[80%]">
             {/* Logout */}
@@ -198,6 +209,15 @@ const Home = () => {
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
                     <AddRecipe />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="add-ingredient"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <AddIngredient />{" "}
                   </Suspense>
                 }
               ></Route>
