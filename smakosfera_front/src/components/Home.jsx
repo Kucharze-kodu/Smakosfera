@@ -59,7 +59,7 @@ const Home = () => {
   };
 
   return (
-    <div className={`${styles.background} p-1 xs:p-5 overflow-auto`}>
+    <div className={`${styles.background} p-1 xs:p-5 overflow-hidden`}>
       <div className="flex xs:h-[95%] h-[90%]">
         <div className="flex xs:flex-row flex-col xs:border-[2px] xs:border-dimWhite">
           {/* Logout (only for phones)*/}
@@ -74,65 +74,67 @@ const Home = () => {
             <img src={logo} className="h-[100%] p-5" alt="Logo" />
           </div>
           {/* Sidebar */}
-          <div className="hidden xs:block w-[20%] border-r-[1px] border-r-dimWhite">
+          <div className="sidebar pb-2 hidden xs:block overflow-y-scroll w-[20%] border-r-[1px] border-r-dimWhite">
             <img
               src={logo}
               className="p-5 border-b-[1px] border-b-dimWhite"
               alt="Logo"
             />
             <img src={avatar} className="w-[75%] mx-auto" alt="Avatar" />
-            <Link to="/home">
-              <Button
-                text="Strona główna"
-                padding="p-1"
-                margin="mb-4 mx-4"
-                color="border-dimWhite hover:border-white text-dimWhite hover:text-white"
-              />
-            </Link>
-            <Link to="/home/my-account">
-              <Button
-                text="Moje konto"
-                padding="p-1"
-                margin="my-4 mx-4"
-                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-              />
-            </Link>
-            <Link to="/home/favorites">
-              <Button
-                text="Ulubione"
-                padding="p-1"
-                margin="my-4 mx-4"
-                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-              />
-            </Link>
-            <Link to="/home/add-recipe">
-              <Button
-                text="Dodaj nowy przepis"
-                padding="p-1"
-                margin="mt-4 mx-4"
-                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-              />
-            </Link>
-            <div onClick={handleRandomRecipe}>
-              {isLoggedIn() && (
-                <Button
-                  text="Losuj przepis"
-                  padding="p-1"
-                  margin="mt-4 mx-4"
-                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                />
-              )}
+            <div className="sidebar-links">
+                <Link to="/home">
+                  <Button
+                    text="Strona główna"
+                    padding="p-1"
+                    margin="mb-4 mx-4"
+                    color="border-dimWhite hover:border-white text-dimWhite hover:text-white"
+                  />
+                </Link>
+                <Link to="/home/my-account">
+                  <Button
+                    text="Moje konto"
+                    padding="p-1"
+                    margin="my-4 mx-4"
+                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                  />
+                </Link>
+                <Link to="/home/favorites">
+                  <Button
+                    text="Ulubione"
+                    padding="p-1"
+                    margin="my-4 mx-4"
+                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                  />
+                </Link>
+                <Link to="/home/add-recipe">
+                  <Button
+                    text="Dodaj nowy przepis"
+                    padding="p-1"
+                    margin="mt-4 mx-4"
+                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                  />
+                </Link>
+                <div onClick={handleRandomRecipe}>
+                  {isLoggedIn() && (
+                    <Button
+                      text="Losuj przepis"
+                      padding="p-1"
+                      margin="mt-4 mx-4"
+                      color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                    />
+                  )}
+                </div>
+                <Link to="/home/add-ingredient">
+                  {isLoggedIn() && (
+                    <Button
+                      text="Dodaj nowy składnik"
+                      padding="p-1"
+                      margin="mt-4 mx-4"
+                      color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                    />
+                  )}
+                </Link>
             </div>
-            <Link to="/home/add-ingredient">
-              {isLoggedIn() && (
-                <Button
-                  text="Dodaj nowy składnik"
-                  padding="p-1"
-                  margin="mt-4 mx-4"
-                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                />
-              )}
-            </Link>
           </div>
           <div className="flex flex-col xs:w-[80%]">
             {/* Logout */}
@@ -151,7 +153,7 @@ const Home = () => {
                   <>Witamy!</>
                 )}
               </div>
-              <div className="w-full text-right mx-4">
+              <div className="w-full text-right">
                 {isLoggedIn() && (
                   <a
                     onClick={handleLogout}

@@ -4,7 +4,7 @@ const MyAccount = () => {
   return (
     <>
       {/* My Account section */}
-      <div className={`${styles.paragraph} p-2`}>
+      <div className={`${styles.paragraph} text-dimWhite p-2`}>
         Vestibulum dictum imperdiet massa a egestas. Suspendisse nunc sem,
         consectetur nec vulputate a, ultrices vitae felis. Curabitur sit amet
         lacus non neque lacinia malesuada nec a massa. Cras egestas nec magna et

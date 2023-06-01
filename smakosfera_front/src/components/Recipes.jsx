@@ -78,26 +78,24 @@ const Recipes = () => {
               .map((recipe) => (
                 <div
                   key={recipe.id}
-                  className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
+                  className="recipe flex flex-col justify-between overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
                 >
                   <Link to={`/home/${recipe.id}`}>
-                    <img className="mx-auto" src={cooking_book} alt="przepis" />
+                    <img className="mx-auto px-2" src={cooking_book} alt="przepis" />
                   </Link>
-                  <div className="">
-                    <h5 className={`${styles.heading3} text-white`}>
-                      {recipe.name}
-                    </h5>
-                    <Link to={`/home/${recipe.id}`}>
-                      <i>
-                        <Button
-                          text="Pokaż przepis!"
-                          padding="p-1"
-                          margin="mx-4"
-                          color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                        ></Button>
-                      </i>
-                    </Link>
-                  </div>
+                  <h5 className={`${styles.heading3} break-words p-1 text-white`}>
+                    {recipe.name}
+                  </h5>
+                  <Link to={`/home/${recipe.id}`}>
+                    <i>
+                      <Button
+                        text="Pokaż przepis!"
+                        padding="p-1"
+                        margin="mx-4"
+                        color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                      ></Button>
+                    </i>
+                  </Link>
                 </div>
               ))}
           </div>

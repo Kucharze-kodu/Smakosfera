@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { urlAddIngredient } from "../endpoints";
 import { useAuth } from "./AuthContext";
 
-const MyAccount = () => {
+const AddIngredient = () => {
 
     const [nazwa,setNazwa] = useState("");
 
@@ -79,4 +79,4 @@ const MyAccount = () => {
   );
 };
 
-export default MyAccount;
+export default AddIngredient;
