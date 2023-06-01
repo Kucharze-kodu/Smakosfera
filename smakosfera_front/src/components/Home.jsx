@@ -1,6 +1,11 @@
-import { Footer, Button, RecipeDetails } from "../components";
+import { Footer, Button } from "../components";
 import { styles } from "../style";
+import axios from "axios";
+import { urlRecipes } from "../endpoints";
 import { logo, avatar } from "../assets";
+import { useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
+
 import {
   BiHome,
   BiUser,
@@ -8,55 +13,73 @@ import {
   BiPlusCircle,
   BiLogOut,
 } from "react-icons/bi";
-import { Route, Routes, Link } from "react-router-dom";
+import { GiPerspectiveDiceFive } from "react-icons/gi";
+import { Route, Routes, Link, useNavigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import { useAuth } from "./AuthContext";
 
 const Recipes = lazy(() => import("./Recipes"));
 const MyAccount = lazy(() => import("./MyAccount"));
 const Favorites = lazy(() => import("./Favorites"));
 const AddRecipe = lazy(() => import("./AddRecipe"));
 const LoadingScreen = lazy(() => import("./LoadingScreen"));
+const RecipeDetails = lazy(() => import("./RecipeDetails"));
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const [recipes, setRecipes] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
   // Check if user is logged in
-  const {isLoggedIn} = useAuth();
-  const {handleLogout} = useAuth();
-  const {getResJsonName} = useAuth();
+  const { isLoggedIn } = useAuth();
+  const { handleLogout } = useAuth();
+  const { getResJsonName } = useAuth();
+
+  // GET recipes
+  useEffect(() => {
+    axios.get(urlRecipes).then((response) => {
+      setRecipes(response.data);
+      setIsDataLoaded(true);
+    });
+  }, []);
+
+  // Create an array of recipe IDs
+  const recipeIds = recipes.map((recipe) => recipe.id);
+  const handleRandomRecipe = () => {
+    // Implement logic to retrieve a random recipe ID
+    const randomRecipeId = getRandomRecipeId();
+    // Navigate to the random recipe details page
+    navigate(`/home/${randomRecipeId}`);
+  };
+
+  const getRandomRecipeId = () => {
+    const randomIndex = Math.floor(Math.random() * recipeIds.length);
+    return recipeIds[randomIndex];
+  };
 
   return (
-    <div
-      className={`${styles.background} xs:py-5 xs:px-5 overflow-y-scroll xs:overflow-hidden`}
-    >
-      <div className="flex xs:h-[95%] h-full">
-        <div className=" flex xs:flex-row flex-col xs:border-[2px] border-dimWhite">
+    <div className={`${styles.background} p-1 xs:p-5 overflow-auto`}>
+      <div className="flex xs:h-[95%] h-[90%]">
+        <div className="flex xs:flex-row flex-col xs:border-[2px] xs:border-dimWhite">
           {/* Logout (only for phones)*/}
-          {isLoggedIn() && (
-            <div
-              onClick={handleLogout}
-              className={`z-0 flex xs:hidden h-[0%] pt-2 pr-2 justify-end ${styles.heading} text-dimWhite`}
-            >
-              <BiLogOut />
-            </div>
-          )}
-
-          {/* Logo (only for phones) */}
-          <div className="z-1 xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
-            <Link to="/">
-              <img src={logo} alt="logo" className="h-[100%] p-5" />
-            </Link>
+          <div
+            className={`flex xs:hidden h-[0%] pt-2 pr-2 justify-end ${styles.heading} text-dimWhite`}
+          >
+            <BiLogOut />
           </div>
 
+          {/* Logo (only for phones) */}
+          <div className="xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
+            <img src={logo} className="h-[100%] p-5" alt="Logo" />
+          </div>
           {/* Sidebar */}
-          <div className="sidebar hidden xs:block overflow-y-scroll pb-2 w-[20%] border-r-[1px] border-r-dimWhite">
-            <Link to="/">
-              <img
-                src={logo}
-                alt="logo"
-                className="p-5 top-0 sticky border-b-[1px] border-b-dimWhite"
-              />
-            </Link>
-            <img src={avatar} alt="avatar" className="w-[65%] mx-auto" />
+          <div className="hidden xs:block w-[20%] border-r-[1px] border-r-dimWhite">
+            <img
+              src={logo}
+              className="p-5 border-b-[1px] border-b-dimWhite"
+              alt="Logo"
+            />
+            <img src={avatar} className="w-[75%] mx-auto" alt="Avatar" />
             <Link to="/home">
               <Button
                 text="Strona główna"
@@ -66,60 +89,67 @@ const Home = () => {
               />
             </Link>
             <Link to="/home/my-account">
-              {isLoggedIn() && (
-                <Button
-                  text="Moje konto"
-                  padding="p-1"
-                  margin="my-4 mx-4"
-                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                />
-              )}
+              <Button
+                text="Moje konto"
+                padding="p-1"
+                margin="my-4 mx-4"
+                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+              />
             </Link>
             <Link to="/home/favorites">
-              {isLoggedIn() && (
-                <Button
-                  text="Ulubione"
-                  padding="p-1"
-                  margin="my-4 mx-4"
-                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                />
-              )}
+              <Button
+                text="Ulubione"
+                padding="p-1"
+                margin="my-4 mx-4"
+                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+              />
             </Link>
             <Link to="/home/add-recipe">
+              <Button
+                text="Dodaj nowy przepis"
+                padding="p-1"
+                margin="mt-4 mx-4"
+                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+              />
+            </Link>
+            <div onClick={handleRandomRecipe}>
               {isLoggedIn() && (
                 <Button
-                  text="Dodaj nowy przepis"
+                  text="Losuj przepis"
                   padding="p-1"
                   margin="mt-4 mx-4"
                   color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
                 />
               )}
-            </Link>
+            </div>
           </div>
-          <div className="flex flex-col xs:w-[80%] ">
+          <div className="flex flex-col xs:w-[80%]">
             {/* Logout */}
             <div
-              className={`xs:flex justify-between hidden h-[10%] pl-5 ${styles.paragraph} justify-end items-center border-b-[1px] border-b-dimWhite`}
+              className={`xs:flex hidden h-[10%] p-5 ${styles.paragraph} justify-end items-center border-b-[1px] border-b-dimWhite`}
             >
               <div className={`${styles.heading3}`}>
-                {isLoggedIn() && (
+                {isLoggedIn() ? (
                   <>
                     Witaj{" "}
                     <span className=" text-red underline underline-offset-4">
                       {getResJsonName()}!
                     </span>
                   </>
+                ) : (
+                  <>Witamy!</>
                 )}
-                {isLoggedIn() == false && <>Witamy!</>}
               </div>
-              {isLoggedIn() && (
-                <a
-                  onClick={handleLogout}
-                  className="text-center cursor-pointer text-dimWhite hover:text-white"
-                >
-                  Wyloguj się...
-                </a>
-              )}
+              <div className="w-full text-right mx-4">
+                {isLoggedIn() && (
+                  <a
+                    onClick={handleLogout}
+                    className="text-center cursor-pointer text-dimWhite hover:text-white"
+                  >
+                    Wyloguj się...
+                  </a>
+                )}
+              </div>
             </div>
 
             <Routes>
@@ -128,7 +158,10 @@ const Home = () => {
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
-                    <Recipes />{" "}
+                    <Recipes
+                      recipes={recipes}
+                      isDataLoaded={isDataLoaded}
+                    />{" "}
                   </Suspense>
                 }
               ></Route>
@@ -137,7 +170,7 @@ const Home = () => {
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
-                    <RecipeDetails />{" "}
+                    <RecipeDetails recipes={recipes} />{" "}
                   </Suspense>
                 }
               ></Route>
@@ -191,6 +224,9 @@ const Home = () => {
             <Link to="/home/add-recipe">
               <BiPlusCircle />
             </Link>
+            <div onClick={handleRandomRecipe}>
+              <GiPerspectiveDiceFive />
+            </div>
           </div>
         </div>
       )}

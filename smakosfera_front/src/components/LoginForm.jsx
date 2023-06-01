@@ -12,6 +12,7 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+
   const [cookieName, setCookieName] = useCookies(["resJson_name"]);
   const [cookiePermission, setCookiePermission] = useCookies(["resJson_permission"]);
 
