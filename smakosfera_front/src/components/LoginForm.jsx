@@ -1,5 +1,5 @@
 import { styles } from "../style";
-import { Link, json, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logo } from "../assets";
 import { urlLogin } from "../endpoints";
 import { useCookies } from "react-cookie";

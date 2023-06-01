@@ -1,8 +1,9 @@
 import { styles } from "../style";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { urlRecipes } from "../endpoints";
 import { urlIngredient } from "../endpoints";
 import axios from "axios";
+import { useAuth } from "./AuthContext";
 
 const DodawaniePrzepisu = () => {
   const [Nazwa, setNazwa] = useState("");
@@ -11,6 +12,9 @@ const DodawaniePrzepisu = () => {
   const [opis, setOpis] = useState("");
   const [czas, setCzas] = useState("");
   const [ingredientList, setIngredientList] = useState([]);
+
+  // Check if user is logged in
+  const {isLoggedIn} = useAuth();
 
   const handleNazwa = (event) => {
     //nazwa
@@ -103,103 +107,112 @@ const DodawaniePrzepisu = () => {
 
   return (
     <div className="add_recipe overflow-y-scroll px-4 flex flex-col pb-10  items-center w-full h-full justify-center xs:justify-start text-center">
-      <div className={`${styles.heading2} xs:my-0 my-4 text-white `}>Dodaj Przepis </div>
-
-      <form onSubmit={handleSubmit}>
-        <label className="text-center">
-          <input
-            type="text"
-            value={Nazwa}
-            onChange={handleNazwa}
-            className="w-full px-4 py-2 -++ rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-            placeholder="Nazwa przepisu:"
-          />
-        </label>
-
-        <label>
-          <div className={`${styles.paragraph} my-2 text-dimWhite`}>
-            Opis przepisu:
-          </div>
-          <textarea
-            value={opis}
-            onChange={handleOpis}
-            className="w-full h-40 px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-            placeholder="Wprowadź opis przepisu..."
-          />
-        </label>
-
+      {isLoggedIn() ? (
         <div>
-          <div className={`${styles.paragraph} my-2 text-dimWhite`}>
-            Wybierz trudność przepisu:
+          <div className={`${styles.heading2} xs:my-0 my-4 text-white `}>
+            Dodaj Przepis
           </div>
-          <select
-            type="number"
-            value={trudnosc}
-            onChange={handleTrudnosc}
-            className="xs:w-48 w-full px-4 py-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-          >
-            <option value={0}>Wybierz trudność</option>
-            <option value={1}>Łatwe</option>
-            <option value={2}>Średnie</option>
-            <option value={3}>Trudne</option>
-          </select>
+          <form onSubmit={handleSubmit}>
+            <label className="text-center">
+              <input
+                type="text"
+                value={Nazwa}
+                onChange={handleNazwa}
+                className="w-full px-4 py-2 -++ rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                placeholder="Nazwa przepisu:"
+              />
+            </label>
 
-          <input
-            type="number"
-            min="0"
-            value={czas}
-            onChange={handleCzas}
-            className="xs:w-48 w-full xs:mt-0 mt-2 px-4 py-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-            placeholder="Czas przygotowania:"
-          />
-        </div>
+            <label>
+              <div className={`${styles.paragraph} my-2 text-dimWhite`}>
+                Opis przepisu:
+              </div>
+              <textarea
+                value={opis}
+                onChange={handleOpis}
+                className="w-full h-40 px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+                placeholder="Wprowadź opis przepisu..."
+              />
+            </label>
 
-        <div className={`${styles.paragraph} my-2 text-dimWhite`}>
-            Wybierz składniki:
-        </div>
-
-        <div>
-          {skladnik.map((ingredient, index) => (
-            <div key={index}>
+            <div>
+              <div className={`${styles.paragraph} my-2 text-dimWhite`}>
+                Wybierz trudność przepisu:
+              </div>
               <select
-                className="xs:w-48 w-full px-4 py-2 xs:mb-0 mb-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-                value={ingredient.nazwa}
-                onChange={(event) => handleSkladnik(event, index, "nazwa")}
+                type="number"
+                value={trudnosc}
+                onChange={handleTrudnosc}
+                className="xs:w-48 w-full px-4 py-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
               >
-                <option value="">Wybierz składnik</option>
-                {ingredientList.map((option) => (
-                  <option key={option.id} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
+                <option value={0}>Wybierz trudność</option>
+                <option value={1}>Łatwe</option>
+                <option value={2}>Średnie</option>
+                <option value={3}>Trudne</option>
               </select>
 
               <input
-                placeholder="Ilosc:"
                 type="number"
                 min="0"
-                value={ingredient.ilosc}
-                onChange={(event) => handleSkladnik(event, index, "ilosc")}
-                className="xs:w-48 w-full px-4 py-2 xs:mb-0  mx-1 mb-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                value={czas}
+                onChange={handleCzas}
+                className="xs:w-48 w-full xs:mt-0 mt-2 px-4 py-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                placeholder="Czas przygotowania:"
               />
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleDodawanko}
-            className={`${styles.paragraph} text-dimWhite hover:text-white- p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-md `}
-          >
-            Dodaj składnik
-          </button>
-        </div>
 
-        <button
-          type="submit"
-          className={`${styles.paragraph} text-dimWhite hover:text-white p-5 xs:mb-0 mb-20 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-md `}
-        >
-          Dodaj przepis
-        </button>
-      </form>
+            <div className={`${styles.paragraph} my-2 text-dimWhite`}>
+              Wybierz składniki:
+            </div>
+
+            <div>
+              {skladnik.map((ingredient, index) => (
+                <div key={index}>
+                  <select
+                    className="xs:w-48 w-full px-4 py-2 xs:mb-0 mb-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                    value={ingredient.nazwa}
+                    onChange={(event) => handleSkladnik(event, index, "nazwa")}
+                  >
+                    <option value="">Wybierz składnik</option>
+                    {ingredientList.map((option) => (
+                      <option key={option.id} value={option.name}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    placeholder="Ilosc:"
+                    type="number"
+                    min="0"
+                    value={ingredient.ilosc}
+                    onChange={(event) => handleSkladnik(event, index, "ilosc")}
+                    className="xs:w-48 w-full px-4 py-2 xs:mb-0  mx-1 mb-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={handleDodawanko}
+                className={`${styles.paragraph} text-dimWhite hover:text-white- p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-md `}
+              >
+                Dodaj składnik
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              className={`${styles.paragraph} text-dimWhite hover:text-white p-5 xs:mb-0 mb-20 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-md `}
+            >
+              Dodaj przepis
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className={`${styles.paragraph} my-48 xs:my-auto text-dimWhite`}>
+          Nie masz uprawnień do wyświetlania tej strony!
+        </div>
+      )}
     </div>
   );
 };
