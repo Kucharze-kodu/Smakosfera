@@ -60,6 +60,7 @@ builder.Services.AddSingleton(urlBackend);
 // Add services to the container.
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IRecipesService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IRecipeIngredientService, RecipeIngredientService>();

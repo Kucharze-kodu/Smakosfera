@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
-import { useCookies } from "react-cookie";
 import ScrollAnimation from "react-animate-on-scroll";
+import { useAuth } from "./AuthContext";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [displayedRecipes, setDisplayedRecipes] = useState(8);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const handleShowMore = () => {
     setDisplayedRecipes((prevCount) => prevCount + 8);
@@ -20,29 +21,15 @@ const Recipes = () => {
   useEffect(() => {
     axios.get(urlRecipes).then((response) => {
       setRecipes(response.data);
+      setIsDataLoaded(true);
     });
   }, []);
 
-  // cookies
-  const [resJson, setResJson] = useState(null);
-  const [cookie] = useCookies(["resJson_name"]);
-
-  useEffect(() => {
-    // Read the value of resJson from cookies
-    const storedResJson = cookie.resJson_name;
-    if (storedResJson) {
-      // If it exists, update the value in the context
-      setResJson(storedResJson);
-    }
-  }, []);
-
-  const isLoggedIn = () => {
-    if (resJson != null) return true;
-    else return false;
-  };
+  // Check if user is logged in
+  const { isLoggedIn } = useAuth();
 
   return (
-    <>
+    <div className="overflow-auto">
       {/* Searchbar */}
       <div className={`${styles.paragraph} text-gray hover:text-black p-2 `}>
         <form>
@@ -81,39 +68,41 @@ const Recipes = () => {
       </div>
 
       {/* Recipes section */}
-      <ScrollAnimation animateIn="fadeIn" duration={1}>
-        <div
-          className={`flex flex-col h-full xs:grid xs:grid-cols-4 xs:gap-4 xs:mx-2 rounded-lg`}
-        >
-          {recipes
-            .slice(0, isLoggedIn() ? displayedRecipes : 4)
-            .map((recipe) => (
-              <div
-                key={recipe.id}
-                className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
-              >
-                <Link to={`/home/${recipe.id}`}>
-                  <img className="mx-auto" src={cooking_book} alt="przepis" />
-                </Link>
-                <div className="">
-                  <h5 className={`${styles.heading3} text-white`}>
-                    {recipe.name}
-                  </h5>
+      {isDataLoaded && (
+        <ScrollAnimation animateIn="fadeIn" duration={1}>
+          <div
+            className={`flex flex-col h-full xs:grid xs:grid-cols-4 xs:gap-4 xs:mx-2 rounded-lg`}
+          >
+            {recipes
+              .slice(0, isLoggedIn() ? displayedRecipes : 8)
+              .map((recipe) => (
+                <div
+                  key={recipe.id}
+                  className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
+                >
                   <Link to={`/home/${recipe.id}`}>
-                    <i>
-                      <Button
-                        text="Pokaż przepis!"
-                        padding="p-1"
-                        margin="mx-4"
-                        color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                      ></Button>
-                    </i>
+                    <img className="mx-auto" src={cooking_book} alt="przepis" />
                   </Link>
+                  <div className="">
+                    <h5 className={`${styles.heading3} text-white`}>
+                      {recipe.name}
+                    </h5>
+                    <Link to={`/home/${recipe.id}`}>
+                      <i>
+                        <Button
+                          text="Pokaż przepis!"
+                          padding="p-1"
+                          margin="mx-4"
+                          color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                        ></Button>
+                      </i>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-        </div>
-      </ScrollAnimation>
+              ))}
+          </div>
+        </ScrollAnimation>
+      )}
 
       {isLoggedIn() == false && (
         <div
@@ -127,16 +116,21 @@ const Recipes = () => {
 
       {isLoggedIn() && (
         <div
-          className={`text-center p-5 ${styles.paragraph} cursor-pointer text-dimWhite hover:text-white`}
+          className={`text-center xs:p-5 pt-5 pb-32 ${styles.paragraph} text-dimWhite`}
         >
           {displayedRecipes >= recipes.length ? (
             <div>Koniec przepisów...</div>
           ) : (
-            <div onClick={handleShowMore}>Wyświetl więcej przepisów...</div>
+            <div
+              onClick={handleShowMore}
+              className="cursor-pointer hover:text-white"
+            >
+              Wyświetl więcej przepisów...
+            </div>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
