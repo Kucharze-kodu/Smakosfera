@@ -5,6 +5,8 @@ import { urlLogin } from "../endpoints";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 
+const history = useHistory();
+
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -78,7 +80,9 @@ const LoginForm = () => {
               id="email"
               name="email"
               title="Wprowadź email :)"
+
               className={`${styles.paragraph} text-black bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black hover:text-white focus:text-white focus:bg-black`}
+
               placeholder="Email:"
               maxLength={100}
               required
@@ -91,6 +95,7 @@ const LoginForm = () => {
               name="password"
               title="Wprowadź hasło :)"
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black text-black hover:text-white focus:text-white focus:bg-black`}
+
               placeholder="Hasło:"
               maxLength={250}
               required
@@ -108,6 +113,7 @@ const LoginForm = () => {
             <div className={`${styles.paragraph} text-red`}>
               {errorMessage ? <p>{errorMessage}</p> : null}
             </div>
+
           </form>
           <Link
             to="/register"
