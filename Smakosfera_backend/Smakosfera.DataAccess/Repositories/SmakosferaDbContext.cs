@@ -30,8 +30,7 @@ namespace Smakosfera.DataAccess.Repositories
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Rate> Rates { get; set; }
-        /*        public DbSet<Recipetype> Recipetypes { get; set; }
-                public DbSet<EnumType> EnumTypes { get; set; }*/
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
