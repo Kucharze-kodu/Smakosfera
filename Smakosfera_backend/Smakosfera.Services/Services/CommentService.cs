@@ -7,6 +7,7 @@ using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -16,16 +17,16 @@ namespace Smakosfera.Services.Services
 {
     public class CommentService : ICommentService
     {
-        private readonly SmakosferaDbContext _Comments;
+        private readonly SmakosferaDbContext database;
 
         public CommentService(SmakosferaDbContext comments)
         {
-            _Comments = comments;
+            database = comments;
         }
 
         public CommentDto GetComment(int CommentId)
         {
-            var comment = _Comments.Comments.SingleOrDefault(c => c.Id == CommentId);
+            var comment = database.Comments.SingleOrDefault(c => c.Id == CommentId);
 
             if (comment is null)
             {
@@ -43,16 +44,32 @@ namespace Smakosfera.Services.Services
             return result;
         }
 
-        public IEnumerable<Comment> GetComments(int RecipeId)
+        public IEnumerable<OutputCommentDto> GetComments(int RecipeId)
         {
-            var comments = _Comments.Comments.ToList().FindAll(c => c.RecipeId == RecipeId);
+            var comments = database.Comments.ToList()
+                .FindAll(c => c.RecipeId == RecipeId)
+                ?? throw new NotFoundException("Brak komentarzy w przepisie");
 
-            if (comments is null)
+            var output = new List<OutputCommentDto>();
+
+            foreach (var c in comments)
             {
-                throw new NotFoundException("Brak komentarzy w przepisie");
-            }
+                var UserInfo = database.Users.SingleOrDefault(u => u.Id == c.UserId) 
+                    ?? throw new NotFoundException("Brak uzytkownika o podanym id");
 
-            return comments;
+                var BossUserInfo = (c.CommentBoss is null) ? null : database.Users.SingleOrDefault(u => u.Id == c.CommentBoss.UserId);
+
+                output.Add(new OutputCommentDto() {
+                    Content = c.Content,
+                    UserId = c.UserId,
+                    UserName = UserInfo.Name + " " + UserInfo.Surname,
+                    RecipeId = c.RecipeId,
+                    CommentBossId = c.CommentBossId,
+                    CommentBossName = BossUserInfo is null ? "" : BossUserInfo.Name + " " + BossUserInfo.Surname,
+                    CreationDate = c.CreationDate.ToString("dd.MM.yyyy HH:mm")
+                });
+            }
+            return output;
         }
 
         public void Add(CommentDto comment)
@@ -61,25 +78,17 @@ namespace Smakosfera.Services.Services
             {
                 throw new NotFoundException("Pusta zawartosc komentarza");
             }
-
-            var newComment = new Comment
+            var NewComment = new Comment
             {
                 Content = comment.Content,
                 UserId = comment.UserId,
+   
                 RecipeId = comment.RecipeId,
-                CommentBossId = comment.CommentBossId
+                CommentBossId = comment.CommentBossId,
             };
 
-            try
-            {
-                _Comments.Comments.Add(newComment);
-                _Comments.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                throw ex;
-            }
-            
+            database.Comments.Add(NewComment);
+            database.SaveChanges();   
         }
 
         public void Update(int CommentId, CommentDto comment)
@@ -89,7 +98,7 @@ namespace Smakosfera.Services.Services
                 throw new NotFoundException("Pusta zawartosc komentarza");
             }
 
-            var old_comment = _Comments.Comments.SingleOrDefault(c => c.Id == CommentId);
+            var old_comment = database.Comments.SingleOrDefault(c => c.Id == CommentId);
             if (old_comment is null)
             {
                 throw new NotFoundException("Komentarz nie istnieje");
@@ -100,21 +109,21 @@ namespace Smakosfera.Services.Services
             old_comment.RecipeId = comment.RecipeId;
             old_comment.CommentBossId = comment.CommentBossId;
 
-            _Comments.SaveChanges();
+            database.SaveChanges();
 
         }
 
         public void Delete(int CommentId)
         {
-            var comment_to_delete = _Comments.Comments.SingleOrDefault(c => c.Id == CommentId);
+            var comment_to_delete = database.Comments.SingleOrDefault(c => c.Id == CommentId);
 
             if (comment_to_delete is null)
             {
                 throw new NotFoundException("Komentarz nie istnieje");
             }
 
-            _Comments.Comments.Remove(comment_to_delete);
-            _Comments.SaveChanges();
+            database.Comments.Remove(comment_to_delete);
+            database.SaveChanges();
         }
 
     }
