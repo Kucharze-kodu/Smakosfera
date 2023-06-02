@@ -18,10 +18,13 @@ namespace Smakosfera.Services.Services
     public class CommentService : ICommentService
     {
         private readonly SmakosferaDbContext database;
+        private readonly IUserContextService _userContextService;
 
-        public CommentService(SmakosferaDbContext comments)
+        public CommentService(SmakosferaDbContext comments,
+            IUserContextService userContextService)
         {
             database = comments;
+            _userContextService = userContextService;
         }
 
         public CommentDto GetComment(int CommentId)
@@ -81,7 +84,7 @@ namespace Smakosfera.Services.Services
             var NewComment = new Comment
             {
                 Content = comment.Content,
-                UserId = comment.UserId,
+                UserId = _userContextService.GetUserId,
    
                 RecipeId = comment.RecipeId,
                 CommentBossId = comment.CommentBossId,
@@ -105,7 +108,7 @@ namespace Smakosfera.Services.Services
             }
 
             old_comment.Content = comment.Content;
-            old_comment.UserId = comment.UserId;
+            old_comment.UserId = _userContextService.GetUserId;
             old_comment.RecipeId = comment.RecipeId;
             old_comment.CommentBossId = comment.CommentBossId;
 
