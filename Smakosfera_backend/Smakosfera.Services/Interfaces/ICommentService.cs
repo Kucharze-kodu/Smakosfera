@@ -11,7 +11,7 @@ namespace Smakosfera.Services.Interfaces
     public interface ICommentService
     {
         CommentDto GetComment(int CommentId);
-        IEnumerable<Comment> GetComments(int RecipeId);
+        IEnumerable<OutputCommentDto> GetComments(int RecipeId);
         void Add(CommentDto comment);
         void Update(int CommentId, CommentDto comment);
         void Delete(int CommentId);
