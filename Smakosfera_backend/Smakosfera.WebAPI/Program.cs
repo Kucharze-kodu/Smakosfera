@@ -8,9 +8,10 @@ using Smakosfera.WebAPI.Middlewares;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Smakosfera.Services.Settings;
+using Microsoft.AspNetCore.Authorization;
 
 
-var frontend_url = "http://127.0.0.1:5173";
+var frontend_url = "http://localhost:5173";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,8 @@ builder.Services.AddScoped<SmakosferaSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

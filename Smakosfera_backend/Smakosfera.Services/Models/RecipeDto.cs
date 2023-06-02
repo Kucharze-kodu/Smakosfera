@@ -11,7 +11,6 @@ namespace Smakosfera.Services.Models
 {
     public class RecipeDto
     {
-
         [Required]
         [MinLength(3)]
         public string Name { get; set; }
