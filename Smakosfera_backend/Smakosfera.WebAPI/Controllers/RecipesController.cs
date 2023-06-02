@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Smakosfera.DataAccess.Repositories;
@@ -14,7 +15,7 @@ namespace Smakosfera.WebAPI.Controllers
     {
         private readonly IRecipesService _recipesService;
 
-        public RecipesController(SmakosferaDbContext smakosfera, IRecipesService recipesService)
+        public RecipesController(IRecipesService recipesService)
         {
             _recipesService = recipesService;
         }
@@ -23,13 +24,13 @@ namespace Smakosfera.WebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<RecipeDto> Get(int id)
         {
-            RecipeDto result = _recipesService.GetRecipe(id);
+            var result = _recipesService.GetRecipe(id);
 
             return Ok(result);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RecipeDto>> GetAll()
+        public ActionResult<IEnumerable<RecipeIDDto>> GetAll()
         {
             var result = _recipesService.Browse();
             return Ok(result);
@@ -37,6 +38,7 @@ namespace Smakosfera.WebAPI.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public ActionResult PostRecipes([FromBody] RecipeDto dto)
         {
             _recipesService.Add(dto);

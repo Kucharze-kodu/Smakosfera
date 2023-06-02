@@ -22,6 +22,41 @@ namespace Smakosfera.WebAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CommentBossId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentBossId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.DifficultyLevel", b =>
                 {
                     b.Property<int>("Id")
@@ -36,7 +71,58 @@ namespace Smakosfera.WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dificulty_Levels");
+                    b.ToTable("Difficulty_Levels");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Ingredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Ingredients");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Permission", b =>
@@ -53,7 +139,39 @@ namespace Smakosfera.WebAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Rate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
@@ -91,9 +209,123 @@ namespace Smakosfera.WebAPI.Migrations
 
                     b.HasIndex("DifficultyLevelId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.RecipeIngredient", b =>
+                {
+                    b.Property<int>("RecipeIngredientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RecipeIngredientId"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("RecipeIngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("Recipes_Ingredients");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.RecipeType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Recipes_Types");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ConsiderationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("IngredientId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ReportDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reports");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Type", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Types");
                 });
 
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.User", b =>
@@ -147,6 +379,80 @@ namespace Smakosfera.WebAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Comment", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.Comment", "CommentBoss")
+                        .WithMany()
+                        .HasForeignKey("CommentBossId");
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommentBoss");
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Ingredient", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Like", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Rate", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
                 {
                     b.HasOne("Smakosfera.DataAccess.Entities.DifficultyLevel", "DifficultyLevel")
@@ -166,6 +472,67 @@ namespace Smakosfera.WebAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.RecipeIngredient", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.Ingredient", "Ingredient")
+                        .WithMany("Recipes")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.RecipeType", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
+                        .WithMany("Types")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.Type", "Type")
+                        .WithMany("Recipes")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Report", b =>
+                {
+                    b.HasOne("Smakosfera.DataAccess.Entities.Ingredient", "Ingredient")
+                        .WithMany()
+                        .HasForeignKey("IngredientId");
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId");
+
+                    b.HasOne("Smakosfera.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Smakosfera.DataAccess.Entities.User", b =>
                 {
                     b.HasOne("Smakosfera.DataAccess.Entities.Permission", "Permission")
@@ -175,6 +542,23 @@ namespace Smakosfera.WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Permission");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Ingredient", b =>
+                {
+                    b.Navigation("Recipes");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Recipe", b =>
+                {
+                    b.Navigation("Ingredients");
+
+                    b.Navigation("Types");
+                });
+
+            modelBuilder.Entity("Smakosfera.DataAccess.Entities.Type", b =>
+                {
+                    b.Navigation("Recipes");
                 });
 #pragma warning restore 612, 618
         }

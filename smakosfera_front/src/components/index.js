@@ -8,10 +8,12 @@ import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import Home from './Home';
 import Recipes from './Recipes';
+import RecipeDetails from './RecipeDetails';
 import MyAccount from './MyAccount';
 import Favorites from './Favorites';
 import AddRecipe from './AddRecipe';
 import Footer from './Footer';
+import Logout from './Logout';
 
 export {
     LandingPage,
@@ -24,8 +26,10 @@ export {
     LoginForm,
     Home,
     Recipes,
+    RecipeDetails,
     MyAccount,
     Favorites,
     AddRecipe,
-    Footer
+    Footer,
+    Logout,
 };

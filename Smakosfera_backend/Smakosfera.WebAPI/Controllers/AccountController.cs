@@ -21,9 +21,9 @@ namespace Smakosfera.WebAPI.Controllers
         [HttpPost("login")]
         public ActionResult Login([FromBody] UserLoginDto dto)
         {
-            var token = _accountService.GenerateJWT(dto);
-            var json = JsonConvert.SerializeObject(token);
-            return Ok(json);
+            var result = _accountService.GenerateJWT(dto);
+            //var json = JsonConvert.SerializeObject(token);
+            return Ok(result);
         }
 
         [HttpPost("register")]

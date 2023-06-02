@@ -30,7 +30,7 @@ const Hero = () => {
           <Button text="Zarejestruj się!" padding="p-4" margin="mx-2" color="text-red border-red hover:border-orange-600"/>
         </Link>
       </div>
-      <Link to="/home" className={`${styles.paragraph} hover:text-gray-400 my-1 opacity-60`}>
+      <Link to="/home" className={`${styles.paragraph} text-dimWhite hover:text-white my-1 opacity-60`}>
         Wejdź na stronę!
       </Link>
     </div>

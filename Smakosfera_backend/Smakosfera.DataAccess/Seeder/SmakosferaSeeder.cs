@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Type = Smakosfera.DataAccess.Entities.Type;
 
 namespace Smakosfera.DataAccess.Seeder
 {
@@ -31,8 +32,21 @@ namespace Smakosfera.DataAccess.Seeder
 
                 if (!_dbContext.Difficulty_Levels.Any())
                 {
-                    var difficultyLevel = GetDificultyLevels();
+                    var difficultyLevel = GetDifficultyLevels();
                     _dbContext.Difficulty_Levels.AddRange(difficultyLevel);
+
+                    _dbContext.SaveChanges();
+                }
+                /* if (!_dbContext.EnumTypes.Any())
+                 {
+                     var enumTypes = GetEnumTypes();
+                     _dbContext.EnumTypes.AddRange(enumTypes);
+                     _dbContext.SaveChanges();
+                 }*/
+                if (!_dbContext.Types.Any())
+                {
+                    var types = GetTypes();
+                    _dbContext.Types.AddRange(types);
                     _dbContext.SaveChanges();
                 }
             
@@ -63,7 +77,7 @@ namespace Smakosfera.DataAccess.Seeder
         }
 
 
-        private IEnumerable<DifficultyLevel> GetDificultyLevels()
+        private IEnumerable<DifficultyLevel> GetDifficultyLevels()
         {
             var dificultyLevels = new List<DifficultyLevel>()
             {
@@ -92,6 +106,38 @@ namespace Smakosfera.DataAccess.Seeder
             };
 
             return dificultyLevels;
+
+        }
+
+        private IEnumerable<Type> GetTypes()
+        {
+            var types = new List<Type>()
+            {
+                new Type()
+                {
+                    Name = "vegetarian"
+                },
+
+                new Type()
+                {
+                    Name = "vegan"
+                },
+
+                new Type()
+                {
+                    Name = "meat"
+                },
+                new Type()
+                {
+                    Name = "fast food"
+                },
+                new Type()
+                {
+                    Name = "other"
+                }
+            };
+
+            return types;
 
         }
     }

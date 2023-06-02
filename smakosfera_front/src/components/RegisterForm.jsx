@@ -65,18 +65,17 @@ const RegisterForm = () => {
             <img className="sm:p-24 md:p-16 p-12" src={logo} />
           </div>
         </Link>
-
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center text-white">
           {isPopupOpen ? (
             <div className="popup">
               <div className="popup-content">
                 <div className="text-container">
-                  <div style={{ lineHeight: '1.75' }} className={`${styles.heading3}`}>
+                  <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
                     Aktywuj konto poprzez link aktywacyjny wysłany na adres
                     email, a następnie zaloguj się.
                     </div>
                 </div>
-                    <div style={{ lineHeight: '1.75' }} className={`${styles.heading3}`}>
+                    <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
                       {whiteSpaceText}
                     </div>
                 <div className="link-container">
@@ -91,14 +90,14 @@ const RegisterForm = () => {
             </div>
           ) : (
           <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
-            <div className={`${styles.heading2} text-white `}>Zarejestruj się!</div>
+            <div className={`${styles.heading4} text-white `}>Zarejestruj się!</div>
             <input
               type="text"
               value={name}
               id="name"
               name="name"
               title="Imię:"
-              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black   hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black   hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Imię:"
               maxLength={50}
               required
@@ -110,7 +109,7 @@ const RegisterForm = () => {
               id="surname"
               name="surname"
               title="Nazwisko:"
-              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white hover:bg-black focus:text-white focus:bg-black text-black`}
+              className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white hover:bg-black focus:text-white focus:bg-black text-black`}
               placeholder="Nazwisko:"
               maxLength={50}
               required
@@ -122,7 +121,7 @@ const RegisterForm = () => {
               id="email"
               name="email"
               title="Email:"
-              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Email:"
               maxLength={256}
               required
@@ -134,7 +133,7 @@ const RegisterForm = () => {
               id="password"
               name="password"
               title="Hasło:"
-              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Hasło:"
               maxLength={32}
               required
@@ -146,7 +145,7 @@ const RegisterForm = () => {
               id="confirmPassword"
               name="confirmPassword"
               title="Powtórz hasło:"
-              className={`${styles.paragraph2} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+              className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
               placeholder="Powtórz hasło:"
               maxLength={256}
               required
@@ -167,6 +166,7 @@ const RegisterForm = () => {
               </Link>
             </form>
           )}
+
 
 
         </div>

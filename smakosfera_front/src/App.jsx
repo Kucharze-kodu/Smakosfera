@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, lazy } from "react";
+import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 
@@ -10,22 +9,17 @@ const RegisterForm = lazy(() => import("./components/RegisterForm"))
 const LoadingScreen = lazy(() => import("./components/LoadingScreen"))
 const PageNotFound = lazy(() => import("./components/PageNotFound"))
 const Home = lazy(() => import("./components/Home"))
+const Logout = lazy(() => import("./components/Logout"))
 
 const App = () => {
-  // fetchowanie z backendu
-  //useEffect(() => {
-    //axios.get(urlWeather).then((response) => {
-      //console.log(response.data);
-    //});
-  //}, []);
-
   return (
     <Routes>
       <Route path="/" element={<Suspense fallback={<LoadingScreen />}><LandingPage /></Suspense>} />
       <Route path="register" element={<Suspense fallback={<LoadingScreen />}><RegisterForm /></Suspense>} />
-      <Route path="login" element={<Suspense fallback={<LoadingScreen />}><LoginForm /></Suspense>} />
+      <Route path="login" element={<Suspense fallback={<LoadingScreen />}> <LoginForm /> </Suspense>} />
       <Route path="home/*" element={<Suspense fallback={<LoadingScreen />}> <Home /> </Suspense>}>  </Route>
       <Route path="*" element={<Suspense fallback={<LoadingScreen />}> <PageNotFound /> </Suspense>}>  </Route>
+      <Route path="logout" element={<Suspense fallback={<LoadingScreen />}> <Logout /> </Suspense>}>  </Route>
     </Routes>
   );
 };

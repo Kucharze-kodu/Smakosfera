@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "animate.css": "^4.1.1",
+    "install": "^0.13.0",
+    "npm": "^9.6.7",
+    "react-animate-on-scroll": "^2.1.7",
+    "react-animation-on-scroll": "^5.1.0",
     "react-fetch": "^0.0.9"
   }
 }

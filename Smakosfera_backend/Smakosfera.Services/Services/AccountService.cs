@@ -38,7 +38,7 @@ namespace Smakosfera.Services.Services
             _host = host;
         }
 
-        public string GenerateJWT(UserLoginDto dto)
+        public UserLoginResponseDto GenerateJWT(UserLoginDto dto)
         {
             var user = _dbContext.Users
                 .Include(r => r.Permission)
@@ -77,7 +77,16 @@ namespace Smakosfera.Services.Services
                 signingCredentials: cred);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(token);
+            var userDto = new UserLoginResponseDto()
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                PermissionName = user.Permission.Name,
+                Token = tokenHandler.WriteToken(token)
+            };
+            
+            return userDto;
         }
 
         public void RegisterUser(UserRegisterDto dto)
