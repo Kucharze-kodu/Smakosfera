@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace Smakosfera.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/comment")]
+    [Authorize]
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
