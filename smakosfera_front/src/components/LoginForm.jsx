@@ -14,6 +14,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const [cookieName, setCookieName] = useCookies(["resJson_name"]);
+  const [cookieId, setCookieId] = useCookies(["resJson_id"]);
   const [cookiePermission, setCookiePermission] = useCookies(["resJson_permission"]);
 
   let handleSubmit = async (e) => {
@@ -38,6 +39,10 @@ const LoginForm = () => {
         currentDate.getTime() + 24 * 60 * 60 * 1000 * 30
       );
       setCookieName("resJson_name", resJson.name, {
+        path: "/",
+        expires: expirationDate,
+      });
+      setCookieId("resJson_id", resJson.id, {
         path: "/",
         expires: expirationDate,
       });

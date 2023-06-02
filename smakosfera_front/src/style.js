@@ -7,11 +7,11 @@ export const styles = {
 
   logo: "font-poppins font-bold xs:text-[30px] text-[24px] gradient",
   heading:
-    "font-poppins text-dimWhite font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[100px] leading-[50px] w-full",
+    "font-poppins text-dimWhite font-semibold xs:text-[5rem] text-[2.5rem] xs:leading-[100px] leading-[50px]",
   heading2:
-    "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] w-full",
+    "font-poppins font-semibold xs:text-[3rem] text-[2rem] xs:leading-[100px] leading-[50px] ",
   heading3:
-    "font-poppins text-dimWhite font-semibold xs:text-[1.3rem] text-[1.5rem] xs:leading-[40px] leading-[30px] w-full",
+    "font-poppins text-dimWhite font-semibold xs:text-[1.3rem] text-[1.5rem] xs:leading-[40px] leading-[30px] ",
   paragraph:
     "font-poppins font-normal text-[18px] leading-[30.8px]",
   paragraph2:

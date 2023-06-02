@@ -59,7 +59,7 @@ const Home = () => {
   };
 
   return (
-    <div className={`${styles.background} p-1 xs:p-5 overflow-hidden`}>
+    <div className={`${styles.background} p-1 xs:p-5 overflow-auto`}>
       <div className="flex xs:h-[95%] h-[90%]">
         <div className="flex xs:flex-row flex-col xs:border-[2px] xs:border-dimWhite">
           {/* Logout (only for phones)*/}
@@ -74,7 +74,7 @@ const Home = () => {
             <img src={logo} className="h-[100%] p-5" alt="Logo" />
           </div>
           {/* Sidebar */}
-          <div className="sidebar pb-2 hidden xs:block overflow-y-scroll w-[20%] border-r-[1px] border-r-dimWhite">
+          <div className="sidebar pb-5 hidden xs:block overflow-y-scroll w-[20%] border-r-[1px] border-r-dimWhite">
             <img
               src={logo}
               className="p-5 border-b-[1px] border-b-dimWhite"
@@ -136,10 +136,10 @@ const Home = () => {
                 </Link>
             </div>
           </div>
-          <div className="flex flex-col xs:w-[80%]">
+          <div className="flex flex-col xs:w-full">
             {/* Logout */}
             <div
-              className={`xs:flex hidden h-[10%] p-5 ${styles.paragraph} justify-end items-center border-b-[1px] border-b-dimWhite`}
+              className={`xs:flex hidden h-[10%] p-5 ${styles.paragraph} justify-between items-center border-b-[1px] border-b-dimWhite`}
             >
               <div className={`${styles.heading3}`}>
                 {isLoggedIn() ? (
@@ -153,7 +153,7 @@ const Home = () => {
                   <>Witamy!</>
                 )}
               </div>
-              <div className="w-full text-right">
+              <div className="text-right">
                 {isLoggedIn() && (
                   <a
                     onClick={handleLogout}
@@ -231,7 +231,7 @@ const Home = () => {
       {/* Bottom navbar (only for phones) */}
       {isLoggedIn() && (
         <div
-          className={`${styles.heading} fixed bottom-0 bg-black text-white xs:hidden h-[10%]`}
+          className={`${styles.heading} w-full fixed bottom-0 bg-black text-white xs:hidden h-[10%]`}
         >
           <div className="flex flex-row items-center justify-between h-full px-5">
             <Link to="/home">
