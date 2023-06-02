@@ -79,6 +79,7 @@ namespace Smakosfera.Services.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var userDto = new UserLoginResponseDto()
             {
+                Id = user.Id,
                 Name = user.Name,
                 Surname = user.Surname,
                 PermissionName = user.Permission.Name,
