@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
@@ -44,18 +45,45 @@ namespace Smakosfera.Services.Services
             return users;
         }
 
+        public UserDto GetUserById(int userId)
+        {
+            var user = GetUser(userId);
+
+            var userDto = new UserDto()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                Surname = user.Surname,
+                Subscription = user.Subscription,
+                VerifiedAt = string.Format("{0:dd-MM-yyyy HH:mm}", user.VerifiedAt),
+                Permission = user.Permission.Name,
+                AvatarFileName = user.AvatarFileName
+            };
+
+            return userDto;
+        }
+
         public void DeleteUser(int userId)
         {
-            var user = _dbContext.Users
-                .FirstOrDefault(r => r.Id == userId);
-
-            if (user is null)
-            {
-                throw new NotFoundException("Użytkownik nie istnieje");
-            }
+            var user = GetUser(userId);
 
             _dbContext.Users.Remove(user);
             _dbContext.SaveChanges();
+        }
+
+        private User GetUser(int userId)
+        {
+            var user = _dbContext.Users
+                .Include(r => r.Permission)
+                .FirstOrDefault(r => r.Id == userId);
+
+            if(user is null)
+            {
+                throw new NotFoundException("Użytkownik nie istnieje!");
+            }
+
+            return user;
         }
     }
 }

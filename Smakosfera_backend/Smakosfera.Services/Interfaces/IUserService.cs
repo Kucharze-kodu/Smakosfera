@@ -10,6 +10,7 @@ namespace Smakosfera.Services.Interfaces
     public interface IUserService
     {
         IEnumerable<UserDto> GetAllUsers();
+        UserDto GetUserById(int userId);
         void DeleteUser(int userId);
         void Add();
     }

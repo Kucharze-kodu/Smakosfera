@@ -24,6 +24,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(users);
         }
 
+        [HttpGet("{userId}")]
+        public ActionResult<UserDto> GetById([FromRoute] int userId)
+        {
+            var user = _userService.GetUserById(userId);
+            return Ok(user);
+        }
+
         [HttpDelete("{userId}")]
         public ActionResult Delete([FromRoute] int userId)
         {
