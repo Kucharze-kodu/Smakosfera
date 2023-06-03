@@ -43,14 +43,7 @@ namespace Smakosfera.Services.Services
 
         public UserInfoDto GetUserInfo()
         {
-            var user = _dbContext.Users
-                .Include(r => r.Permission)
-                .FirstOrDefault(r => r.Id == _userContextService.GetUserId);
-
-            if (user is null)
-            {
-                throw new NotFoundException("Użytkownik nie istnieje");
-            }
+            var user = GetUser();
 
             var userDto = new UserInfoDto()
             {
@@ -65,13 +58,7 @@ namespace Smakosfera.Services.Services
 
         public void Update(UserUpdateDto dto)
         {
-            var user = _dbContext.Users
-                .FirstOrDefault(r => r.Id == _userContextService.GetUserId);
-
-            if (user is null)
-            {
-                throw new NotFoundException("Użytkownik nie istnieje");
-            }
+            var user = GetUser();
 
             if (!string.IsNullOrEmpty(dto.Email))
             {
@@ -90,6 +77,14 @@ namespace Smakosfera.Services.Services
                 user.Subscription = (bool)dto.Subscription;
             }
 
+            _dbContext.SaveChanges();
+        }
+
+        public void Delete()
+        {
+            var user = GetUser();
+
+            _dbContext.Remove(user);
             _dbContext.SaveChanges();
         }
 
@@ -219,6 +214,20 @@ namespace Smakosfera.Services.Services
             user.PasswordResetToken = null;
             user.ResetTokenExpires = null;
             _dbContext.SaveChanges();
+        }
+
+        private User GetUser()
+        {
+            var user = _dbContext.Users
+                .Include(r => r.Permission)
+                .FirstOrDefault(r => r.Id == _userContextService.GetUserId);
+
+            if(user is null)
+            {
+                throw new NotFoundException("Użytkownik nie istnieje");
+            }
+
+            return user;
         }
 
         private string CreateHash(string password)

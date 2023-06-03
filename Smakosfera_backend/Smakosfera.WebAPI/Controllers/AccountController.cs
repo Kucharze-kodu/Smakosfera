@@ -35,6 +35,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        public ActionResult Delete()
+        {
+            _accountService.Delete();
+            return Ok();
+        }
+
         [HttpPost("login")]
         public ActionResult Login([FromBody] UserLoginDto dto)
         {

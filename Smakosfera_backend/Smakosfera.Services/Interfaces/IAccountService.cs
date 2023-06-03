@@ -11,6 +11,7 @@ namespace Smakosfera.Services.Interfaces
     {
         UserInfoDto GetUserInfo();
         void Update(UserUpdateDto dto);
+        void Delete();
         UserLoginResponseDto GenerateJWT(UserLoginDto dto);
         void RegisterUser(UserRegisterDto dto);
         void VerifyUser(string token);
