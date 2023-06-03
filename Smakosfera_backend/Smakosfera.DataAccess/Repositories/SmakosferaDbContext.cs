@@ -31,7 +31,6 @@ namespace Smakosfera.DataAccess.Repositories
         public DbSet<Like> Likes { get; set; }
         public DbSet<Rate> Rates { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Permission

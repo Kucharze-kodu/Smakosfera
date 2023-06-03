@@ -21,5 +21,7 @@ namespace Smakosfera.DataAccess.Entities
 
         public int PermissionId { get; set; } = 1;
         public virtual Permission Permission { get; set; }
+
+        public string? AvatarFileName { get; set; }
     }
 }
