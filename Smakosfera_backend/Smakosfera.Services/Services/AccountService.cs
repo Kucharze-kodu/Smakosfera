@@ -106,6 +106,14 @@ namespace Smakosfera.Services.Services
                 throw new BadRequestException("Konto nie zostalo aktywowane");
             }
 
+            if (user.BanTime.HasValue)
+            {
+                if(user.BanTime > DateTime.UtcNow)
+                {
+                    throw new NotAcceptableException("Konto zbanowane");
+                }
+            }
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -155,7 +163,8 @@ namespace Smakosfera.Services.Services
                 Surname = dto.Surname,
                 Email = dto.Email,
                 PasswordHash = CreateHash(dto.Password),
-                VerifacationToken = CreateRandomToken()
+                VerifacationToken = CreateRandomToken(),
+                BanTime = DateTime.UtcNow.AddDays(1)
             };
 
             _dbContext.Users.Add(user);
