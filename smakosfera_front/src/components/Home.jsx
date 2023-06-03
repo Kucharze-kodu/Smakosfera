@@ -17,6 +17,7 @@ const MyAccount = lazy(() => import("./MyAccount"));
 const Favorites = lazy(() => import("./Favorites"));
 const AddRecipe = lazy(() => import("./AddRecipe"));
 const LoadingScreen = lazy(() => import("./LoadingScreen"));
+const AddIngredniet = lazy(() => import("./AddIngredient"));
 
 const Home = () => {
   // Check if user is logged in
@@ -95,6 +96,16 @@ const Home = () => {
                 />
               )}
             </Link>
+            <Link to="/home/add-ingredient">
+              {isLoggedIn() && (
+                <Button
+                  text="Dodaj nowy składnik"
+                  padding="p-1"
+                  margin="mt-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              )}
+            </Link>
           </div>
           <div className="flex flex-col xs:w-[80%] ">
             {/* Logout */}
@@ -165,6 +176,15 @@ const Home = () => {
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
                     <AddRecipe />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="add-ingredient"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <AddIngredniet />{" "}
                   </Suspense>
                 }
               ></Route>
