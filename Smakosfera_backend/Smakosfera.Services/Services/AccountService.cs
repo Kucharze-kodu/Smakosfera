@@ -63,6 +63,36 @@ namespace Smakosfera.Services.Services
             return userDto;
         }
 
+        public void Update(UserUpdateDto dto)
+        {
+            var user = _dbContext.Users
+                .FirstOrDefault(r => r.Id == _userContextService.GetUserId);
+
+            if (user is null)
+            {
+                throw new NotFoundException("Użytkownik nie istnieje");
+            }
+
+            if (!string.IsNullOrEmpty(dto.Email))
+            {
+                user.Email = dto.Email;
+            }
+            if (!string.IsNullOrEmpty(dto.Name))
+            {
+                user.Name = dto.Name;
+            }
+            if (!string.IsNullOrEmpty(dto.Surname))
+            {
+                user.Surname = dto.Surname;
+            }
+            if(dto.Subscription is not null)
+            {
+                user.Subscription = (bool)dto.Subscription;
+            }
+
+            _dbContext.SaveChanges();
+        }
+
         public UserLoginResponseDto GenerateJWT(UserLoginDto dto)
         {
             var user = _dbContext.Users
@@ -71,12 +101,12 @@ namespace Smakosfera.Services.Services
 
             var hashedPassword = CreateHash(dto.Password);
 
-            if(user is null || user.PasswordHash != hashedPassword)
+            if (user is null || user.PasswordHash != hashedPassword)
             {
                 throw new BadRequestException("Nieprawidlowy email lub haslo");
             }
 
-            if(user.VerifiedAt is null) 
+            if (user.VerifiedAt is null)
             {
                 throw new BadRequestException("Konto nie zostalo aktywowane");
             }
@@ -110,7 +140,7 @@ namespace Smakosfera.Services.Services
                 PermissionName = user.Permission.Name,
                 Token = tokenHandler.WriteToken(token)
             };
-            
+
             return userDto;
         }
 
@@ -119,7 +149,7 @@ namespace Smakosfera.Services.Services
             var isExist = _dbContext.Users
                 .Any(r => r.Email == dto.Email);
 
-            if(isExist)
+            if (isExist)
             {
                 throw new BadRequestException("Email jest zajety");
             }
@@ -145,7 +175,7 @@ namespace Smakosfera.Services.Services
             var user = _dbContext.Users
                 .FirstOrDefault(r => r.VerifacationToken == token);
 
-            if(user is null)
+            if (user is null)
             {
                 throw new BadRequestException("Nie mozna aktywowac konta");
             }
@@ -159,7 +189,7 @@ namespace Smakosfera.Services.Services
         {
             var user = _dbContext.Users.FirstOrDefault(c => c.Email == dto.Email);
 
-            if(user is null)
+            if (user is null)
             {
                 throw new NotFoundException("Nie znaleziono emaila");
             }
@@ -175,12 +205,12 @@ namespace Smakosfera.Services.Services
         {
             var user = _dbContext.Users.FirstOrDefault(c => c.PasswordResetToken == token);
 
-            if(user is null)
+            if (user is null)
             {
                 throw new BadRequestException("Nie mozna zresetowac hasla");
             }
 
-            if(user.ResetTokenExpires < DateTime.UtcNow)
+            if (user.ResetTokenExpires < DateTime.UtcNow)
             {
                 throw new BadRequestException("Link wygasl");
             }

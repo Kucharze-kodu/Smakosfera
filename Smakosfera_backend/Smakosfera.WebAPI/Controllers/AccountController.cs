@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
@@ -19,17 +20,25 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult GetData()
         {
             var result = _accountService.GetUserInfo();
             return Ok(result);
         }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult Update([FromBody] UserUpdateDto dto)
+        {
+            _accountService.Update(dto);
+            return Ok();
+        }
+
         [HttpPost("login")]
         public ActionResult Login([FromBody] UserLoginDto dto)
         {
             var result = _accountService.GenerateJWT(dto);
-            //var json = JsonConvert.SerializeObject(token);
             return Ok(result);
         }
 
