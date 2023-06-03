@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Smakosfera.DataAccess.Repositories;
+using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
 using System;
@@ -41,6 +42,20 @@ namespace Smakosfera.Services.Services
                 })
                 .ToList();
             return users;
+        }
+
+        public void DeleteUser(int userId)
+        {
+            var user = _dbContext.Users
+                .FirstOrDefault(r => r.Id == userId);
+
+            if (user is null)
+            {
+                throw new NotFoundException("Użytkownik nie istnieje");
+            }
+
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
         }
     }
 }

@@ -23,5 +23,12 @@ namespace Smakosfera.WebAPI.Controllers
             var users = _userService.GetAllUsers();
             return Ok(users);
         }
+
+        [HttpDelete("{userId}")]
+        public ActionResult Delete([FromRoute] int userId)
+        {
+            _userService.DeleteUser(userId);
+            return Ok("Użytkownik usunięty");
+        }
     }
 }

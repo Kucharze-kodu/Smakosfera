@@ -27,7 +27,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         public ActionResult Update([FromBody] UserUpdateDto dto)
         {
