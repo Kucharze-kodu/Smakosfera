@@ -5,9 +5,11 @@ import { urlIngredient } from "../endpoints";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 
+
+
 const DodawaniePrzepisu = () => {
   const [Nazwa, setNazwa] = useState("");
-  const [skladnik, setskladnik] = useState([{ nazwa: "", ilosc: "" }]);
+  const [skladnik, setskladnik] = useState([{ nazwa: "", ilosc: "", jednostka: "" }]);
   const [trudnosc, setTrudnosc] = useState("");
   const [opis, setOpis] = useState("");
   const [czas, setCzas] = useState("");
@@ -42,7 +44,7 @@ const DodawaniePrzepisu = () => {
   };
 
   const handleDodawanko = () => {
-    setskladnik([...skladnik, { nazwa: "", ilosc: "" }]); //dodane skladniki
+    setskladnik([...skladnik, { nazwa: "", ilosc: "", jednostka: "" }]); //dodane skladniki
   };
 
   const handleTrudnosc = (event) => {
@@ -57,30 +59,32 @@ const DodawaniePrzepisu = () => {
     setCzas(event.target.value);
   };
 
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      let res = await fetch(urlRecipes, {
+      let res = await fetch('https://localhost:7000/api/recipe', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          //"Authorization":"Bearer ${token}"
+          
+
         },
         body: JSON.stringify({
-          /*name: Nazwa,
+         
+          name: Nazwa,
           description: opis,
           difficultyLevelId: trudnosc,
-          preparationTime: czas,                       
-          skladnik: skladnik,
-          communityRecipe: true,*/
-
-          name: "Przykładowy przepis",
-          description: "Opis przepisu",
-          difficultyLevelId: trudnosc,
-          preparationTime: 30,
-          communityRecipe: true, // PRZYKLADKOWE DANE
-          skladniki: ["skladnik1", "skladnik2"],
-        }),
+          preparationTime: czas,
+          ingredients: skladnik.map(({ nazwa, ilosc, jednostka }) => ({
+            name: nazwa,
+            amount: ilosc,
+            unit: jednostka
+          }))
+        })
       });
       let resJson = await res.json();
 
@@ -91,13 +95,23 @@ const DodawaniePrzepisu = () => {
 
       document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`;
 
-      if (res.status === 200) {
+      if (res.status === 200 ) {
         setNazwa("");
-        setskladnik([{ nazwa: "", ilosc: "" }]);
+        setskladnik([{ nazwa: "", ilosc: "", jednostka: "" }]);
         setCzas("");
         setOpis("");
         setTrudnosc("");
-      } else {
+      } 
+      else if (res.status === 201)
+      {
+        setNazwa("");
+        setskladnik([{ nazwa: "", ilosc: "", jednostka: "" }]);
+        setCzas("");
+        setOpis("");
+        setTrudnosc("");
+      }
+      
+      else {
         console.log("Błąd!");
       }
     } catch (err) {
@@ -189,6 +203,18 @@ const DodawaniePrzepisu = () => {
                     onChange={(event) => handleSkladnik(event, index, "ilosc")}
                     className="xs:w-48 w-full px-4 py-2 xs:mb-0  mx-1 mb-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                   />
+
+                <select
+                value={ingredient.jednostka}
+                onChange={(event) => handleSkladnik(event, index, "jednostka")}
+                className="xs:w-48 w-full px-4 py-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Wybierz jendostke</option>
+                <option value="sztuk">Sztuki</option>
+                <option value="gramów">Gramy</option>
+                <option value="łyżeczki">Łyżeczki</option>
+                <option value="mililitrów">Mililitrów</option>
+              </select>
                 </div>
               ))}
               <button
