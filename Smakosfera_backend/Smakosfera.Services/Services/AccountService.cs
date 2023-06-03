@@ -25,17 +25,42 @@ namespace Smakosfera.Services.Services
         private readonly IEmailService _emailService;
         private readonly AuthenticationSettings _authenticationSettings;
         private readonly HostSettings _host;
+        private readonly IUserContextService _userContextService;
 
         public AccountService(
             SmakosferaDbContext dbContext,
             IEmailService emailService,
             AuthenticationSettings authenticationSettings,
-            HostSettings host)
+            HostSettings host,
+            IUserContextService userContextService)
         {
             _dbContext = dbContext;
             _emailService = emailService;
             _authenticationSettings = authenticationSettings;
             _host = host;
+            _userContextService = userContextService;
+        }
+
+        public UserInfoDto GetUserInfo()
+        {
+            var user = _dbContext.Users
+                .Include(r => r.Permission)
+                .FirstOrDefault(r => r.Id == _userContextService.GetUserId);
+
+            if (user is null)
+            {
+                throw new NotFoundException("Użytkownik nie istnieje");
+            }
+
+            var userDto = new UserInfoDto()
+            {
+                Id = user.Id,
+                Name = $"{user.Name} {user.Surname}",
+                Email = user.Email,
+                Permission = user.Permission.Name
+            };
+
+            return userDto;
         }
 
         public UserLoginResponseDto GenerateJWT(UserLoginDto dto)

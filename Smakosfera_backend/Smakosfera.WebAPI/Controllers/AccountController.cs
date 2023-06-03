@@ -18,6 +18,13 @@ namespace Smakosfera.WebAPI.Controllers
             _accountService = accountService;
         }
 
+        [HttpGet]
+        public ActionResult GetData()
+        {
+            var result = _accountService.GetUserInfo();
+            return Ok(result);
+        }
+
         [HttpPost("login")]
         public ActionResult Login([FromBody] UserLoginDto dto)
         {

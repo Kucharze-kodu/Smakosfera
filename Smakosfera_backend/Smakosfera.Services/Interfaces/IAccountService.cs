@@ -9,6 +9,7 @@ namespace Smakosfera.Services.Interfaces
 {
     public interface IAccountService
     {
+        UserInfoDto GetUserInfo();
         UserLoginResponseDto GenerateJWT(UserLoginDto dto);
         void RegisterUser(UserRegisterDto dto);
         void VerifyUser(string token);
