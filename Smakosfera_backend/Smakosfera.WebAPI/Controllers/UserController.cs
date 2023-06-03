@@ -31,6 +31,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(user);
         }
 
+        [HttpPut("{userId}")]
+        public ActionResult Ban([FromRoute] int userId, [FromBody] int days)
+        {
+            _userService.BanUser(userId, days);
+            return Ok($"Użytkownik o id {userId} został zbanowany na {days} dni");
+        }
+
         [HttpDelete("{userId}")]
         public ActionResult Delete([FromRoute] int userId)
         {

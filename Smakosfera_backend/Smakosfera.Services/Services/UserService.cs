@@ -30,19 +30,36 @@ namespace Smakosfera.Services.Services
         {
             var users = _dbContext.Users
                 .Include(r => r.Permission)
-                .Select(r => new UserDto()
-                {
-                    Id = r.Id,
-                    Email = r.Email,
-                    Name = r.Name,
-                    Surname = r.Surname,
-                    Subscription = r.Subscription,
-                    VerifiedAt = string.Format("{0:dd-MM-yyyy HH:mm}", r.VerifiedAt),
-                    Permission = r.Permission.Name,
-                    AvatarFileName = r.AvatarFileName
-                })
                 .ToList();
-            return users;
+
+            var usersDto = new List<UserDto>();
+
+            foreach(var user in users)
+            {
+                var userDto = new UserDto()
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Subscription = user.Subscription,
+                    Permission = user.Permission.Name,
+                    AvatarFileName = user.AvatarFileName
+                };
+
+                if (user.VerifiedAt is not null)
+                {
+                    userDto.VerifiedAt = string.Format("{0:dd-MM-yyyy HH:mm}", user.VerifiedAt);
+                }
+
+                if (user.BanTime is not null)
+                {
+                    userDto.BanTime = string.Format("{0:dd-MM-yyyy HH:mm}", user.BanTime);
+                }
+
+                usersDto.Add(userDto);
+            }
+            return usersDto;
         }
 
         public UserDto GetUserById(int userId)
@@ -56,12 +73,29 @@ namespace Smakosfera.Services.Services
                 Name = user.Name,
                 Surname = user.Surname,
                 Subscription = user.Subscription,
-                VerifiedAt = string.Format("{0:dd-MM-yyyy HH:mm}", user.VerifiedAt),
                 Permission = user.Permission.Name,
                 AvatarFileName = user.AvatarFileName
             };
 
+            if(user.VerifiedAt is not null)
+            {
+                userDto.VerifiedAt = string.Format("{0:dd-MM-yyyy HH:mm}", user.VerifiedAt);
+            }
+
+            if(user.BanTime is not null)
+            {
+                userDto.BanTime = string.Format("{0:dd-MM-yyyy HH:mm}", user.BanTime);
+            }
+
             return userDto;
+        }
+
+        public void BanUser(int userId, int days)
+        {
+            var user = GetUser(userId);
+
+            user.BanTime = DateTime.UtcNow.AddDays(days);
+            _dbContext.SaveChanges();
         }
 
         public void DeleteUser(int userId)

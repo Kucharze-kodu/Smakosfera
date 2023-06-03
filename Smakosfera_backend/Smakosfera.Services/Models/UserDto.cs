@@ -16,6 +16,7 @@ namespace Smakosfera.Services.Models
         public bool Subscription { get; set; }
         public string VerifiedAt { get; set; }
         public string Permission { get; set; }
+        public string BanTime { get; set; }
         public string? AvatarFileName { get; set; }
     }
 }
