@@ -36,6 +36,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public ActionResult Delete()
         {
             _accountService.Delete();
