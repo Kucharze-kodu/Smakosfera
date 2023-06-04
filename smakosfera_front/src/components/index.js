@@ -14,6 +14,7 @@ import Favorites from './Favorites';
 import AddRecipe from './AddRecipe';
 import Footer from './Footer';
 import Logout from './Logout';
+import AddIngredient from './AddIngredient'
 
 export {
     LandingPage,
@@ -32,4 +33,5 @@ export {
     AddRecipe,
     Footer,
     Logout,
+    AddIngredient,
 };
