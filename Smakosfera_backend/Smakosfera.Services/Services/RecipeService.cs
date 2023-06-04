@@ -11,23 +11,23 @@ namespace Smakosfera.Services.Services
 {
     public class RecipeService : IRecipesService
     {
-        private readonly SmakosferaDbContext _Recipes;
+        private readonly SmakosferaDbContext _DbContext;
         private readonly IUserContextService _userContextService;
         private readonly IIngredientService _ingredientService;
 
         public RecipeService(
-            SmakosferaDbContext recipes, 
+            SmakosferaDbContext dbContext, 
             IUserContextService userContextService,
             IIngredientService ingredientService)
         {
-            _Recipes = recipes;
+            _DbContext = dbContext;
             _userContextService = userContextService;
             _ingredientService = ingredientService;
         }
 
         public RecipeResponseDto GetRecipe(int recipeId)
         {
-            var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+            var recipe = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             if (recipe is null)
             {
@@ -54,7 +54,7 @@ namespace Smakosfera.Services.Services
 
         public IEnumerable<RecipeResponseDto> Browse()
         {
-            var date = _Recipes.Recipes.ToList();
+            var date = _DbContext.Recipes.ToList();
 
 
             var result = date.FindAll(r => r.IsConfirmed == true)
@@ -78,7 +78,7 @@ namespace Smakosfera.Services.Services
 
         public void Add(RecipeDto dto)
         {
-            var isExist = _Recipes.Recipes.Any(r => r.Name == dto.Name);
+            var isExist = _DbContext.Recipes.Any(r => r.Name == dto.Name);
 
             if (isExist)
             {
@@ -94,48 +94,48 @@ namespace Smakosfera.Services.Services
                 UserId = _userContextService.GetUserId // zmiana
             };
 
-            _Recipes.Recipes.Add(recipe);
-            _Recipes.SaveChanges();
+            _DbContext.Recipes.Add(recipe);
+            _DbContext.SaveChanges();
 
-            var recipeId = _Recipes.Recipes.FirstOrDefault(r => r.Name == dto.Name).Id;
+            var recipeId = _DbContext.Recipes.FirstOrDefault(r => r.Name == dto.Name).Id;
 
             if(dto.Ingredients != null)
             {
                 foreach (var ingredientDto in dto.Ingredients)
                 {
-                    var isIngredient = _Recipes.Ingredients.Any(r => r.Name == ingredientDto.Name);
+                    var isIngredient = _DbContext.Ingredients.Any(r => r.Name == ingredientDto.Name);
                     if (!isIngredient)
                     {
-                        _Recipes.Ingredients.Add(new Ingredient()
+                        _DbContext.Ingredients.Add(new Ingredient()
                         {
                             Name = ingredientDto.Name,
                             CreatedById = _userContextService.GetUserId
                         });
-                        _Recipes.SaveChanges();
+                        _DbContext.SaveChanges();
                     }                    
                     
-                    var ingredientId = _Recipes.Ingredients.FirstOrDefault(r => r.Name == ingredientDto.Name).Id;
-                    var isRecord = _Recipes.Recipes_Ingredients
+                    var ingredientId = _DbContext.Ingredients.FirstOrDefault(r => r.Name == ingredientDto.Name).Id;
+                    var isRecord = _DbContext.Recipes_Ingredients
                         .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId);
 
                     if (!isRecord)
                     {
-                        _Recipes.Recipes_Ingredients.Add(new RecipeIngredient()
+                        _DbContext.Recipes_Ingredients.Add(new RecipeIngredient()
                         {
                             IngredientId = ingredientId,
                             RecipeId = recipeId,
                             Amount = ingredientDto.Amount,
                             Unit = ingredientDto.Unit
                         });
-                        _Recipes.SaveChanges();
+                        _DbContext.SaveChanges();
                     }
                 }
             }
 
             //try
             //{
-            //    _Recipes.Recipes.Add(one);
-            //    _Recipes.SaveChanges();
+            //    _DbContext.Recipes.Add(one);
+            //    _DbContext.SaveChanges();
             //}
             //catch (DbUpdateException ex)
             //{
@@ -153,7 +153,7 @@ namespace Smakosfera.Services.Services
 
         public void Update(int recipeId, RecipeDto dto)
         {
-            var result = _Recipes.Recipes.FirstOrDefault(c => c.Id == recipeId);//SingleOrDefault(c => c.Id == recipeId);
+            var result = _DbContext.Recipes.FirstOrDefault(c => c.Id == recipeId);//SingleOrDefault(c => c.Id == recipeId);
 
 
             if (result is null)
@@ -166,21 +166,37 @@ namespace Smakosfera.Services.Services
             result.DifficultyLevelId = dto.DifficultyLevelId;
             result.PreparationTime = dto.PreparationTime;
 
-            _Recipes.SaveChanges();
+            _DbContext.SaveChanges();
 
         }
         public void Delete(int recipeId)
         {
-            var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+            var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             if (result is null)
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
 
-            _Recipes.Recipes.Remove(result);
-            _Recipes.SaveChanges();
+            _DbContext.Recipes.Remove(result);
+            _DbContext.SaveChanges();
 
+        }
+
+        public void ApplyRecipe(int recipeId)
+        {
+            var isresult = _DbContext.Recipes.Any(r => r.Id == recipeId);
+
+            if (!isresult)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
+
+            result.IsConfirmed = true;
+
+            _DbContext.SaveChanges();
         }
     }
 }

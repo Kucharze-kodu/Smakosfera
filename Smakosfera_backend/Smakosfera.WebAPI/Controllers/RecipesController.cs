@@ -61,5 +61,16 @@ namespace Smakosfera.WebAPI.Controllers
 
             return Created($"Update Recipe", null);
         }
+
+        [HttpPut("/verification/{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult ApplyRecipe([FromRoute] int id)
+        {
+            _recipesService.ApplyRecipe(id);
+
+
+            return Created($"Apply Recipe", null);
+        }
+
     }
 }

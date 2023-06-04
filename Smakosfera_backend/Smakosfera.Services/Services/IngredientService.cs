@@ -1,4 +1,5 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
@@ -9,18 +10,18 @@ namespace Smakosfera.Services.Services
 {
     public class IngredientService : IIngredientService
     {
-        private readonly SmakosferaDbContext _ingredient;
+        private readonly SmakosferaDbContext _DbContext;
         private readonly IUserContextService _userContextService;
 
-        public IngredientService(SmakosferaDbContext ingredient, IUserContextService userContextService)
+        public IngredientService(SmakosferaDbContext dbContext, IUserContextService userContextService)
         {
-            _ingredient = ingredient;
+            _DbContext = dbContext;
             _userContextService = userContextService;
         }
 
         public void AddIngredient(IngredientDto dto)
         {
-            var isExist = _ingredient.Ingredients.Any(r => r.Name == dto.Name);
+            var isExist = _DbContext.Ingredients.Any(r => r.Name == dto.Name);
 
             if (isExist)
             {
@@ -33,13 +34,13 @@ namespace Smakosfera.Services.Services
                 CreatedById = _userContextService.GetUserId,
             };
 
-            _ingredient.Ingredients.Add(result);
-            _ingredient.SaveChanges();
+            _DbContext.Ingredients.Add(result);
+            _DbContext.SaveChanges();
         }
 
         public IngredientDto GetIngredient(int ingredientId)
         {
-            var ingredient = _ingredient.Ingredients
+            var ingredient = _DbContext.Ingredients
                 .SingleOrDefault(c => c.Id == ingredientId);
 
             if (ingredient is null)
@@ -63,7 +64,7 @@ namespace Smakosfera.Services.Services
 
         public IEnumerable<IngredientDto> Browse()
         {
-            var date = _ingredient.Ingredients.ToList().FindAll(r => r.IsConfirmed == true);
+            var date = _DbContext.Ingredients.ToList().FindAll(r => r.IsConfirmed == true);
 
 
             var result = date.Select(r => new IngredientDto()
@@ -77,7 +78,7 @@ namespace Smakosfera.Services.Services
 
         public void EditIngredient(int Id, IngredientDto dto)
         {
-            var result = _ingredient.Ingredients.FirstOrDefault(c => c.Id == Id);
+            var result = _DbContext.Ingredients.FirstOrDefault(c => c.Id == Id);
 
             if (result is null)
             {
@@ -86,22 +87,22 @@ namespace Smakosfera.Services.Services
 
             result.Name = dto.Name;
 
-            _ingredient.SaveChanges();
+            _DbContext.SaveChanges();
         }
 
 
         public void DeleteIngredient(int Id)
         {
-            var result = _ingredient.Ingredients.FirstOrDefault(c => c.Id == Id);
+            var result = _DbContext.Ingredients.FirstOrDefault(c => c.Id == Id);
 
             if (result is null)
             {
                 throw new NotFoundException("Nie ma składniku");
             }
 
-            _ingredient.Ingredients.Remove(result);
+            _DbContext.Ingredients.Remove(result);
 
-            _ingredient.SaveChanges();
+            _DbContext.SaveChanges();
         }
     }
 }
