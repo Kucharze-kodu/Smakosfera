@@ -13,22 +13,23 @@ namespace Smakosfera.Services.Services
     {
         private readonly SmakosferaDbContext _DbContext;
         private readonly IUserContextService _userContextService;
-        private readonly IIngredientService _ingredientService;
 
         public RecipeService(
             SmakosferaDbContext recipes, 
-            IUserContextService userContextService,
-            IIngredientService ingredientService)
+            IUserContextService userContextService)
         {
             _DbContext = recipes;
             _userContextService = userContextService;
-            _ingredientService = ingredientService;
+
         }
 
         public RecipeResponseDto GetRecipe(int recipeId)
         {
-            var recipe = _DbContext.Recipes.Include(c => c.Ingredients).ThenInclude(t => t.Ingredient).
-                SingleOrDefault(cc => cc.Id == recipeId);
+            var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
+                                           .ThenInclude(cc => cc.Ingredient)
+                                           .Include(t => t.Types)
+                                           .ThenInclude(tt => tt.Type)
+                                           .SingleOrDefault(cc => cc.Id == recipeId);
 
 
 
@@ -50,8 +51,16 @@ namespace Smakosfera.Services.Services
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
                 CommunityRecipe = recipe.CommunityRecipe,
+                ImageFileName = recipe.ImageFileName,
+                Types = recipe.Types.Select(i => new RecipeTypeDto
+                {
+                    Name = i.Type.Name,
+                    TypeId = i.TypeId
+                }).ToList(),
+
                 Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
                 {
+                    Name = i.Ingredient.Name,
                     IngredientId = i.IngredientId,
                     Amount = i.Amount,
                     Unit = i.Unit
@@ -76,7 +85,21 @@ namespace Smakosfera.Services.Services
                                  Description = r.Description,
                                  DifficultyLevelId = r.DifficultyLevelId,
                                  PreparationTime = r.PreparationTime,
-                                 CommunityRecipe = r.CommunityRecipe
+                                 CommunityRecipe = r.CommunityRecipe,
+                                 ImageFileName = r.ImageFileName,
+                                 Types = r.Types.Select(i => new RecipeTypeDto
+                                 {
+                                     Name = i.Type.Name,
+                                     TypeId = i.TypeId
+                                 }).ToList(),
+
+                                 Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
+                                 {
+                                     Name = i.Ingredient.Name,
+                                     IngredientId = i.IngredientId,
+                                     Amount = i.Amount,
+                                     Unit = i.Unit
+                                 }).ToList()
                              });
 
             if (result.Any() == false)
@@ -142,6 +165,28 @@ namespace Smakosfera.Services.Services
                         _DbContext.SaveChanges();
                     }
                 }
+            }
+
+            if (dto.Types != null)
+            {
+               
+                foreach (var typeOne in dto.Types) 
+                {
+                    var isRecipeTypes = _DbContext.Types.SingleOrDefault(r => r.Name == typeOne.Name).Id;
+                    var isRecord  = _DbContext.Recipes_Types
+                                    .Any(r=> r.TypeId  == typeOne.TypeId && r.RecipeId == recipeId);
+
+                    if(!isRecord)
+                    {
+                        _DbContext.Recipes_Types.Add(new RecipeType()
+                        {
+                            RecipeId = recipeId,
+                            TypeId = typeOne.TypeId
+                        });
+                    }
+                    _DbContext.SaveChanges();
+                }
+                
             }
 
             //try

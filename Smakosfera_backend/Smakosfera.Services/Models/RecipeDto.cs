@@ -21,6 +21,10 @@ namespace Smakosfera.Services.Models
         [Required]
         public int PreparationTime { get; set; }
 
+        public string? ImageFileName { get; set; }
+        [Required]
+        public IEnumerable<RecipeTypeDto> Types { get; set; }
+
         public bool CommunityRecipe { get; set; } = true; // zmiany?
         [Required]
         public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }

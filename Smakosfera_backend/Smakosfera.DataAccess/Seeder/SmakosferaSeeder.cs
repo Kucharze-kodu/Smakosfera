@@ -37,12 +37,6 @@ namespace Smakosfera.DataAccess.Seeder
 
                     _dbContext.SaveChanges();
                 }
-                /* if (!_dbContext.EnumTypes.Any())
-                 {
-                     var enumTypes = GetEnumTypes();
-                     _dbContext.EnumTypes.AddRange(enumTypes);
-                     _dbContext.SaveChanges();
-                 }*/
                 if (!_dbContext.Types.Any())
                 {
                     var types = GetTypes();
