@@ -13,16 +13,13 @@ namespace Smakosfera.Services.Services
     {
         private readonly SmakosferaDbContext _DbContext;
         private readonly IUserContextService _userContextService;
-        private readonly IIngredientService _ingredientService;
 
         public RecipeService(
             SmakosferaDbContext dbContext, 
-            IUserContextService userContextService,
-            IIngredientService ingredientService)
+            IUserContextService userContextService)
         {
             _DbContext = dbContext;
             _userContextService = userContextService;
-            _ingredientService = ingredientService;
         }
 
         public RecipeResponseDto GetRecipe(int recipeId)
@@ -191,6 +188,19 @@ namespace Smakosfera.Services.Services
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
+
+            var ishere = _DbContext.Recipes_Ingredients.Include(tt => tt.Ingredient)
+                                            .Where(a => a.Ingredient.IsConfirmed == false && a.RecipeId==recipeId)
+                                            .Select(r => r.Ingredient)
+                                            .ToList();
+
+            foreach(var one in ishere)
+            {
+                one.IsConfirmed = true;
+                _DbContext.SaveChanges();
+            }
+        
+
 
             var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
