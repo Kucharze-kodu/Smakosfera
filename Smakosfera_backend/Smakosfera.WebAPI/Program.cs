@@ -66,6 +66,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IRecipesService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<INewsletterService, NewsletterService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -79,6 +80,7 @@ builder.Services.AddScoped<SmakosferaSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<NewsletterMiddleware>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();
 
@@ -95,6 +97,7 @@ var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<SmakosferaSeeder>();
 seeder.Seed();
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<NewsletterMiddleware>();
 
 app.UseAuthentication();
 
