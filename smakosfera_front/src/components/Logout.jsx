@@ -11,7 +11,7 @@ const Logout = () => {
       >
         Zostałeś wylogowany!
         <div className={`${styles.paragraph} my-2`}>
-          <Link to="/" className="text-dimWhite">Wróc do strony głównej</Link>
+          <Link to="/" className="text-dimWhite hover:text-white">Wróc do strony głównej</Link>
         </div>
       </div>
     </div>

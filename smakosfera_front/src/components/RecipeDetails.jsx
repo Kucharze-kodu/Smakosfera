@@ -43,7 +43,7 @@ const RecipeDetails = ({ recipes }) => {
     // Create a new comment object
     const newCommentObj = {
       content: newComment,
-      userId: 34,
+      userId: getResJsonId(),
       recipeId: recipeId,
       commentBossId: null
     };

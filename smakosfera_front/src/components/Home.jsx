@@ -60,7 +60,7 @@ const Home = () => {
 
   return (
     <div className={`${styles.background} p-1 xs:p-5 overflow-auto`}>
-      <div className="flex xs:h-[95%] h-[90%]">
+      <div className="flex xs:flex-row flex-col xs:h-[95%] h-[90%]">
         <div className="flex xs:flex-row flex-col xs:border-[2px] xs:border-dimWhite">
           {/* Logout (only for phones)*/}
           {isLoggedIn() && (
@@ -73,7 +73,7 @@ const Home = () => {
           )}
 
           {/* Logo (only for phones) */}
-          <div className="z-1 xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
+          <div className="z-1 xs:hidden flex justify-center xs:h-[25%] h-[20%] border-b-[1px] border-b-dimWhite">
             <img src={logo} className="h-[100%] p-5" alt="Logo" />
           </div>
           {/* Sidebar */}
