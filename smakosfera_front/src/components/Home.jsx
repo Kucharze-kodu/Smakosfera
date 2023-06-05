@@ -63,14 +63,17 @@ const Home = () => {
       <div className="flex xs:h-[95%] h-[90%]">
         <div className="flex xs:flex-row flex-col xs:border-[2px] xs:border-dimWhite">
           {/* Logout (only for phones)*/}
-          <div
-            className={`flex xs:hidden h-[0%] pt-2 pr-2 justify-end ${styles.heading} text-dimWhite`}
-          >
-            <BiLogOut />
-          </div>
+          {isLoggedIn() && (
+            <div
+              className={`z-0 flex xs:hidden h-[0%] pt-2 pr-2 justify-end ${styles.heading} text-dimWhite`}
+              onClick={handleLogout}
+            >
+              <BiLogOut />
+            </div>
+          )}
 
           {/* Logo (only for phones) */}
-          <div className="xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
+          <div className="z-1 xs:hidden flex justify-center h-[25%] border-b-[1px] border-b-dimWhite">
             <img src={logo} className="h-[100%] p-5" alt="Logo" />
           </div>
           {/* Sidebar */}
@@ -82,58 +85,58 @@ const Home = () => {
             />
             <img src={avatar} className="w-[75%] mx-auto" alt="Avatar" />
             <div className="sidebar-links">
-                <Link to="/home">
+              <Link to="/home">
+                <Button
+                  text="Strona główna"
+                  padding="p-1"
+                  margin="mb-4 mx-4"
+                  color="border-dimWhite hover:border-white text-dimWhite hover:text-white"
+                />
+              </Link>
+              <Link to="/home/my-account">
+                <Button
+                  text="Moje konto"
+                  padding="p-1"
+                  margin="my-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              </Link>
+              <Link to="/home/favorites">
+                <Button
+                  text="Ulubione"
+                  padding="p-1"
+                  margin="my-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              </Link>
+              <Link to="/home/add-recipe">
+                <Button
+                  text="Dodaj nowy przepis"
+                  padding="p-1"
+                  margin="mt-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              </Link>
+              <div onClick={handleRandomRecipe}>
+                {isLoggedIn() && (
                   <Button
-                    text="Strona główna"
-                    padding="p-1"
-                    margin="mb-4 mx-4"
-                    color="border-dimWhite hover:border-white text-dimWhite hover:text-white"
-                  />
-                </Link>
-                <Link to="/home/my-account">
-                  <Button
-                    text="Moje konto"
-                    padding="p-1"
-                    margin="my-4 mx-4"
-                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                  />
-                </Link>
-                <Link to="/home/favorites">
-                  <Button
-                    text="Ulubione"
-                    padding="p-1"
-                    margin="my-4 mx-4"
-                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                  />
-                </Link>
-                <Link to="/home/add-recipe">
-                  <Button
-                    text="Dodaj nowy przepis"
+                    text="Losuj przepis"
                     padding="p-1"
                     margin="mt-4 mx-4"
                     color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
                   />
-                </Link>
-                <div onClick={handleRandomRecipe}>
-                  {isLoggedIn() && (
-                    <Button
-                      text="Losuj przepis"
-                      padding="p-1"
-                      margin="mt-4 mx-4"
-                      color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                    />
-                  )}
-                </div>
-                <Link to="/home/add-ingredient">
-                  {isLoggedIn() && (
-                    <Button
-                      text="Dodaj nowy składnik"
-                      padding="p-1"
-                      margin="mt-4 mx-4"
-                      color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                    />
-                  )}
-                </Link>
+                )}
+              </div>
+              <Link to="/home/add-ingredient">
+                {isLoggedIn() && (
+                  <Button
+                    text="Dodaj nowy składnik"
+                    padding="p-1"
+                    margin="mt-4 mx-4"
+                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                  />
+                )}
+              </Link>
             </div>
           </div>
           <div className="flex flex-col xs:w-full">
