@@ -14,9 +14,13 @@ const RecipeDetails = ({ recipes }) => {
 
   const { getResJsonName } = useAuth();
   const { getResJsonId } = useAuth();
+  const { getResJsonToken } = useAuth();
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [lastCommentTime, setLastCommentTime] = useState(null);
+  const [lastCommentCaption, setLastCommentCaption] = useState(null);
+  const [showLastCommentCaption, setShowLastCommentCaption] = useState(true);
 
   // find a recipe with id...
   const recipe = recipes.find((recipe) => recipe.id === parseInt(recipeId));
@@ -24,12 +28,17 @@ const RecipeDetails = ({ recipes }) => {
   // GET comments
   useEffect(() => {
     axios
-      .get(urlComments)
+      .get(urlComments, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         setComments(response.data);
       })
-      .catch((er) => {
-        console.log("Błąd przy pobieraniu komentarzy: ", er);
+      .catch((error) => {
+        console.log("Błąd przy pobieraniu komentarzy: ", error);
       });
   }, [recipeId]);
 
@@ -40,25 +49,46 @@ const RecipeDetails = ({ recipes }) => {
 
   // Function to handle comment submission
   const handleCommentSubmit = () => {
+    // Check if enough time has passed since the last comment was added (1 minute)
+    if (lastCommentTime && Date.now() - lastCommentTime < 60000) {
+      setLastCommentCaption(
+        `Następny komentarz możesz dodać o: ${new Date(
+          lastCommentTime + 60000
+        ).toLocaleTimeString()}`
+      );
+      setShowLastCommentCaption(true);
+      return;
+    }
+
     // Create a new comment object
     const newCommentObj = {
       content: newComment,
       userId: getResJsonId(),
       recipeId: recipeId,
-      commentBossId: null
+      commentBossId: null,
     };
 
     // POST comment
     axios
-      .post(urlAddComment, newCommentObj)
+      .post(urlAddComment, newCommentObj, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         // Refresh comments after successful submission
         axios
-          .get(urlComments)
+          .get(urlComments, {
+            headers: {
+              Authorization: `Bearer ${getResJsonToken()}`,
+              "Content-Type": "application/json",
+            },
+          })
           .then((response) => {
             setComments(response.data);
-            setNewComment(""); // Clear the comment input field
-            console.log("Komentarz został dodany."); // Show success notification
+            setNewComment("");
+            console.log("Komentarz został dodany.");
           })
           .catch((er) => {
             console.log("Błąd przy pobieraniu komentarzy: ", er);
@@ -67,7 +97,21 @@ const RecipeDetails = ({ recipes }) => {
       .catch((er) => {
         console.log("Błąd przy dodawaniu komentarza: ", er);
       });
+
+    // Set the time of the last comment added to the current time
+    setLastCommentTime(Date.now());
   };
+
+  // Clear last comment caption after 5 seconds
+  useEffect(() => {
+    if (showLastCommentCaption) {
+      const timeout = setTimeout(() => {
+        setShowLastCommentCaption(false);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [showLastCommentCaption]);
 
   if (!recipe) {
     return (
@@ -105,15 +149,13 @@ const RecipeDetails = ({ recipes }) => {
               />
             </div>
             <div className="flex flex-col w-full px-2">
-              <div className={`${styles.heading3} text-white pb-1`}>
-                {getResJsonName()}
-              </div>
+              <div className={`${styles.heading3} text-white pb-1`}>Ty</div>
               <textarea
                 value={newComment}
                 onChange={handleCommentChange}
                 maxLength={250}
                 placeholder="Dodaj komentarz..."
-                className={`${styles.paragraph} min-h-[100px] max-h-[] bg-white p-2 text-dark`}
+                className={`${styles.paragraph} min-h-[100px] bg-white p-2 text-dark`}
               ></textarea>
               <div className="flex justify-end mt-2 pt-1">
                 <Button
@@ -124,14 +166,17 @@ const RecipeDetails = ({ recipes }) => {
                   color="border-dimWhite hover:border-white text-dimWhite hover:text-white"
                 ></Button>
               </div>
+              <div className={`${styles.paragraph} xs:p-0 p-1 text-dimWhite`}>
+                {showLastCommentCaption && lastCommentCaption}
+              </div>
             </div>
           </div>
         }
         {
           // Show Comments
-          comments.map((comment) => (
+          comments.map((comment, index) => (
             <div
-              key={comment.id}
+              key={index}
               className="flex flex-row bg-black border-[1px] my-2 py-2 border-gray rounded-lg"
             >
               <div className="">
@@ -139,14 +184,13 @@ const RecipeDetails = ({ recipes }) => {
                   src={avatar}
                   className="min-w-[100px] w-[100px]"
                   alt="avatar"
-                  title={comment.user}
+                  title={comment.userName}
                 />
               </div>
               <div className="flex flex-col w-full px-2">
                 <div className="flex xs:flex-row flex-col justify-between">
                   <div className={`${styles.heading3} text-white`}>
-                    {comment.user} Nazwa użytkownika
-                    
+                    {comment.userName}
                   </div>
                   <div className={`${styles.paragraph2} text-dimWhite`}>
                     {comment.creationDate}

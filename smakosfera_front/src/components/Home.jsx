@@ -35,13 +35,21 @@ const Home = () => {
   const { isLoggedIn } = useAuth();
   const { handleLogout } = useAuth();
   const { getResJsonName } = useAuth();
+  const { getResJsonToken } = useAuth();
 
   // GET recipes
   useEffect(() => {
-    axios.get(urlRecipes).then((response) => {
-      setRecipes(response.data);
-      setIsDataLoaded(true);
-    });
+    axios
+      .get(urlRecipes, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setRecipes(response.data);
+        setIsDataLoaded(true);
+      });
   }, []);
 
   // Create an array of recipe IDs
@@ -156,7 +164,7 @@ const Home = () => {
                   <>Witamy!</>
                 )}
               </div>
-              <div className="text-right">
+              <div className="text-right w-full">
                 {isLoggedIn() && (
                   <a
                     onClick={handleLogout}
