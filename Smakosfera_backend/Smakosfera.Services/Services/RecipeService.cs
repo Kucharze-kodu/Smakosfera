@@ -11,25 +11,34 @@ namespace Smakosfera.Services.Services
 {
     public class RecipeService : IRecipesService
     {
-        private readonly SmakosferaDbContext _Recipes;
+        private readonly SmakosferaDbContext _DbContext;
+        private readonly IUserContextService _userContextService;
 
-        public RecipeService(SmakosferaDbContext recipes)
+        public RecipeService(
+            SmakosferaDbContext dbContext, 
+            IUserContextService userContextService)
         {
-            _Recipes = recipes;
+            _DbContext = dbContext;
+            _userContextService = userContextService;
         }
 
-        public RecipeDto GetRecipe(int recipeId)
+        public RecipeResponseDto GetRecipe(int recipeId)
         {
-            var recipe = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+            var recipe = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             if (recipe is null)
-
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
 
-            var result = new RecipeDto
+            if (recipe.IsConfirmed == false)
             {
+                throw new NotAcceptableException("Przepis nie zatwierdzony");
+            }
+
+            var result = new RecipeResponseDto
+            {
+                Id = recipeId,
                 Name = recipe.Name,
                 Description = recipe.Description,
                 DifficultyLevelId = recipe.DifficultyLevelId,
@@ -38,16 +47,15 @@ namespace Smakosfera.Services.Services
             };
 
             return result;
-
         }
 
-        public IEnumerable<RecipeIDDto> Browse()
+        public IEnumerable<RecipeResponseDto> Browse()
         {
-            var date = _Recipes.Recipes.ToList();
+            var date = _DbContext.Recipes.ToList();
 
 
             var result = date.FindAll(r => r.IsConfirmed == true)
-                             .Select(r => new RecipeIDDto()
+                             .Select(r => new RecipeResponseDto()
                              {
                                  Id = r.Id,
                                  Name = r.Name,
@@ -67,37 +75,82 @@ namespace Smakosfera.Services.Services
 
         public void Add(RecipeDto dto)
         {
-            var one = new Recipe
+            var isExist = _DbContext.Recipes.Any(r => r.Name == dto.Name);
+
+            if (isExist)
+            {
+                throw new BadRequestException("Przepis już istnieje");
+            }
+
+            var recipe = new Recipe
             {
                 Name = dto.Name,
                 Description = dto.Description,
                 DifficultyLevelId = dto.DifficultyLevelId,
                 PreparationTime = dto.PreparationTime,
-                UserId = 23 // zmiana
+                UserId = _userContextService.GetUserId // zmiana
             };
 
-            try
-            {
-                _Recipes.Recipes.Add(one);
-                _Recipes.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                if (ex.InnerException is PostgresException postgresException)
-                {
+            _DbContext.Recipes.Add(recipe);
+            _DbContext.SaveChanges();
 
-                    throw new NotFoundException("ta sama nazwa");
-                }
-                else
+            var recipeId = _DbContext.Recipes.FirstOrDefault(r => r.Name == dto.Name).Id;
+
+            if(dto.Ingredients != null)
+            {
+                foreach (var ingredientDto in dto.Ingredients)
                 {
-                    throw new NotFoundException("nie ma takiego levelu trudnosci");
+                    var isIngredient = _DbContext.Ingredients.Any(r => r.Name == ingredientDto.Name);
+                    if (!isIngredient)
+                    {
+                        _DbContext.Ingredients.Add(new Ingredient()
+                        {
+                            Name = ingredientDto.Name,
+                            CreatedById = _userContextService.GetUserId
+                        });
+                        _DbContext.SaveChanges();
+                    }                    
+                    
+                    var ingredientId = _DbContext.Ingredients.FirstOrDefault(r => r.Name == ingredientDto.Name).Id;
+                    var isRecord = _DbContext.Recipes_Ingredients
+                        .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId);
+
+                    if (!isRecord)
+                    {
+                        _DbContext.Recipes_Ingredients.Add(new RecipeIngredient()
+                        {
+                            IngredientId = ingredientId,
+                            RecipeId = recipeId,
+                            Amount = ingredientDto.Amount,
+                            Unit = ingredientDto.Unit
+                        });
+                        _DbContext.SaveChanges();
+                    }
                 }
             }
+
+            //try
+            //{
+            //    _DbContext.Recipes.Add(one);
+            //    _DbContext.SaveChanges();
+            //}
+            //catch (DbUpdateException ex)
+            //{
+            //    if (ex.InnerException is PostgresException postgresException)
+            //    {
+
+            //        throw new NotFoundException("ta sama nazwa");
+            //    }
+            //    else
+            //    {
+            //        throw new NotFoundException("nie ma takiego levelu trudnosci");
+            //    }
+            //}
         }
 
         public void Update(int recipeId, RecipeDto dto)
         {
-            var result = _Recipes.Recipes.FirstOrDefault(c => c.Id == recipeId);//SingleOrDefault(c => c.Id == recipeId);
+            var result = _DbContext.Recipes.FirstOrDefault(c => c.Id == recipeId);//SingleOrDefault(c => c.Id == recipeId);
 
 
             if (result is null)
@@ -110,21 +163,50 @@ namespace Smakosfera.Services.Services
             result.DifficultyLevelId = dto.DifficultyLevelId;
             result.PreparationTime = dto.PreparationTime;
 
-            _Recipes.SaveChanges();
+            _DbContext.SaveChanges();
 
         }
         public void Delete(int recipeId)
         {
-            var result = _Recipes.Recipes.SingleOrDefault(c => c.Id == recipeId);
+            var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
 
             if (result is null)
             {
                 throw new NotFoundException("Przepis nie istnieje");
             }
 
-            _Recipes.Recipes.Remove(result);
-            _Recipes.SaveChanges();
+            _DbContext.Recipes.Remove(result);
+            _DbContext.SaveChanges();
 
+        }
+
+        public void ApplyRecipe(int recipeId)
+        {
+            var isresult = _DbContext.Recipes.Any(r => r.Id == recipeId);
+
+            if (!isresult)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            var ishere = _DbContext.Recipes_Ingredients.Include(tt => tt.Ingredient)
+                                            .Where(a => a.Ingredient.IsConfirmed == false && a.RecipeId==recipeId)
+                                            .Select(r => r.Ingredient)
+                                            .ToList();
+
+            foreach(var one in ishere)
+            {
+                one.IsConfirmed = true;
+                _DbContext.SaveChanges();
+            }
+        
+
+
+            var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
+
+            result.IsConfirmed = true;
+
+            _DbContext.SaveChanges();
         }
     }
 }

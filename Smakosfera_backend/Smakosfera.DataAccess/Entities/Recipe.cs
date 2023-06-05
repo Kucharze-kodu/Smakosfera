@@ -19,13 +19,13 @@ namespace Smakosfera.DataAccess.Entities
         public int PreparationTime { get; set; }
         public bool CommunityRecipe { get; set; } = true;
         public bool IsConfirmed { get; set; } = false;
+        public string? ImageFileName { get; set; }
 
         public int DifficultyLevelId { get; set; }
         public virtual DifficultyLevel DifficultyLevel { get; set; }
 
         public int UserId { get; set; }
         public virtual User User { get; set; }
-
 
 
         public virtual ICollection<RecipeIngredient> Ingredients { get; set; }

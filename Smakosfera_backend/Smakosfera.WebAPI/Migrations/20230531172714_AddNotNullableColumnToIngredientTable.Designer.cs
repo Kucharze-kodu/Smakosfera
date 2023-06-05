@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Smakosfera.DataAccess.Repositories;
@@ -11,9 +12,11 @@ using Smakosfera.DataAccess.Repositories;
 namespace Smakosfera.WebAPI.Migrations
 {
     [DbContext(typeof(SmakosferaDbContext))]
-    partial class SmakosferaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531172714_AddNotNullableColumnToIngredientTable")]
+    partial class AddNotNullableColumnToIngredientTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,9 +195,6 @@ namespace Smakosfera.WebAPI.Migrations
                     b.Property<int>("DifficultyLevelId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ImageFileName")
-                        .HasColumnType("text");
-
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("boolean");
 
@@ -338,12 +338,6 @@ namespace Smakosfera.WebAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AvatarFileName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("BanTime")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()

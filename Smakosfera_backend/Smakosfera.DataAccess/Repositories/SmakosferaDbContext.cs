@@ -22,7 +22,6 @@ namespace Smakosfera.DataAccess.Repositories
 
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<DifficultyLevel> Difficulty_Levels { get; set; }
-
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<RecipeIngredient> Recipes_Ingredients { get; set; }
         public DbSet<Type> Types { get; set; }
@@ -31,9 +30,6 @@ namespace Smakosfera.DataAccess.Repositories
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Rate> Rates { get; set; }
-        /*        public DbSet<Recipetype> Recipetypes { get; set; }
-                public DbSet<EnumType> EnumTypes { get; set; }*/
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

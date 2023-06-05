@@ -18,8 +18,11 @@ namespace Smakosfera.DataAccess.Entities
         public DateTime? VerifiedAt { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
+        public DateTime? BanTime { get; set; }
 
         public int PermissionId { get; set; } = 1;
         public virtual Permission Permission { get; set; }
+
+        public string? AvatarFileName { get; set; }
     }
 }

@@ -7,13 +7,21 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.Services.Models
 {
-    public class RecipeIngredientDto
+    public class LikeDto
     {
         [Required]
-        public string Name { get; set; }
+        public int RecipeId { get; set; }
         [Required]
-        public int Amount { get; set; }
+        public int UserId { get; set; }
+
+    }
+
+    public class OutputLikeDto
+    {
         [Required]
-        public string Unit { get; set; }
+        public int RecipeId { get; set; }
+        [Required]
+        public int LikeAmount { get; set; }
+
     }
 }
