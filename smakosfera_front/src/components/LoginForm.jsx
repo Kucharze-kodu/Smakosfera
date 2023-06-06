@@ -12,8 +12,11 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+
   const [cookieName, setCookieName] = useCookies(["resJson_name"]);
+  const [cookieId, setCookieId] = useCookies(["resJson_id"]);
   const [cookiePermission, setCookiePermission] = useCookies(["resJson_permission"]);
+  const [cookieToken, setCookieToken] = useCookies(["resJson_token"]);
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +43,15 @@ const LoginForm = () => {
         path: "/",
         expires: expirationDate,
       });
+      setCookieId("resJson_id", resJson.id, {
+        path: "/",
+        expires: expirationDate,
+      });
       setCookiePermission("resJson_permission", resJson.permissionName, {
+        path: "/",
+        expires: expirationDate,
+      });
+      setCookieToken("resJson_token", resJson.token, {
         path: "/",
         expires: expirationDate,
       });

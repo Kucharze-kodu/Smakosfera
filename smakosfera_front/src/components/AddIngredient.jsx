@@ -6,8 +6,11 @@ import { useAuth } from "./AuthContext";
 const AddIngredient = () => {
 
     const [nazwa,setNazwa] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [blad, setblad] = useState(false);
 
     const {isLoggedIn} = useAuth();
+    const {getResJsonToken} = useAuth();
 
     const handleSkladnik = (event) =>{
         setNazwa(event.target.value)
@@ -21,7 +24,7 @@ const AddIngredient = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              //"Authorization":"Bearer ${token}"
+              Authorization:`Bearer ${getResJsonToken()}`
               
             },
             body: JSON.stringify({
@@ -45,10 +48,26 @@ const AddIngredient = () => {
             console.log("Błąd!");
             setNazwa("");
           }
-        } catch (err) {
+          
+        } 
+        catch (err) {
+          if (err instanceof SyntaxError && err.message.includes('Unexpected end of JSON input')) 
+          {
+            console.log('Pominięto błąd parsowania JSON');
+          setNazwa("");
+          setSuccess(true);
+          setblad(false)
           console.log(err);
-        }
-      };
+          }
+          else
+          {
+            console.log(err);
+            setblad(true);
+            setSuccess(false)
+          }
+ 
+      }
+    };
 
 
  return (
@@ -75,6 +94,10 @@ const AddIngredient = () => {
               Dodaj Składnik
             </button>
           </form>
+          <div className={`${styles.heading5} xs:my-0 my-4 text-white `}>
+            {success ? <p>Dodano składnik!</p> : null}
+            {blad ? <p>Coś poszło nie tak </p> : null}
+          </div>
         </div>
       ) : 
       (

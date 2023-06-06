@@ -7,9 +7,11 @@ import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
+import { BsHeartFill, BsHeart } from "react-icons/bs";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [displayedRecipes, setDisplayedRecipes] = useState(8);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -17,16 +19,49 @@ const Recipes = () => {
     setDisplayedRecipes((prevCount) => prevCount + 8);
   };
 
-  // GET recipes
-  useEffect(() => {
-    axios.get(urlRecipes).then((response) => {
-      setRecipes(response.data);
-      setIsDataLoaded(true);
-    });
-  }, []);
-
   // Check if user is logged in
   const { isLoggedIn } = useAuth();
+  const { getResJsonToken } = useAuth();
+
+  // GET recipes
+  useEffect(() => {
+    axios
+      .get(urlRecipes, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setRecipes(response.data);
+        setIsDataLoaded(true);
+      });
+  }, []);
+
+  // GET likes for each recipe
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const likesPromises = recipes.map((recipe) =>
+        axios.get(`https://localhost:7000/api/like/counter/${recipe.id}`, {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+      );
+      const likesResponses = await Promise.all(likesPromises);
+      const likesData = likesResponses.map((response, index) => ({
+        id: recipes[index].id,
+        count: response.data.count,
+      }));
+      const likesMap = likesData.reduce((map, item) => {
+        map[item.id] = item.count;
+        return map;
+      }, {});
+      setLikes(likesMap);
+    };
+    fetchLikes();
+  }, [recipes]);
 
   return (
     <div className="overflow-auto">
@@ -78,26 +113,32 @@ const Recipes = () => {
               .map((recipe) => (
                 <div
                   key={recipe.id}
-                  className="recipe flex flex-col justify-center overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
+                  className="recipe flex flex-col justify-between overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
                 >
                   <Link to={`/home/${recipe.id}`}>
-                    <img className="mx-auto" src={cooking_book} alt="przepis" />
+                    <img
+                      className="mx-auto px-2"
+                      src={cooking_book}
+                      alt="przepis"
+                    />
                   </Link>
-                  <div className="">
-                    <h5 className={`${styles.heading3} text-white`}>
-                      {recipe.name}
-                    </h5>
-                    <Link to={`/home/${recipe.id}`}>
-                      <i>
-                        <Button
-                          text="Pokaż przepis!"
-                          padding="p-1"
-                          margin="mx-4"
-                          color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                        ></Button>
-                      </i>
-                    </Link>
-                  </div>
+                  <h5
+                    className={`${styles.heading3} break-words p-1 text-white`}
+                  >
+                    {recipe.name}
+                  </h5>
+                  <Link to={`/home/${recipe.id}`}>
+                    <i>
+                      <Button
+                        text="Pokaż przepis!"
+                        padding="p-1"
+                        margin="mx-4"
+                        color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                      ></Button>
+                    </i>
+                  </Link>
+
+                  <div>{likes[recipe.id]}</div>
                 </div>
               ))}
           </div>

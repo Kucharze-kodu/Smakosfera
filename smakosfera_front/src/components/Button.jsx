@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import { styles } from "../style";
 
-const Button = ({ text, padding, margin, color }) => {
+const Button = ({ text, padding, margin, color, onClick }) => {
   return (
     <div
       type="button"
+      onClick={onClick}
       className={`${styles.paragraph} ${padding} ${margin} ${color} text-center rounded-lg border-[2px]  cursor-pointer `}
     >
       {text}

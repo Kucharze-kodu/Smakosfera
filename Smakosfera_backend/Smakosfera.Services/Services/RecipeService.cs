@@ -15,12 +15,11 @@ namespace Smakosfera.Services.Services
         private readonly IUserContextService _userContextService;
 
         public RecipeService(
-            SmakosferaDbContext recipes, 
+            SmakosferaDbContext dbContext, 
             IUserContextService userContextService)
         {
-            _DbContext = recipes;
+            _DbContext = dbContext;
             _userContextService = userContextService;
-
         }
 
         public RecipeResponseDto GetRecipe(int recipeId)
@@ -30,8 +29,6 @@ namespace Smakosfera.Services.Services
                                            .Include(t => t.Types)
                                            .ThenInclude(tt => tt.Type)
                                            .SingleOrDefault(cc => cc.Id == recipeId);
-
-
 
             if (recipe is null)
             {
@@ -74,8 +71,6 @@ namespace Smakosfera.Services.Services
         public IEnumerable<RecipeResponseDto> Browse()
         {
             var date = _DbContext.Recipes.ToList();
-
-
 
             var result = date.FindAll(r => r.IsConfirmed == true)
                              .Select(r => new RecipeResponseDto()
@@ -128,9 +123,9 @@ namespace Smakosfera.Services.Services
                 UserId = _userContextService.GetUserId 
             };
 
-
             _DbContext.Recipes.Add(recipe);
             _DbContext.SaveChanges();
+
 
             var recipeId = _DbContext.Recipes.FirstOrDefault(r => r.Name == dto.Name).Id;
 
@@ -238,6 +233,35 @@ namespace Smakosfera.Services.Services
             _DbContext.Recipes.Remove(result);
             _DbContext.SaveChanges();
 
+        }
+
+        public void ApplyRecipe(int recipeId)
+        {
+            var isresult = _DbContext.Recipes.Any(r => r.Id == recipeId);
+
+            if (!isresult)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            var ishere = _DbContext.Recipes_Ingredients.Include(tt => tt.Ingredient)
+                                            .Where(a => a.Ingredient.IsConfirmed == false && a.RecipeId==recipeId)
+                                            .Select(r => r.Ingredient)
+                                            .ToList();
+
+            foreach(var one in ishere)
+            {
+                one.IsConfirmed = true;
+                _DbContext.SaveChanges();
+            }
+        
+
+
+            var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
+
+            result.IsConfirmed = true;
+
+            _DbContext.SaveChanges();
         }
     }
 }

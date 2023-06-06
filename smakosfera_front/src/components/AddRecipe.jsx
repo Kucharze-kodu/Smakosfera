@@ -7,6 +7,7 @@ import { useAuth } from "./AuthContext";
 
 
 
+
 const DodawaniePrzepisu = () => {
   const [Nazwa, setNazwa] = useState("");
   const [skladnik, setskladnik] = useState([{ nazwa: "", ilosc: "", jednostka: "" }]);
@@ -14,9 +15,13 @@ const DodawaniePrzepisu = () => {
   const [opis, setOpis] = useState("");
   const [czas, setCzas] = useState("");
   const [ingredientList, setIngredientList] = useState([]);
+  const [success, setSuccess] = useState(false);
+  const [blad, setblad] = useState(false);
 
   // Check if user is logged in
   const {isLoggedIn} = useAuth();
+
+  const {getResJsonToken} = useAuth();
 
   const handleNazwa = (event) => {
     //nazwa
@@ -29,7 +34,13 @@ const DodawaniePrzepisu = () => {
 
   const fetchIngredients = async () => {
     try {
-      const response = await axios.get(urlIngredient);
+      const response = await axios.get(urlIngredient,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:`Bearer ${getResJsonToken()}`
+          
+
+        }});
       setIngredientList(response.data);
       setskladnik([{ nazwa: "", ilosc: "" }]);
     } catch (error) {
@@ -69,7 +80,7 @@ const DodawaniePrzepisu = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          //"Authorization":"Bearer ${token}"
+          Authorization:`Bearer ${getResJsonToken()}`
           
 
         },
@@ -86,13 +97,8 @@ const DodawaniePrzepisu = () => {
           }))
         })
       });
+
       let resJson = await res.json();
-
-      const currentDate = new Date();
-      const expirationDate = new Date(
-        currentDate.getTime() + 24 * 60 * 60 * 1000
-      );
-
       document.cookie = `resJson=${resJson}; expires=${expirationDate.toUTCString()}; path=/`;
 
       if (res.status === 200 ) {
@@ -110,13 +116,37 @@ const DodawaniePrzepisu = () => {
         setOpis("");
         setTrudnosc("");
       }
-      
       else {
         console.log("Błąd!");
       }
+        const currentDate = new Date();
+        const expirationDate = new Date(
+        currentDate.getTime() + 24 * 60 * 60 * 1000
+      );
+      
     } catch (err) {
-      console.log(err);
+      if (err instanceof SyntaxError && err.message.includes('Unexpected end of JSON input')) 
+          {
+          console.log('Pominięto błąd parsowania JSON');
+          setNazwa("");
+          setskladnik([{ nazwa: "", ilosc: "", jednostka: "" }]);
+          setCzas("");
+          setOpis("");
+          setTrudnosc("");
+          setSuccess(true);
+          setblad(false)
+          console.log(err);
+          }
+          else
+          {
+            console.log(err);
+            setblad(true);
+            setSuccess(false)
+          }
+      
+        
     }
+ 
   };
 
   return (
@@ -233,6 +263,10 @@ const DodawaniePrzepisu = () => {
               Dodaj przepis
             </button>
           </form>
+          <div className={`${styles.heading5} xs:my-0 my-4 text-white `}>
+            {success ? <p>Dodano Przepis!</p> : null}
+            {blad ? <p>Coś poszło nie tak </p> : null}
+          </div>
         </div>
       ) : (
         <div className={`${styles.paragraph} my-48 xs:my-auto text-dimWhite`}>

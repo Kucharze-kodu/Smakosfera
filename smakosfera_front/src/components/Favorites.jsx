@@ -4,7 +4,7 @@ const Favorites = () => {
   return (
     <>
       {/* Favorites section */}
-      <div className={`${styles.paragraph} p-2 `}>
+      <div className={`${styles.paragraph} text-dimWhite p-2 `}>
         Donec semper varius nulla. Maecenas imperdiet non enim a vulputate.
         Donec non mattis arcu. Proin fermentum tellus at elit sodales, nec
         accumsan quam vulputate. Aliquam mattis, nisi ut vulputate varius, nibh

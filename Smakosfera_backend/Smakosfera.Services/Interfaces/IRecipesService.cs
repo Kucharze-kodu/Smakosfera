@@ -16,5 +16,8 @@ namespace Smakosfera.Services.Interfaces
         void Add(RecipeDto dto);
         void Update(int recipeId, RecipeDto dto);
         void Delete(int recipeId);
+
+        void ApplyRecipe(int recipeId);
+
     }
 }

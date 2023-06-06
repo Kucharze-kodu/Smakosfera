@@ -1,4 +1,5 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Exceptions;
 using Smakosfera.Services.Interfaces;
@@ -12,9 +13,10 @@ namespace Smakosfera.Services.Services
         private readonly SmakosferaDbContext _DbContext;
         private readonly IUserContextService _userContextService;
 
-        public IngredientService(SmakosferaDbContext ingredient, IUserContextService userContextService)
+        public IngredientService(SmakosferaDbContext dbContext, IUserContextService userContextService)
         {
-            _DbContext = ingredient;
+
+            _DbContext = dbContext;
             _userContextService = userContextService;
         }
 
