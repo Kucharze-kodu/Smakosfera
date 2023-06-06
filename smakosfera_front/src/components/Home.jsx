@@ -24,6 +24,7 @@ const AddRecipe = lazy(() => import("./AddRecipe"));
 const LoadingScreen = lazy(() => import("./LoadingScreen"));
 const RecipeDetails = lazy(() => import("./RecipeDetails"));
 const AddIngredient = lazy(() => import("./AddIngredient"));
+const Newsletter = lazy(() => import("./Newsletter"));
 
 const Home = () => {
   const navigate = useNavigate();
@@ -145,6 +146,14 @@ const Home = () => {
                   />
                 )}
               </Link>
+              <Link to="/home/newsletter">
+                <Button
+                  text="Zapisz do newslettera"
+                  padding="p-1"
+                  margin="mt-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              </Link>
             </div>
           </div>
           <div className="flex flex-col xs:w-full">
@@ -231,6 +240,15 @@ const Home = () => {
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
                     <AddIngredient />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="newsletter"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <Newsletter />{" "}
                   </Suspense>
                 }
               ></Route>
