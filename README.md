@@ -13,5 +13,11 @@ The project offers an orignal approach to cooking, designed to make it easier fo
 ### **Installation and Setup Instructions:**
 - clone down this repository
 - run backend server
+- navigate into the front-end folder: `cd smakosfera_front`
+- install all front-end dependencies: `npm install animate.css --force`
 - run front-end server: `npm run dev`
 - URL to visit app: `localhost:5173/`
+
+If the front-end server crashes with a message about "port 5173 already in use" try killing all node processes with
+- `taskkill /f /im node.exe` on windows
+- `killall node` on linux/macos

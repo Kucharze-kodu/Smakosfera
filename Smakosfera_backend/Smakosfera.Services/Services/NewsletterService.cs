@@ -39,6 +39,21 @@ namespace Smakosfera.Services.Services
            
         }
 
+        public OutputNewsletterDto GetUserInfo()
+        {
+            var userId = _userContextService.GetUserId;
+            var userInfo = _dbContext.Users.SingleOrDefault(u => u.Id == userId)
+                ?? throw new BadRequestException("Uzytkownik nie istnieje");
+
+            var result = new OutputNewsletterDto
+            {
+                Email = userInfo.Email,
+                IsSubscribed = userInfo.Subscription
+            };
+
+            return result;
+        }
+
         public IEnumerable<OutputNewsletterDto> GetAllSubscribedUsers()
         {
             var subscribedUsersDto = _dbContext.Users.ToList()

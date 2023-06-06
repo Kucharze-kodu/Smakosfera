@@ -98,6 +98,21 @@ namespace Smakosfera.Services.Services
             _dbContext.SaveChanges();
         }
 
+        public void ChangePermission(int userId, string newPermission)
+        {
+            var user = GetUser(userId);
+
+            var permission = _dbContext.Permissions
+                .FirstOrDefault(r => r.Name == newPermission);
+            if (permission is null)
+            {
+                throw new NotFoundException("Nie znaleziono takich uprawnień");
+            }
+
+            user.Permission = permission;
+            _dbContext.SaveChanges();
+        }
+
         public void DeleteUser(int userId)
         {
             var user = GetUser(userId);

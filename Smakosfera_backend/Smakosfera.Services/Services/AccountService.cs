@@ -164,7 +164,6 @@ namespace Smakosfera.Services.Services
                 Email = dto.Email,
                 PasswordHash = CreateHash(dto.Password),
                 VerifacationToken = CreateRandomToken(),
-                BanTime = DateTime.UtcNow.AddDays(1)
             };
 
             _dbContext.Users.Add(user);

@@ -10,6 +10,8 @@ namespace Smakosfera.Services.Interfaces
     public interface INewsletterService
     {
         IEnumerable<OutputNewsletterDto> GetAllSubscribedUsers();
+
+        OutputNewsletterDto GetUserInfo();
         void SendEmailsToSubscribed();
         void Toggle();
     }

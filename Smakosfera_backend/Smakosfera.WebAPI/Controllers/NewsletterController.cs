@@ -21,6 +21,7 @@ namespace Smakosfera.WebAPI.Controllers
             _newsletterService = newsletterService;
         }
 
+        [Route("getall")]
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public ActionResult<IEnumerable<OutputNewsletterDto>> GetAll()
@@ -28,6 +29,15 @@ namespace Smakosfera.WebAPI.Controllers
             var subscribedUsers = _newsletterService.GetAllSubscribedUsers();
 
             return Ok(subscribedUsers);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult<OutputNewsletterDto> GetUserInfo()
+        {
+            var userInfo = _newsletterService.GetUserInfo();
+
+            return Ok(userInfo);
         }
 
         [HttpPost]

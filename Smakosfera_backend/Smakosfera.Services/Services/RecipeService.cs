@@ -15,7 +15,7 @@ namespace Smakosfera.Services.Services
         private readonly IUserContextService _userContextService;
 
         public RecipeService(
-            SmakosferaDbContext dbContext, 
+            SmakosferaDbContext dbContext,
             IUserContextService userContextService)
         {
             _DbContext = dbContext;
@@ -105,6 +105,26 @@ namespace Smakosfera.Services.Services
             return result;
         }
 
+        public RecipeResponseDto GetRandomRecipe()
+        {
+            var recipes = _DbContext.Recipes.ToList();
+
+            var random = new Random();
+            int number = random.Next(recipes.Count);
+            var recipe = recipes[number];
+            var recipeDto = new RecipeResponseDto()
+            {
+                Id = recipe.Id,
+                Name = recipe.Name,
+                Description = recipe.Description,
+                DifficultyLevelId = recipe.DifficultyLevelId,
+                PreparationTime = recipe.PreparationTime,
+                CommunityRecipe = recipe.CommunityRecipe
+            };
+
+            return recipeDto;
+        }
+
         public void Add(RecipeDto dto)
         {
             var isExist = _DbContext.Recipes.Any(r => r.Name == dto.Name);
@@ -129,7 +149,7 @@ namespace Smakosfera.Services.Services
 
             var recipeId = _DbContext.Recipes.FirstOrDefault(r => r.Name == dto.Name).Id;
 
-            if(dto.Ingredients != null)
+            if (dto.Ingredients != null)
             {
                 foreach (var ingredientDto in dto.Ingredients)
                 {
@@ -142,8 +162,8 @@ namespace Smakosfera.Services.Services
                             CreatedById = _userContextService.GetUserId
                         });
                         _DbContext.SaveChanges();
-                    }                    
-                    
+                    }
+
                     var ingredientId = _DbContext.Ingredients.FirstOrDefault(r => r.Name == ingredientDto.Name).Id;
                     var isRecord = _DbContext.Recipes_Ingredients
                         .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId);
@@ -201,6 +221,7 @@ namespace Smakosfera.Services.Services
             //        throw new NotFoundException("nie ma takiego levelu trudnosci");
             //    }
             //}
+
         }
 
         public void Update(int recipeId, RecipeDto dto)
@@ -245,16 +266,16 @@ namespace Smakosfera.Services.Services
             }
 
             var ishere = _DbContext.Recipes_Ingredients.Include(tt => tt.Ingredient)
-                                            .Where(a => a.Ingredient.IsConfirmed == false && a.RecipeId==recipeId)
+                                            .Where(a => a.Ingredient.IsConfirmed == false && a.RecipeId == recipeId)
                                             .Select(r => r.Ingredient)
                                             .ToList();
 
-            foreach(var one in ishere)
+            foreach (var one in ishere)
             {
                 one.IsConfirmed = true;
                 _DbContext.SaveChanges();
             }
-        
+
 
 
             var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);

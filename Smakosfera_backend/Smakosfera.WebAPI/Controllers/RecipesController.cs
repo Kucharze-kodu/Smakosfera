@@ -38,6 +38,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("random")]
+        public ActionResult<RecipeResponseDto> GetRandom()
+        {
+            var result = _recipesService.GetRandomRecipe();
+            return Ok(result);
+        }
+
 
         [HttpPost]
         [Authorize]
