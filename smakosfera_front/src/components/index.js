@@ -15,6 +15,7 @@ import AddRecipe from './AddRecipe';
 import Footer from './Footer';
 import Logout from './Logout';
 import AddIngredient from './AddIngredient'
+import NewsletterSubscription from './Newsletter'
 
 export {
     LandingPage,
@@ -34,4 +35,5 @@ export {
     Footer,
     Logout,
     AddIngredient,
+    NewsletterSubscription,
 };
