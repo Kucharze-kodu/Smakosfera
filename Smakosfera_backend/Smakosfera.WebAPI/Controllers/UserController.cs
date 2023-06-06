@@ -38,6 +38,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok($"Użytkownik o id {userId} został zbanowany na {days} dni");
         }
 
+        [HttpPut("{userId}/permission")]
+        public ActionResult ChangePermission([FromRoute] int userId, [FromBody] string newPermission)
+        {
+            _userService.ChangePermission(userId, newPermission);
+            return Ok("Zmieniono uprawnienia");
+        }
+
         [HttpDelete("{userId}")]
         public ActionResult Delete([FromRoute] int userId)
         {

@@ -12,6 +12,7 @@ namespace Smakosfera.Services.Interfaces
         IEnumerable<UserDto> GetAllUsers();
         UserDto GetUserById(int userId);
         void BanUser(int userId, int days);
+        void ChangePermission(int userId, string newPermission);
         void DeleteUser(int userId);
         void Add();
     }

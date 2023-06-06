@@ -12,6 +12,7 @@ namespace Smakosfera.Services.Interfaces
     {   
         RecipeResponseDto GetRecipe(int recipeId);
         IEnumerable<RecipeResponseDto> Browse();
+        RecipeResponseDto GetRandomRecipe();
         void Add(RecipeDto dto);
         void Update(int recipeId, RecipeDto dto);
         void Delete(int recipeId);
