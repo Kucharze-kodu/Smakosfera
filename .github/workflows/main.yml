@@ -25,5 +25,11 @@ jobs:
         run: dotnet build ./Smakosfera_backend/Smakosfera_backend.sln --configuration Release --no-restore
         
       - name: Publish
-        run: dotnet publish ./Smakosfera_backend/Smakosfera_backend.sln --configuration Release --no-build
+        run: dotnet publish ./Smakosfera_backend/Smakosfera_backend.sln --configuration Release --no-build --output './Smakosfera_backend/publish'
   
+      - name: Deployment
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: 'smakosfera-backend'
+          publish-profile: '<publishData><publishProfile profileName="smakosfera-backend - Web Deploy" publishMethod="MSDeploy" publishUrl="smakosfera-backend.scm.azurewebsites.net:443" msdeploySite="smakosfera-backend" userName="$smakosfera-backend" userPWD="plGpiSksviwdkWpXEL30aBlWBMsBp0FriYwHeSPy0q41PyYCJ7jEnhTijpLx" destinationAppUrl="https://smakosfera-backend.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="smakosfera-backend - FTP" publishMethod="FTP" publishUrl="ftps://waws-prod-db3-267.ftp.azurewebsites.windows.net/site/wwwroot" ftpPassiveMode="True" userName="smakosfera-backend\$smakosfera-backend" userPWD="plGpiSksviwdkWpXEL30aBlWBMsBp0FriYwHeSPy0q41PyYCJ7jEnhTijpLx" destinationAppUrl="https://smakosfera-backend.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="smakosfera-backend - Zip Deploy" publishMethod="ZipDeploy" publishUrl="smakosfera-backend.scm.azurewebsites.net:443" userName="$smakosfera-backend" userPWD="plGpiSksviwdkWpXEL30aBlWBMsBp0FriYwHeSPy0q41PyYCJ7jEnhTijpLx" destinationAppUrl="https://smakosfera-backend.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile></publishData>'
+          package: './Smakosfera_backend/publish'
