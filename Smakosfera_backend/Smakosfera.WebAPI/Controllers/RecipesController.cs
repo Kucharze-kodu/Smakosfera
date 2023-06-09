@@ -10,7 +10,7 @@ namespace Smakosfera.WebAPI.Controllers
 {
 
     [ApiController]
-    [Route("api/recipe")]
+    [Route("")]
     public class RecipesController : ControllerBase
     {
         private readonly IRecipesService _recipesService;
