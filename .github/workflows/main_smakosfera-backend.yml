@@ -21,7 +21,8 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
-
+      - name: Change Directory
+        run: cd Smakosfera_backend
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
