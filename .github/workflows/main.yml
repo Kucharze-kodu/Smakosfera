@@ -1,35 +1,57 @@
-name: Publish
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-on: 
-  workflow_dispatch:
+name: Build and deploy ASP.Net Core app to Azure Web App - smakosfera-backend
+
+on:
   push:
     branches:
       - main
-  
+  workflow_dispatch:
+
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with: 
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
           dotnet-version: '6.0.x'
-        
-      - name: Restore
-        run: dotnet restore ./Smakosfera_backend/Smakosfera_backend.sln
-        
-      - name: Build
-        run: dotnet build ./Smakosfera_backend/Smakosfera_backend.sln --configuration Release --no-restore
-        
-      - name: Publish
-        run: dotnet publish ./Smakosfera_backend/Smakosfera_backend.sln --configuration Release --no-build --output './publish'
-  
-      - name: Deployment
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build ./Smakosfera_backend/ --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish ./Smakosfera_backend/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
-        with: 
+        with:
           app-name: 'smakosfera-backend'
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: './publish'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FAAED467C70C432BBE0AA43F4A7BAB2D }}
+          package: .
