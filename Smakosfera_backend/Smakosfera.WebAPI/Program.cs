@@ -80,7 +80,7 @@ builder.Services.AddScoped<SmakosferaSeeder>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
-builder.Services.AddScoped<NewsletterMiddleware>();
+//builder.Services.AddScoped<NewsletterMiddleware>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddHttpContextAccessor();
 
@@ -94,7 +94,7 @@ var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<SmakosferaSeeder>();
 seeder.Seed();
 app.UseMiddleware<ErrorHandlingMiddleware>();
-app.UseMiddleware<NewsletterMiddleware>();
+//app.UseMiddleware<NewsletterMiddleware>();
 
 app.UseAuthentication();
 
