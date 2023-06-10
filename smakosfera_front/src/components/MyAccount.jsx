@@ -1,32 +1,53 @@
 import { styles } from "../style";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyAccount = () => {
+  const [accountInfo, setAccountInfo] = useState([]);
+
+    // Check if user is logged in
+    const { isLoggedIn } = useAuth();
+    const { getResJsonToken } = useAuth();
+    const { getResJsonId } = useAuth();
+
+    // GET 
+    useEffect(() => {
+      axios
+        .get(`https://localhost:7000/api/account`, {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => { 
+          setAccountInfo(response.data);
+        });
+    }, []);
+    
   return (
     <>
       {/* My Account section */}
+      <div className={`${styles.paragraph} text-white font-20 p-2`}>
+        Informacje o koncie 
+        </div>
       <div className={`${styles.paragraph} text-dimWhite p-2`}>
-        Vestibulum dictum imperdiet massa a egestas. Suspendisse nunc sem,
-        consectetur nec vulputate a, ultrices vitae felis. Curabitur sit amet
-        lacus non neque lacinia malesuada nec a massa. Cras egestas nec magna et
-        mollis. Quisque sem massa, commodo a justo vel, maximus scelerisque
-        metus. Aliquam convallis est nec luctus tempor. Morbi tincidunt vel
-        libero fringilla efficitur. Aenean semper sagittis ante nec convallis.
-        Pellentesque vel turpis a massa feugiat consequat vitae at nibh. Sed
-        egestas dictum ex, et ultricies arcu vestibulum sed. Suspendisse
-        venenatis auctor nisi sed iaculis. Aenean eu metus sed diam dapibus
-        aliquam ut vitae orci. Curabitur vel molestie est. Etiam dignissim, nibh
-        at varius gravida, erat lectus ornare metus, non iaculis quam enim eu
-        ante. Praesent id felis sit amet diam vestibulum egestas. Donec feugiat
-        erat felis, sit amet tempus elit blandit sed. Ut porta facilisis tortor
-        at consectetur. Fusce at egestas risus. Vivamus sit amet feugiat urna.
-        Integer sit amet convallis purus, sit amet facilisis sapien. Suspendisse
-        ultricies lobortis lacinia. Mauris auctor feugiat sodales. Vivamus
-        tristique purus vitae pulvinar convallis. Donec ullamcorper mollis quam,
-        non lacinia ipsum ornare vitae. Quisque pretium nisi sed dictum
-        ultrices. Fusce semper semper turpis in hendrerit. Praesent ullamcorper
-        nibh non dolor posuere mattis. Quisque in eros aliquam turpis
-        condimentum aliquam. Orci varius natoque penatibus et magnis dis
-        parturient montes, nascetur ridiculus mus.
+        <p>Twoja nazwa:</p>
+        {accountInfo.name}
+      </div>
+      <div className={`${styles.paragraph} text-dimWhite p-2`}>
+        <p>Twój email: </p>
+        {accountInfo.email}
+      </div>
+      <div className={`${styles.paragraph} text-dimWhite p-2`}>
+        <Link
+          to="/resetpassword"
+          className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
+          >
+          Zmień hasło
+        </Link>
+        
       </div>
     </>
   );

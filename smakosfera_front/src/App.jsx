@@ -10,6 +10,7 @@ const LoadingScreen = lazy(() => import("./components/LoadingScreen"))
 const PageNotFound = lazy(() => import("./components/PageNotFound"))
 const Home = lazy(() => import("./components/Home"))
 const Logout = lazy(() => import("./components/Logout"))
+const ResetPasswordForm = lazy(() => import("./components/ResetPasswordForm"))
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Route path="home/*" element={<Suspense fallback={<LoadingScreen />}> <Home /> </Suspense>}>  </Route>
       <Route path="*" element={<Suspense fallback={<LoadingScreen />}> <PageNotFound /> </Suspense>}>  </Route>
       <Route path="logout" element={<Suspense fallback={<LoadingScreen />}> <Logout /> </Suspense>}>  </Route>
+      <Route path="resetpassword" element={<Suspense fallback={<LoadingScreen />}> <ResetPasswordForm /> </Suspense>}>  </Route>
     </Routes>
   );
 };
