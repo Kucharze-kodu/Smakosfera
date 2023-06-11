@@ -28,7 +28,7 @@ namespace Smakosfera.WebAPI.Middlewares
             catch (Exception exception)
             {
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync("Something went wrong");
+                await context.Response.WriteAsync("Something went wrong. " + exception.Message);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Smakosfera.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,13 @@ namespace Smakosfera.DataAccess.Seeder
         {
             if (_dbContext.Database.CanConnect())
             {
+                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+
+                if(pendingMigrations != null && pendingMigrations.Any())
+                {
+                    _dbContext.Database.Migrate();
+                }
+
 
                 if (!_dbContext.Permissions.Any())
                 {
@@ -37,6 +45,7 @@ namespace Smakosfera.DataAccess.Seeder
 
                     _dbContext.SaveChanges();
                 }
+
                 if (!_dbContext.Types.Any())
                 {
                     var types = GetTypes();
