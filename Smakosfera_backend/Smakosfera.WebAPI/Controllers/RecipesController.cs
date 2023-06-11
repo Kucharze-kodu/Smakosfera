@@ -43,6 +43,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Recipe_Like")]
+        public ActionResult<RecipeResponseDto> GetRecipeLike()
+        {
+            var result = _recipesService.BrowseRecipeLike();
+            return Ok(result);
+        }
+
 
         [HttpPost]
         [Authorize]

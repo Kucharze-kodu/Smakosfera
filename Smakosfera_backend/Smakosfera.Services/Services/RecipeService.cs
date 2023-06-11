@@ -93,6 +93,28 @@ namespace Smakosfera.Services.Services
             return recipeDto;
         }
 
+        public IEnumerable<RecipeResponseDto> BrowseRecipeLike()
+        {
+            var likes = _DbContext.Likes.ToList()
+                        .FindAll(l => l.UserId == _userContextService.GetUserId)
+                        .Select(l => new LikeDto
+                        {
+                            RecipeId = l.Id,
+                            UserId = l.UserId
+                        });
+
+            List<RecipeResponseDto> result = new List<RecipeResponseDto>();
+
+            foreach (var like in likes)
+            {
+                var r = GetRecipe(like.RecipeId);
+                result.Add(r);
+            }
+
+            return result;
+        }
+
+
         public void Add(RecipeDto dto)
         {
             var isExist = _DbContext.Recipes.Any(r => r.Name == dto.Name);
