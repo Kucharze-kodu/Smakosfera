@@ -87,7 +87,7 @@ const RegisterForm = () => {
               name="email"
               title="Email:"
               className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
-              placeholder="Nowy Email:"
+              placeholder="Nowy email:"
               maxLength={256}
               required
               onChange={(e) => setNewEmail(e.target.value)}

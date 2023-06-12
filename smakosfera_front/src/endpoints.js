@@ -8,3 +8,4 @@ export const urlAddIngredient = `${API_URL}/api/Ingredient/Ingerdient`;
 export const urlAccountInfo = `${API_URL}/api/account`;
 export const urlNameChange = `${API_URL}/api/account`;
 export const urlEmailChange = `${API_URL}/api/account`;
+export const urlResetPassowrd = `${API_URL}/api/account/forgot-password`;

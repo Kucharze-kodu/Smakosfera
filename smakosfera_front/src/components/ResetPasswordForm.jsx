@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { logo } from "../assets";
 import { useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
+import { urlResetPassowrd } from "../endpoints";
 import axios from 'axios';
 
 const whiteSpaceText = '\u00A0';
 
 const RegisterForm = () => {
-  const[newPassword, setNewPassword] = useState("");
-  const[confirmNewPassword, setConfirmNewPassword] = useState("");
+  const[newEmail, setNewEmail] = useState("");
   const[message, setMessage] = useState("");
   const[isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -21,15 +21,14 @@ const RegisterForm = () => {
   let handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      let res = await fetch(`https://localhost:7000/api/account/rest-password/${getResJsonToken()} `, {
+      let res = await fetch(urlResetPassowrd, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${getResJsonToken()}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({  
-          newPassword: newPassword,
-          confirmNewPassword: confirmNewPassword,
+          email: newEmail,
         }),
       });
 
@@ -39,7 +38,7 @@ const RegisterForm = () => {
         setIsPopupOpen(true);
       }
       else{
-        setMessage("Coś poszło nie tak!");
+        setMessage("Konto o takim emailu nie istnieje!");
       }
     }
      catch (error) {
@@ -62,7 +61,7 @@ const RegisterForm = () => {
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Hasło zostało zmienione pomyślnie!
+                    Na twoją skrzynkę został wysłany link resetujący hasło!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
@@ -70,7 +69,7 @@ const RegisterForm = () => {
                     </div>
                 <div className="link-container">
                   <Link
-                    to="/home/my-account"
+                    to="/"
                     className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
                   >
                     OK
@@ -80,36 +79,24 @@ const RegisterForm = () => {
             </div>
           ) : (
         <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
-        <div className={`${styles.heading4} text-white `}>Zmień hasło!</div>
+        <div className={`${styles.heading4} text-white `}>Podaj swój email!</div>
         <input
-              type="password"
-              value={newPassword}
-              id="password"
-              name="password"
-              title="Hasło:"
+              type="email"
+              value={newEmail}
+              id="email"
+              name="email"
+              title="Email:"
               className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
-              placeholder="Podaj nowe hasło:"
-              maxLength={32}
+              placeholder="Nowy Email:"
+              maxLength={256}
               required
-              onChange={(e) => setNewPassword(e.target.value)}
-            ></input>
-            <input
-              type="password"
-              value={confirmNewPassword}
-              id="confirmPassword"
-              name="confirmPassword"
-              title="Powtórz hasło:"
-              className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
-              placeholder="Powtórz nowe hasło:"
-              maxLength={32}
-              required
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              onChange={(e) => setNewEmail(e.target.value)}
             ></input>
             <button
                 type="submit"
                 className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
               >
-                Wyślij!
+                Zmień!
               </button>
               <div className="">{message ? <p>{message}</p> : null}</div>
               <Link
