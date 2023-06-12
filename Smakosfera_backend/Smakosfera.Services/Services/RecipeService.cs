@@ -24,7 +24,9 @@ namespace Smakosfera.Services.Services
 
         public RecipeResponseDto GetRecipe(int recipeId)
         {
-            var recipe = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
+            var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
+                                           .ThenInclude(cc => cc.Ingredient)
+                                           .SingleOrDefault(cc => cc.Id == recipeId);
 
             if (recipe is null)
             {
@@ -43,16 +45,23 @@ namespace Smakosfera.Services.Services
                 Description = recipe.Description,
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
-                CommunityRecipe = recipe.CommunityRecipe
+                CommunityRecipe = recipe.CommunityRecipe,
+                Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
+                {
+                    Name = i.Ingredient.Name,
+                    IngredientId = i.IngredientId,
+                    Amount = i.Amount,
+                    Unit = i.Unit
+                }).ToList()
             };
 
             return result;
         }
 
+
         public IEnumerable<RecipeResponseDto> Browse()
         {
             var date = _DbContext.Recipes.ToList();
-
 
             var result = date.FindAll(r => r.IsConfirmed == true)
                              .Select(r => new RecipeResponseDto()
@@ -62,7 +71,14 @@ namespace Smakosfera.Services.Services
                                  Description = r.Description,
                                  DifficultyLevelId = r.DifficultyLevelId,
                                  PreparationTime = r.PreparationTime,
-                                 CommunityRecipe = r.CommunityRecipe
+                                 CommunityRecipe = r.CommunityRecipe,
+                                 Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
+                                 {
+                                     Name = i.Ingredient.Name,
+                                     IngredientId = i.IngredientId,
+                                     Amount = i.Amount,
+                                     Unit = i.Unit
+                                 }).ToList()
                              });
 
             if (result.Any() == false)

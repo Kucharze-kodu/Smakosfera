@@ -11,6 +11,7 @@ namespace Smakosfera.Services.Models
     {
         [Required]
         public string Name { get; set; }
+        public int IngredientId { get; set; }
         [Required]
         public int Amount { get; set; }
         [Required]
