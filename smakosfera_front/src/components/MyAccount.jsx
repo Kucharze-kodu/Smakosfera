@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { urlAccountInfo } from "../endpoints";
 
 const MyAccount = () => {
   const [accountInfo, setAccountInfo] = useState([]);
@@ -15,7 +16,7 @@ const MyAccount = () => {
     // GET 
     useEffect(() => {
       axios
-        .get(`https://localhost:7000/api/account`, {
+        .get(urlAccountInfo, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
             "Content-Type": "application/json",
@@ -29,25 +30,36 @@ const MyAccount = () => {
   return (
     <>
       {/* My Account section */}
-      <div className={`${styles.paragraph} text-white font-20 p-2`}>
+      <div className={`${styles.paragraph} text-white underline text-[32px] font-20 p-2`}>
         Informacje o koncie 
         </div>
+      <div className={`${styles.paragraph} text-white text-[24px] p-2`}>
+        Twoja nazwa:
+      </div>
       <div className={`${styles.paragraph} text-dimWhite p-2`}>
-        <p>Twoja nazwa:</p>
         {accountInfo.name}
       </div>
       <div className={`${styles.paragraph} text-dimWhite p-2`}>
-        <p>Twój email: </p>
-        {accountInfo.email}
+        <Link
+          to="/changename"
+          className={`${styles.paragraph} my-1 cursor-pointer opacity-50 hover:text-white`}
+          >
+          Zmień swoją nazwę!
+        </Link>
+      </div>
+      <div className={`${styles.paragraph} text-white text-[24px] p-2`}>
+        Twój email:
       </div>
       <div className={`${styles.paragraph} text-dimWhite p-2`}>
+        {accountInfo.email}
+      </div>
+      <div className={`${styles.paragraph} text-dimWhite p-2 hover:text-white`}>
         <Link
-          to="/resetpassword"
+          to="/changeemail"
           className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
           >
-          Zmień hasło
+          Zmień email
         </Link>
-        
       </div>
     </>
   );

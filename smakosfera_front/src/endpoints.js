@@ -5,4 +5,6 @@ export const urlRegister = `${API_URL}/api/account/register`;
 export const urlRecipes = `${API_URL}/api/recipe`;
 export const urlIngredient = `${API_URL}/api/Ingredient`;
 export const urlAddIngredient = `${API_URL}/api/Ingredient/Ingerdient`;
-export const urlUser = `${API_URL}/api/User`;
+export const urlAccountInfo = `${API_URL}/api/account`;
+export const urlNameChange = `${API_URL}/api/account`;
+export const urlEmailChange = `${API_URL}/api/account`;
