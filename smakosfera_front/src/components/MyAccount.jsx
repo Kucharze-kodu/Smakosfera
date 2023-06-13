@@ -28,40 +28,48 @@ const MyAccount = () => {
     }, []);
     
   return (
+    isLoggedIn() ? (
     <>
       {/* My Account section */}
-      <div className={`${styles.paragraph} text-white underline text-[32px] font-20 p-2`}>
-        Informacje o koncie 
+      
+        <div className={`${styles.paragraph} text-white underline text-[32px] font-20 p-2`}>
+          Informacje o koncie 
+          </div>
+        <div className={`${styles.paragraph} text-white text-[24px] p-2`}>
+          Twoja nazwa:
         </div>
-      <div className={`${styles.paragraph} text-white text-[24px] p-2`}>
-        Twoja nazwa:
-      </div>
-      <div className={`${styles.paragraph} text-dimWhite p-2`}>
-        {accountInfo.name}
-      </div>
-      <div className={`${styles.paragraph} text-dimWhite p-2`}>
-        <Link
-          to="/changename"
-          className={`${styles.paragraph} my-1 cursor-pointer opacity-50 hover:text-white`}
-          >
-          Zmień swoją nazwę!
-        </Link>
-      </div>
-      <div className={`${styles.paragraph} text-white text-[24px] p-2`}>
-        Twój email:
-      </div>
-      <div className={`${styles.paragraph} text-dimWhite p-2`}>
-        {accountInfo.email}
-      </div>
-      <div className={`${styles.paragraph} text-dimWhite p-2 hover:text-white`}>
-        <Link
-          to="/changeemail"
-          className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
-          >
-          Zmień email
-        </Link>
-      </div>
-    </>
+        <div className={`${styles.paragraph} text-dimWhite p-2`}>
+          {accountInfo.name}
+        </div>
+        <div className={`${styles.paragraph} text-dimWhite p-2`}>
+          <Link
+            to="/changename"
+            className={`${styles.paragraph} my-1 cursor-pointer opacity-50 hover:text-white`}
+            >
+            Zmień swoją nazwę!
+          </Link>
+        </div>
+        <div className={`${styles.paragraph} text-white text-[24px] p-2`}>
+          Twój email:
+        </div>
+        <div className={`${styles.paragraph} text-dimWhite p-2`}>
+          {accountInfo.email}
+        </div>
+        <div className={`${styles.paragraph} text-dimWhite p-2 hover:text-white`}>
+          <Link
+            to="/changeemail"
+            className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
+            >
+            Zmień email
+          </Link>
+        </div>
+
+      </>
+          ) : (
+            <div className={`${styles.paragraph} my-48 xs:my-auto items-center justify-center xs:justify-start text-center text-dimWhite`}>
+              Nie masz uprawnień do wyświetlania tej strony!
+            </div>
+  )
   );
 };
 

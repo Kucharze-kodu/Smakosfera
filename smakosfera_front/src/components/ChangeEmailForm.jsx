@@ -78,6 +78,7 @@ const RegisterForm = () => {
               </div>
             </div>
           ) : (
+            isLoggedIn() ? (
         <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
         <div className={`${styles.heading4} text-white `}>Zmień email!</div>
         <input
@@ -106,6 +107,11 @@ const RegisterForm = () => {
               Powrót
               </Link>
               </form>
+              ) : (
+                <div className={`${styles.paragraph} my-48 xs:my-auto text-dimWhite`}>
+                  Nie masz uprawnień do wyświetlania tej strony!
+                </div>
+              )
               )}
         </div>
       </div>

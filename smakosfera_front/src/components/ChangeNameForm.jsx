@@ -18,7 +18,6 @@ const RegisterForm = () => {
     const { isLoggedIn } = useAuth();
     const { getResJsonToken } = useAuth();
     const { getResJsonId } = useAuth();
-  
   let handleSubmit = async (e) => {
     e.preventDefault();
     try{
@@ -46,7 +45,7 @@ const RegisterForm = () => {
      catch (error) {
     }
   };
-
+ 
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -57,13 +56,13 @@ const RegisterForm = () => {
         </Link>
         <div className="overflow-auto flex flex-col p-3 items-center w-full h-full justify-center xs:justify-start md:my-10 text-center text-white">
 
-
+        
         {isPopupOpen ? (
             <div className="popup">
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Hasło zostało zmienione pomyślnie!
+                    Nazwa została zmieniona pomyślnie!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
@@ -80,6 +79,7 @@ const RegisterForm = () => {
               </div>
             </div>
           ) : (
+            isLoggedIn() ? (
         <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
         <div className={`${styles.heading4} text-white `}>Zmień swoją nazwę!</div>
         <input
@@ -120,6 +120,11 @@ const RegisterForm = () => {
               Powrót
               </Link>
               </form>
+              ) : (
+                <div className={`${styles.paragraph} my-48 xs:my-auto text-dimWhite`}>
+                  Nie masz uprawnień do wyświetlania tej strony!
+                </div>
+              )
               )}
         </div>
       </div>
