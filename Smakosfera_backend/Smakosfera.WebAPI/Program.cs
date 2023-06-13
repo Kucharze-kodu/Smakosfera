@@ -72,7 +72,7 @@ builder.Services.AddScoped<INewsletterService, NewsletterService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SmakosferaDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+    options.UseNpgsql(builder.Configuration.GetSection("ConnectionString").Value,
     r => r.MigrationsAssembly("Smakosfera.WebAPI")));
 
 
