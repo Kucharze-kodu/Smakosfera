@@ -17,6 +17,7 @@ const RegisterForm = () => {
     const { isLoggedIn } = useAuth();
     const { getResJsonToken } = useAuth();
     const { getResJsonId } = useAuth();
+    const { handleLogout } = useAuth();
   
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,17 +62,19 @@ const RegisterForm = () => {
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Email został zmieniony pomyślnie!
+                    Email został zmieniony pomyślnie! Prosimy o ponowne zalogowanie się!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
                       {whiteSpaceText}
                     </div>
-                <div className="link-container">
+                <div className="link-container"
+                onClick={handleLogout}>
                   <Link
                     to="/home/my-account"
                     className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
                   >
+                    
                     OK
                   </Link>
                 </div>
