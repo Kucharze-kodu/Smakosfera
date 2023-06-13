@@ -70,7 +70,11 @@ namespace Smakosfera.Services.Services
 
         public IEnumerable<RecipeResponseDto> Browse()
         {
-            var date = _DbContext.Recipes.ToList();
+            var date = _DbContext.Recipes.Include(c => c.Ingredients)
+                             .ThenInclude(cc => cc.Ingredient)
+                             .Include(t => t.Types)
+                             .ThenInclude(tt => tt.Type)
+                             .ToList();
 
             var result = date.FindAll(r => r.IsConfirmed == true)
                              .Select(r => new RecipeResponseDto()
