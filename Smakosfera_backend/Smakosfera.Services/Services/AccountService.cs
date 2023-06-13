@@ -62,6 +62,13 @@ namespace Smakosfera.Services.Services
 
             if (!string.IsNullOrEmpty(dto.Email))
             {
+                var isExist = _dbContext.Users.Any(r => r.Email == dto.Email);
+
+                if (isExist)
+                {
+                    throw new BadRequestException("Email jest zajęty");
+                }
+
                 user.Email = dto.Email;
             }
             if (!string.IsNullOrEmpty(dto.Name))
