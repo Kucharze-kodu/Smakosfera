@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Smakosfera.Services.Settings;
 using Microsoft.AspNetCore.Authorization;
+using System.Configuration;
+using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 
 // var frontend_url = "http://localhost:5173";
@@ -109,5 +111,7 @@ app.UseCors(frontendUrl);
 app.UseAuthorization();
 
 app.MapControllers();
-
+Console.WriteLine(app.Configuration.GetSection("ConnectionString").Value);
+Console.WriteLine(app.Configuration.GetSection("Email").GetSection("Password").Value);
 app.Run();
+
