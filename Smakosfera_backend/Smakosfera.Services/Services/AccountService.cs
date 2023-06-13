@@ -56,12 +56,19 @@ namespace Smakosfera.Services.Services
             return userDto;
         }
 
-        public void Update(UserUpdateDto dto)
+        public string Update(UserUpdateDto dto)
         {
             var user = GetUser();
 
             if (!string.IsNullOrEmpty(dto.Email))
             {
+                var isExist = _dbContext.Users.Any(r => r.Email == dto.Email);
+
+                if (isExist)
+                {
+                    throw new BadRequestException("Email jest zajęty");
+                }
+
                 user.Email = dto.Email;
             }
             if (!string.IsNullOrEmpty(dto.Name))
@@ -78,6 +85,9 @@ namespace Smakosfera.Services.Services
             }
 
             _dbContext.SaveChanges();
+
+            var token = GenerateJWT(user);
+            return token;
         }
 
         public void Delete()
@@ -88,7 +98,7 @@ namespace Smakosfera.Services.Services
             _dbContext.SaveChanges();
         }
 
-        public UserLoginResponseDto GenerateJWT(UserLoginDto dto)
+        public UserLoginResponseDto Login(UserLoginDto dto)
         {
             var user = _dbContext.Users
                 .Include(r => r.Permission)
@@ -113,35 +123,14 @@ namespace Smakosfera.Services.Services
                     throw new NotAcceptableException("Konto zbanowane");
                 }
             }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, dto.Email),
-                new Claim(ClaimTypes.Name, $"{user.Name} {user.Surname}"),
-                new Claim(ClaimTypes.Role, user.Permission.Name),
-                new Claim("Subscription", user.Subscription.ToString())
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
-
-            var token = new JwtSecurityToken(
-                _authenticationSettings.JwtIssuer,
-                _authenticationSettings.JwtIssuer,
-                claims,
-                expires: expires,
-                signingCredentials: cred);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
+            
             var userDto = new UserLoginResponseDto()
             {
                 Id = user.Id,
                 Name = user.Name,
                 Surname = user.Surname,
                 PermissionName = user.Permission.Name,
-                Token = tokenHandler.WriteToken(token)
+                Token = GenerateJWT(user)
             };
 
             return userDto;
@@ -238,6 +227,32 @@ namespace Smakosfera.Services.Services
             return user;
         }
 
+        private string GenerateJWT(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, $"{user.Name} {user.Surname}"),
+                new Claim(ClaimTypes.Role, user.Permission.Name),
+                new Claim("Subscription", user.Subscription.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+
+            var token = new JwtSecurityToken(
+                _authenticationSettings.JwtIssuer,
+                _authenticationSettings.JwtIssuer,
+                claims,
+                expires: expires,
+                signingCredentials: cred);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
+        }
+
         private string CreateHash(string password)
         {
             using (var md5 = MD5.Create())
@@ -245,11 +260,6 @@ namespace Smakosfera.Services.Services
                 return string.Join("", md5.ComputeHash(Encoding.ASCII.GetBytes(password))
                     .Select(x => x.ToString("X2")));
             }
-            //using (var md5 = MD5.Create())
-            //{
-            //    var result = md5.ComputeHash(Encoding.ASCII.GetBytes(password));
-            //    return Encoding.ASCII.GetString(result);
-            //}
         }
 
         private string CreateRandomToken()

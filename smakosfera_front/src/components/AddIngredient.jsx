@@ -1,6 +1,8 @@
 import { styles } from "../style";
 import { useState, useEffect } from "react";
-//import { urlAddIngredient } from "../endpoints";
+import { urlAddIngredient } from "../endpoints";
+import { urlIngredient } from "../endpoints";
+import axios from "axios";
 import { useAuth } from "./AuthContext";
 
 const AddIngredient = () => {
@@ -8,6 +10,7 @@ const AddIngredient = () => {
     const [nazwa,setNazwa] = useState("");
     const [success, setSuccess] = useState(false);
     const [blad, setblad] = useState(false);
+    const [ingredientList, setIngredientList] = useState([]);
 
     const {isLoggedIn} = useAuth();
     const {getResJsonToken} = useAuth();
@@ -20,7 +23,7 @@ const AddIngredient = () => {
         event.preventDefault();
     
        try {
-          let res = await fetch('https://localhost:7000/api/ingredient', {
+          let res = await fetch(urlAddIngredient, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -69,6 +72,26 @@ const AddIngredient = () => {
       }
     };
 
+    useEffect(() => {
+      fetchIngredients();
+    }, []);
+  
+    const fetchIngredients = async () => {
+      try {
+        const response = await axios.get(urlIngredient,{
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:`Bearer ${getResJsonToken()}`
+            
+  
+          }});
+        setIngredientList(response.data);
+      } catch (error) {
+        console.error("Błąd podczas pobierania składników:", error);
+      }
+    };
+    
+
 
  return (
     <div className="add_recipe overflow-y-scroll px-4 flex flex-col pb-10  items-center w-full h-full justify-center xs:justify-start text-center">
@@ -98,6 +121,27 @@ const AddIngredient = () => {
             {success ? <p>Dodano składnik!</p> : null}
             {blad ? <p>Coś poszło nie tak </p> : null}
           </div>
+          <div className="container mx-auto p-4 text-white">
+      <h1 className="text-2xl font-bold mb-4">Lista już dodanych składników :</h1>
+      <table className="w-full border">
+        <thead>
+          <tr>
+            <th className="border p-2">Nazwa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ingredientList.map((ingredient) => (
+            <tr key={ingredient.id}>
+              <td className="border p-2">{ingredient.name}</td>
+              
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+        
+          
         </div>
       ) : 
       (
