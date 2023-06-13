@@ -61,10 +61,12 @@ namespace Smakosfera.Services.Services
 
         public IEnumerable<RecipeResponseDto> Browse()
         {
-            var date = _DbContext.Recipes.ToList();
+            var date = _DbContext.Recipes.Include(c => c.Ingredients)
+                                         .ThenInclude(cc => cc.Ingredient)
+                                         .ToList();
 
             var result = date.FindAll(r => r.IsConfirmed == true)
-                             .Select(r => new RecipeResponseDto()
+                             .Select(r => new RecipeResponseDto
                              {
                                  Id = r.Id,
                                  Name = r.Name,
@@ -79,7 +81,7 @@ namespace Smakosfera.Services.Services
                                      Amount = i.Amount,
                                      Unit = i.Unit
                                  }).ToList()
-                             });
+                             }).ToList();
 
             if (result.Any() == false)
             {
