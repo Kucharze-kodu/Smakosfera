@@ -22,7 +22,7 @@ const RegisterForm = () => {
     e.preventDefault();
     try{
       let res = await fetch(urlEmailChange, {
-        method: "POST",
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${getResJsonToken()}`,
           "Content-Type": "application/json",
