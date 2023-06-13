@@ -22,7 +22,7 @@ namespace Smakosfera.WebAPI.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<RecipeDto> Get(int id)
+        public ActionResult<RecipeResponseDto> Get(int id)
         {
             var result = _recipesService.GetRecipe(id);
 
@@ -30,7 +30,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RecipeIDDto>> GetAll()
+        public ActionResult<IEnumerable<RecipeResponseDto>> GetAll()
         {
             var result = _recipesService.Browse();
             return Ok(result);
@@ -40,6 +40,13 @@ namespace Smakosfera.WebAPI.Controllers
         public ActionResult<RecipeResponseDto> GetRandom()
         {
             var result = _recipesService.GetRandomRecipe();
+            return Ok(result);
+        }
+
+        [HttpGet("Recipe_Like")]
+        public ActionResult<RecipeResponseDto> GetRecipeLike()
+        {
+            var result = _recipesService.BrowseRecipeLike();
             return Ok(result);
         }
 

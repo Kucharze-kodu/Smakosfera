@@ -11,17 +11,17 @@ using Smakosfera.Services.Settings;
 using Microsoft.AspNetCore.Authorization;
 
 
-var frontend_url = "http://localhost:5173";
+// var frontend_url = "http://localhost:5173";
 
 var builder = WebApplication.CreateBuilder(args);
-
+var frontendUrl = builder.Configuration.GetSection("URLFrontend").Value;
 // Configure the Cors policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: frontend_url,
+    options.AddPolicy(name: frontendUrl,
         policy =>
         {
-            policy.WithOrigins(frontend_url).AllowAnyMethod().AllowAnyHeader();
+            policy.WithOrigins(frontendUrl).AllowAnyMethod().AllowAnyHeader();
         });
 });
 
@@ -53,7 +53,7 @@ builder.Services.AddAuthentication(options =>
 var urlBackend = new HostSettings();
 
 //urlBackend.Url = builder.Configuration.GetSection("Host").GetSection("URL").Value; // (COMMENT THIS IN DEVELOPMENT)
-urlBackend.Url = builder.Configuration.GetSection("Host").GetSection("URLBackend").Value; // (COMMENT THIS IN HOSTING)
+urlBackend.Url = builder.Configuration.GetSection("URLBackend").Value; // (COMMENT THIS IN HOSTING)
 builder.Services.AddSingleton(urlBackend);
 
 
@@ -104,7 +104,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors(frontend_url);
+app.UseCors(frontendUrl);
 
 app.UseAuthorization();
 
