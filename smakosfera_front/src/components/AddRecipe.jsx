@@ -76,7 +76,7 @@ const DodawaniePrzepisu = () => {
     event.preventDefault();
 
     try {
-      let res = await fetch('https://localhost:7000/api/recipe', {
+      let res = await fetch(urlRecipes, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
