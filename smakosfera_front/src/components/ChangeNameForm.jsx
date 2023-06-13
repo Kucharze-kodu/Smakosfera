@@ -45,7 +45,6 @@ const RegisterForm = () => {
      catch (error) {
     }
   };
- 
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -62,7 +61,7 @@ const RegisterForm = () => {
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Nazwa została zmieniona pomyślnie!
+                    Nazwa została zmieniona pomyślnie! Prosimy o ponowne zalogowanie się!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
