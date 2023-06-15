@@ -22,18 +22,18 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(connectionString);
         }
 
-        [HttpGet("url")]
-        public ActionResult GetUrl()
+        [HttpGet("{param}")]
+        public ActionResult GetOneParam([FromRoute] string param)
         {
-            var url = _configuration.GetSection("URLFrontend");
-            return Ok(url);
+            var result = _configuration.GetSection(param);
+            return Ok(result);
         }
 
-        [HttpGet("email")]
-        public ActionResult GetEmail()
+        [HttpGet("{param1}/{param2}")]
+        public ActionResult GetTwoParams([FromRoute] string param1, [FromRoute] string param2)
         {
-            var email = _configuration.GetSection("Email").GetSection("Password");
-            return Ok(email);
+            var result = _configuration.GetSection(param1).GetSection(param2);
+            return Ok(result);
         }
     }
 }
