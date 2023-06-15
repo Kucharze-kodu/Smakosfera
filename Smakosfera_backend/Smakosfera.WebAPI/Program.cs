@@ -16,6 +16,7 @@ using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationMan
 // var frontend_url = "http://localhost:5173";
 
 var builder = WebApplication.CreateBuilder(args);
+
 var frontendUrl = builder.Configuration.GetSection("URLFrontend").Value;
 // Configure the Cors policy
 builder.Services.AddCors(options =>

@@ -12,11 +12,26 @@ namespace Smakosfera.WebAPI.Controllers
         {
             _configuration = configuration;
         }
+
         [HttpGet]
         public ActionResult GetInfo()
         {
             var connectionString = _configuration.GetConnectionString("DbConnection");
             return Ok(connectionString);
+        }
+
+        [HttpGet("url")]
+        public ActionResult GetUrl()
+        {
+            var url = _configuration.GetSection("URLFrontend");
+            return Ok(url);
+        }
+
+        [HttpGet("email")]
+        public ActionResult GetEmail()
+        {
+            var email = _configuration.GetSection("Email").GetSection("Password");
+            return Ok(email);
         }
     }
 }
