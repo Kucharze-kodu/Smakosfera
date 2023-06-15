@@ -52,11 +52,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add URL Host 
-var url = new HostSettings();
 
-builder.Configuration.GetSection("Url").Bind(url);
-builder.Services.AddSingleton(url);
 
 
 
