@@ -74,7 +74,7 @@ builder.Services.AddScoped<INewsletterService, NewsletterService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SmakosferaDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetSection("ConnectionString").Value,
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"),
     r => r.MigrationsAssembly("Smakosfera.WebAPI")));
 
 
@@ -111,7 +111,6 @@ app.UseCors(frontendUrl);
 app.UseAuthorization();
 
 app.MapControllers();
-Console.WriteLine(app.Configuration.GetSection("ConnectionString").Value);
-Console.WriteLine(app.Configuration.GetSection("Email").GetSection("Password").Value);
+
 app.Run();
 
