@@ -17,7 +17,7 @@ using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationMan
 
 var builder = WebApplication.CreateBuilder(args);
 
-var frontendUrl = builder.Configuration.GetSection("URLFrontend").Value;
+var frontendUrl = builder.Configuration.GetSection("Url").GetSection("URLFrontend").Value;
 // Configure the Cors policy
 builder.Services.AddCors(options =>
 {
