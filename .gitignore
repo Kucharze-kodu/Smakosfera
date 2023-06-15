@@ -506,3 +506,4 @@ dist-ssr
 Smakosfera_backend/Smakosfera.WebAPI/Properties/ServiceDependencies/smakosfera-backend - Web Deploy/profile.arm.json
 Smakosfera_backend/Smakosfera.WebAPI/Properties/ServiceDependencies/smakosfera-backend - Zip Deploy/profile.arm.json
 Smakosfera_backend/Smakosfera.WebAPI/Properties/ServiceDependencies/smakosfera-backend - Web Deploy1/profile.arm.json
+Smakosfera_backend/Smakosfera.WebAPI/appsettings.Development.json

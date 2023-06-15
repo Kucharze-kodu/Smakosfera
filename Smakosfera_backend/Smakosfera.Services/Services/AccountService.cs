@@ -272,8 +272,8 @@ namespace Smakosfera.Services.Services
 
             StringBuilder stringBuilder = new StringBuilder("");
             stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"");
-            stringBuilder.Append(_host.Url.ToString());
-            stringBuilder.Append("api/account/verify/");
+            stringBuilder.Append(_host.UrlBackend.ToString());
+            stringBuilder.Append("/api/account/verify/");
             stringBuilder.Append(veryficationToken.ToString());
             stringBuilder.Append("\" method=\"POST\">\r\n    <button>Aktywacja</button>\r\n</form>");
 
@@ -291,8 +291,8 @@ namespace Smakosfera.Services.Services
         {
             StringBuilder stringBuilder = new StringBuilder("");
             stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"");
-            stringBuilder.Append(_host.Url.ToString());
-            stringBuilder.Append("api/account/reset-password/");
+            stringBuilder.Append(_host.UrlFrontend.ToString());
+            stringBuilder.Append("/");
             stringBuilder.Append(resetToken.ToString());
             stringBuilder.Append("\" method=\"GET\">\r\n<button>Ustaw nowe hasło</button>\r\n</form>");
 

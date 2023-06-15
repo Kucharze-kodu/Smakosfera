@@ -53,11 +53,11 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Add URL Host 
-var urlBackend = new HostSettings();
+var url = new HostSettings();
 
-//urlBackend.Url = builder.Configuration.GetSection("Host").GetSection("URL").Value; // (COMMENT THIS IN DEVELOPMENT)
-urlBackend.Url = builder.Configuration.GetSection("URLBackend").Value; // (COMMENT THIS IN HOSTING)
-builder.Services.AddSingleton(urlBackend);
+url.UrlBackend = builder.Configuration.GetSection("Url").GetSection("URLBackend").Value;
+url.UrlFrontend = builder.Configuration.GetSection("Url").GetSection("URLFrontend").Value;
+builder.Services.AddSingleton(url);
 
 
 
