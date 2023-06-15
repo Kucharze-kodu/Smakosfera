@@ -5,12 +5,12 @@ import { avatar, cooking_book } from "../assets";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 import Button from "./Button";
+import { urlComments, urlAddComment } from "../endpoints";
 
 const RecipeDetails = ({ recipes }) => {
   // extract id of recipe from the URL
   const { recipeId } = useParams();
-  const urlComments = `https://localhost:7000/api/comment/recipes/${recipeId}`;
-  const urlAddComment = `https://localhost:7000/api/comment`;
+  const urlComment = urlComments + recipeId;
 
   const { getResJsonName } = useAuth();
   const { getResJsonId } = useAuth();
@@ -28,7 +28,7 @@ const RecipeDetails = ({ recipes }) => {
   // GET comments
   useEffect(() => {
     axios
-      .get(urlComments, {
+      .get(urlComment, {
         headers: {
           Authorization: `Bearer ${getResJsonToken()}`,
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ const RecipeDetails = ({ recipes }) => {
       .then((response) => {
         // Refresh comments after successful submission
         axios
-          .get(urlComments, {
+          .get(urlComment, {
             headers: {
               Authorization: `Bearer ${getResJsonToken()}`,
               "Content-Type": "application/json",

@@ -10,3 +10,5 @@ export const urlAccountInfo = `${API_URL}/api/account`;
 export const urlNameChange = `${API_URL}/api/account`;
 export const urlEmailChange = `${API_URL}/api/account`;
 export const urlResetPassowrd = `${API_URL}/api/account/forgot-password`;
+export const urlComments = `${API_URL}/api/comment/recipes/`;
+export const urlAddComment = `${API_URL}/api/comment`;
