@@ -55,8 +55,7 @@ builder.Services.AddAuthentication(options =>
 // Add URL Host 
 var url = new HostSettings();
 
-url.UrlBackend = builder.Configuration.GetSection("Url").GetSection("URLBackend").Value;
-url.UrlFrontend = builder.Configuration.GetSection("Url").GetSection("URLFrontend").Value;
+builder.Configuration.GetSection("Url").Bind(url);
 builder.Services.AddSingleton(url);
 
 
