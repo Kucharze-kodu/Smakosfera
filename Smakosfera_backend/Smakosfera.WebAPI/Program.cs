@@ -21,7 +21,7 @@ var frontendUrl = builder.Configuration.GetSection("URLFrontend").Value;
 // Configure the Cors policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: frontendUrl,
+    options.AddPolicy( "frontend",
         policy =>
         {
             policy.WithOrigins(frontendUrl).AllowAnyMethod().AllowAnyHeader();
@@ -102,7 +102,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors(frontendUrl);
+app.UseCors("frontend");
 
 app.UseAuthorization();
 
