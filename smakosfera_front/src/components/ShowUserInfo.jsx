@@ -5,26 +5,79 @@ import { styles } from "../style";
 import { avatar } from "../assets";
 import { useAuth } from "./AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import ReactModal from "react-modal";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const ShowUserInfo = (prop) => {
   const button = prop.button;
   const { idUser } = useParams();
   const url = urlUsers + "/" + idUser;
   const { getResJsonToken } = useAuth();
-  const { data: user, isPending } = useFetch(url);
   const navigate = useNavigate();
 
-  const Delete = () =>{
+  const [isOpen, setIsOpen] = useState(false);
+  const [banTime, setBanTime] = useState(0);
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(true);
+
+  
+
+  const Delete = () => {
     fetch(url, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${getResJsonToken()}`,
         "Content-Type": "application/json",
-      }
+      },
     }).then(() => {
       navigate("/home/admin-panel/users");
-    })
-  }
+    });
+  };
+
+  const Ban = () => {
+    handleCloseModal();
+    axios
+      .put(url, banTime, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+       
+        // Wykonaj odpowiednie działania na podstawie danych odpowiedzi
+      })
+      .catch((error) => {
+        console.error(error);
+        // Obsłuż błąd żądania
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((result) => {
+        setUser(result.data);
+        setError(null);
+        setIsPending(false);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }, [Ban]);
 
   return (
     <>
@@ -39,6 +92,36 @@ const ShowUserInfo = (prop) => {
               color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
             />
           </Link>
+
+          <ReactModal
+            isOpen={isOpen}
+            onRequestClose={handleCloseModal}
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+            contentLabel="Okienko"
+            ariaHideApp={false}
+          >
+            <div className="bg-white p-4 rounded-lg shadow-lg">
+              <h1 className="font-bold pb-2 text-center">Liczba dni:</h1>
+              <input
+                type="number"
+                value={banTime}
+                onChange={(e) => setBanTime(e.target.value)}
+                className="w-full px-4 py-2 mb-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+              />
+              <button
+                onClick={() => Ban()}
+                className="px-4 py-2 mr-2 bg-green-600 text-white rounded hover:bg-green-800 focus:outline-none focus:bg-green-700"
+              >
+                Zbanuj
+              </button>
+              <button
+                onClick={handleCloseModal}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              >
+                Anuluj
+              </button>
+            </div>
+          </ReactModal>
 
           {user && (
             <>
@@ -103,7 +186,7 @@ const ShowUserInfo = (prop) => {
                   hover:border-black hover:outline-red  rounded-lg"
                 />
                 <Button
-                  onClick={() => Ban()}
+                  onClick={() => setIsOpen(true)}
                   text="Zbanuj"
                   padding="p-1"
                   margin="mt-4 mx-4"
@@ -113,7 +196,7 @@ const ShowUserInfo = (prop) => {
                   hover:border-black hover:outline-green  rounded-lg"
                 />
                 <Button
-                  onClick={() => Ban()}
+                  onClick={() => ChangePermission()}
                   text="Zmień uprawnienia"
                   padding="p-1"
                   margin="mt-4 mx-4"

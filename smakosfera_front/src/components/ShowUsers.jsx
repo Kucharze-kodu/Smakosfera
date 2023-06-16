@@ -16,11 +16,8 @@ const ShowUsers = (prop) => {
 
   const handleRow = (idUser) =>{
     navigator(`/home/admin-panel/users/` + idUser);
-    console.log(idUser);
   }
 
-  const { getResJsonName } = useAuth();
-  const { getResJsonId } = useAuth();
   const { getResJsonToken } = useAuth();
 
   const [users, setUsers] = useState(null);
