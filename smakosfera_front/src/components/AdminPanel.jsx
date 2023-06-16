@@ -1,37 +1,56 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styles } from "../style";
-import useFetch from "./useFetch";
-import { urlUsers } from "../endpoints";
 import Button from "./Button";
 import ShowUsers from "./ShowUsers";
 import { useAuth } from "./AuthContext";
+import { Route, Routes, Link, useNavigate } from "react-router-dom";
+import { Suspense } from "react";
+import LoadingScreen from "./LoadingScreen";
+import ShowUserInfo from "./ShowUserInfo";
 
 const AdminPanel = () => {
-  const { data: users, isPending} = useFetch(urlUsers);
   const { getResJsonPermission } = useAuth();
 
-  const handleRow = () => {};
-
-  const [buttonShowUsers, setButtonShowUsers] = useState(false);
+  const [hideButton, setHideButton] = useState(false);
 
   return (
     <>
       {getResJsonPermission() === "Admin" ? (
         <>
-          {!buttonShowUsers && (
+          {!hideButton && (
+          <Link to="users">
             <Button
-              onClick={() => {
-                setButtonShowUsers(true);
-              }}
+              onClick={() => setHideButton(true)}
               text="Pokaż użytkowników"
               padding="p-1"
               margin="mt-4 mx-4"
               color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
             />
-          )}
-          {buttonShowUsers && (
-            <ShowUsers users={users} button={setButtonShowUsers} isPending={isPending}/>
-          )}
+          </Link>)}
+          <Routes>
+            <Route
+              path="users"
+              element={
+                <Suspense fallback={<LoadingScreen />}>
+                  {" "}
+                  <ShowUsers
+                    button={setHideButton}
+                  />{" "}
+                </Suspense>
+              }
+            ></Route>
+            <Route
+              path="users/:idUser"
+              element={
+                <Suspense fallback={<LoadingScreen />}>
+                  {" "}
+                  <ShowUserInfo
+                    button={setHideButton}
+                  />{" "}
+                </Suspense>
+              }
+            ></Route>
+          </Routes>
         </>
       ) : (
         <div

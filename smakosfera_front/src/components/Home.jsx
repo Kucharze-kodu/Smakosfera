@@ -26,6 +26,7 @@ const RecipeDetails = lazy(() => import("./RecipeDetails"));
 const AddIngredient = lazy(() => import("./AddIngredient"));
 const Newsletter = lazy(() => import("./Newsletter"));
 const AdminPanel = lazy(() => import("./AdminPanel"));
+const ShowUsers = lazy(() => import("./ShowUsers"));
 
 const Home = () => {
   const navigate = useNavigate();
@@ -156,14 +157,16 @@ const Home = () => {
                   color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
                 />
               </Link>
-              { getResJsonPermission() === 'Admin' && <Link to="/home/admin-panel">
-                <Button
-                  text= "Panel admina"
-                  padding="p-1"
-                  margin="mt-4 mx-4"
-                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-                />
-              </Link>}
+              {getResJsonPermission() === "Admin" && (
+                <Link to="/home/admin-panel">
+                  <Button
+                    text="Panel admina"
+                    padding="p-1"
+                    margin="mt-4 mx-4"
+                    color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                  />
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex flex-col xs:w-full">
@@ -263,7 +266,7 @@ const Home = () => {
                 }
               ></Route>
               <Route
-                path="admin-panel"
+                path="admin-panel/*"
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
@@ -271,6 +274,7 @@ const Home = () => {
                   </Suspense>
                 }
               ></Route>
+              
             </Routes>
           </div>
         </div>
