@@ -13,3 +13,4 @@ export const urlResetPassowrd = `${API_URL}/api/account/forgot-password`;
 export const urlComments = `${API_URL}/api/comment/recipes/`;
 export const urlAddComment = `${API_URL}/api/comment`;
 export const urlLikes = `${API_URL}/api/like/counter/`;
+export const urlUsers = `${API_URL}/api/user`;

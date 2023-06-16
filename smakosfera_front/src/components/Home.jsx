@@ -25,6 +25,7 @@ const LoadingScreen = lazy(() => import("./LoadingScreen"));
 const RecipeDetails = lazy(() => import("./RecipeDetails"));
 const AddIngredient = lazy(() => import("./AddIngredient"));
 const Newsletter = lazy(() => import("./Newsletter"));
+const AdminPanel = lazy(() => import("./AdminPanel"));
 
 const Home = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const Home = () => {
   const { handleLogout } = useAuth();
   const { getResJsonName } = useAuth();
   const { getResJsonToken } = useAuth();
+  const { getResJsonPermission } = useAuth();
 
   // GET recipes
   useEffect(() => {
@@ -154,6 +156,14 @@ const Home = () => {
                   color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
                 />
               </Link>
+              { getResJsonPermission() === 'Admin' && <Link to="/home/admin-panel">
+                <Button
+                  text= "Panel admina"
+                  padding="p-1"
+                  margin="mt-4 mx-4"
+                  color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                />
+              </Link>}
             </div>
           </div>
           <div className="flex flex-col xs:w-full">
@@ -249,6 +259,15 @@ const Home = () => {
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
                     <Newsletter />{" "}
+                  </Suspense>
+                }
+              ></Route>
+              <Route
+                path="admin-panel"
+                element={
+                  <Suspense fallback={<LoadingScreen />}>
+                    {" "}
+                    <AdminPanel />{" "}
                   </Suspense>
                 }
               ></Route>
