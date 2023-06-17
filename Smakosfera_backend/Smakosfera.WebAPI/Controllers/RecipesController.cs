@@ -29,10 +29,27 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/ToConfirmedDetail{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult<RecipeResponseDto> GetToConfirmed(int id)
+        {
+            var result = _recipesService.GetRecipeToConfirmed(id);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<RecipeResponseDto>> GetAll()
         {
             var result = _recipesService.Browse();
+            return Ok(result);
+        }
+
+        [HttpGet("/ToConfirmedAll")]
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult<IEnumerable<RecipeResponseDto>> GetAllToConfirmed()
+        {
+            var result = _recipesService.BrowseToConfirmed();
             return Ok(result);
         }
 
@@ -52,7 +69,7 @@ namespace Smakosfera.WebAPI.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "User,Admin,Moderator")]
         public ActionResult PostRecipes([FromBody] RecipeDto dto)
         {
             _recipesService.Add(dto);
@@ -60,6 +77,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPut("{idRecipe}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Update([FromRoute] int idRecipe, [FromBody] RecipeDto dto)
         {
             _recipesService.Update(idRecipe, dto);
@@ -69,6 +87,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Delete([FromRoute] int id)
         {
             _recipesService.Delete(id);

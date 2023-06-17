@@ -32,7 +32,7 @@ const RecipeDetails = ({ recipes }) => {
   // GET comments
   useEffect(() => {
     axios
-      .get(urlComments, {
+      .get(urlComment, {
         headers: {
           Authorization: `Bearer ${getResJsonToken()}`,
           "Content-Type": "application/json",
@@ -145,7 +145,7 @@ const RecipeDetails = ({ recipes }) => {
       .then((response) => {
         // Refresh comments after successful submission
         axios
-          .get(urlComments, {
+          .get(urlComment, {
             headers: {
               Authorization: `Bearer ${getResJsonToken()}`,
               "Content-Type": "application/json",

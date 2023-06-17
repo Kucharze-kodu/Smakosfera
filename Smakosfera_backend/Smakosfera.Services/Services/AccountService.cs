@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Utilities;
@@ -24,20 +25,20 @@ namespace Smakosfera.Services.Services
         private readonly SmakosferaDbContext _dbContext;
         private readonly IEmailService _emailService;
         private readonly AuthenticationSettings _authenticationSettings;
-        private readonly HostSettings _host;
+        private readonly IConfiguration _configuration;
         private readonly IUserContextService _userContextService;
 
         public AccountService(
             SmakosferaDbContext dbContext,
             IEmailService emailService,
             AuthenticationSettings authenticationSettings,
-            HostSettings host,
+            IConfiguration configuration,
             IUserContextService userContextService)
         {
             _dbContext = dbContext;
             _emailService = emailService;
             _authenticationSettings = authenticationSettings;
-            _host = host;
+            _configuration = configuration;
             _userContextService = userContextService;
         }
 
@@ -272,8 +273,8 @@ namespace Smakosfera.Services.Services
 
             StringBuilder stringBuilder = new StringBuilder("");
             stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Dziękujemy za dołączenie. Kliknij poniższy link, aby aktywować swoje konto: <form action=\"");
-            stringBuilder.Append(_host.Url.ToString());
-            stringBuilder.Append("api/account/verify/");
+            stringBuilder.Append(_configuration.GetSection("Url").GetSection("URLBackend").Value);
+            stringBuilder.Append("/api/account/verify/");
             stringBuilder.Append(veryficationToken.ToString());
             stringBuilder.Append("\" method=\"POST\">\r\n    <button>Aktywacja</button>\r\n</form>");
 
@@ -291,8 +292,8 @@ namespace Smakosfera.Services.Services
         {
             StringBuilder stringBuilder = new StringBuilder("");
             stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"");
-            stringBuilder.Append(_host.Url.ToString());
-            stringBuilder.Append("api/account/reset-password/");
+            stringBuilder.Append(_configuration.GetSection("Url").GetSection("URLFrontend").Value);
+            stringBuilder.Append("/");
             stringBuilder.Append(resetToken.ToString());
             stringBuilder.Append("\" method=\"GET\">\r\n<button>Ustaw nowe hasło</button>\r\n</form>");
 

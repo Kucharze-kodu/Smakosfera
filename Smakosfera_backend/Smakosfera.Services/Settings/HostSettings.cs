@@ -8,6 +8,7 @@ namespace Smakosfera.Services.Settings
 {
     public class HostSettings
     {
-        public string Url { get; set; }
+        public string UrlFrontend { get; set; }
+        public string UrlBackend { get; set; }
     }
 }
