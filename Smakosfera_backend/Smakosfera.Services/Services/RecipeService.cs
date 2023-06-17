@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Npgsql;
 using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
@@ -222,7 +223,7 @@ namespace Smakosfera.Services.Services
                 Description = dto.Description,
                 DifficultyLevelId = dto.DifficultyLevelId,
                 PreparationTime = dto.PreparationTime,
-                UserId = _userContextService.GetUserId // zmiana
+                UserId = _userContextService.GetUserId 
             };
 
             _DbContext.Recipes.Add(recipe);
@@ -282,7 +283,83 @@ namespace Smakosfera.Services.Services
 
             _DbContext.SaveChanges();
 
+            int NumberIngredient = 0;
+
+            if (dto.Ingredients != null)
+            {
+                foreach (var ingredientDto in dto.Ingredients)
+                {
+                    NumberIngredient++;
+
+                    var isIngredient = _DbContext.Ingredients.Any(r => r.Name == ingredientDto.Name);
+                    if (!isIngredient)
+                    {
+                        _DbContext.Ingredients.Add(new Ingredient()
+                        {
+                            Name = ingredientDto.Name,
+                            CreatedById = _userContextService.GetUserId
+                        });
+                        _DbContext.SaveChanges();
+                    }
+
+                    var ingredientId = _DbContext.Ingredients.FirstOrDefault(r => r.Name == ingredientDto.Name).Id;
+                    var isRecord = _DbContext.Recipes_Ingredients
+                        .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId && r.Amount == ingredientDto.Amount && r.Unit == ingredientDto.Unit);
+
+                    
+
+                    if (!isRecord)
+                    {
+                        _DbContext.Recipes_Ingredients.Add(new RecipeIngredient()
+                        {
+                            IngredientId = ingredientId,
+                            RecipeId = recipeId,
+                            Amount = ingredientDto.Amount,
+                            Unit = ingredientDto.Unit
+                        });
+                        _DbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        var Record = _DbContext.Recipes_Ingredients.FirstOrDefault(r => r.IngredientId == ingredientId && r.RecipeId == recipeId);
+                        Record.IngredientId = ingredientId;
+                        Record.Amount = ingredientDto.Amount;
+                        Record.Unit = ingredientDto.Unit;
+                        _DbContext.SaveChanges();
+                    }
+                }
+            }
+
+            var AllIngredient = _DbContext.Recipes_Ingredients.ToList().FindAll(r => r.RecipeId == recipeId);
+
+            if(AllIngredient.Count() < NumberIngredient)
+            {
+                return;
+            }
+            else
+            {
+                foreach(var ing in  AllIngredient)
+                {
+                    bool isOK = false;
+                    foreach(var ingDto in dto.Ingredients)
+                    {
+                        if(ing.IngredientId == ingDto.IngredientId)
+                        {
+                            isOK = true;
+                            break;
+                        }
+                    }
+                    if(!isOK)
+                    {
+                        _DbContext.Recipes_Ingredients.Remove(ing);
+                        _DbContext.SaveChanges();
+                    }
+                }
+            }
+
         }
+
+
         public void Delete(int recipeId)
         {
             var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);
