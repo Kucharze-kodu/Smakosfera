@@ -369,7 +369,7 @@ namespace Smakosfera.Services.Services
                     var isRecord = _DbContext.Recipes_Ingredients
                         .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId && r.Amount == ingredientDto.Amount && r.Unit == ingredientDto.Unit);
 
-                    
+
 
                     if (!isRecord)
                     {
@@ -391,35 +391,84 @@ namespace Smakosfera.Services.Services
                         _DbContext.SaveChanges();
                     }
                 }
-            }
 
-            var AllIngredient = _DbContext.Recipes_Ingredients.ToList().FindAll(r => r.RecipeId == recipeId);
+                var AllIngredient = _DbContext.Recipes_Ingredients.ToList().FindAll(r => r.RecipeId == recipeId);
 
-            if(AllIngredient.Count() < NumberIngredient)
-            {
-                return;
-            }
-            else
-            {
-                foreach(var ing in  AllIngredient)
+                if (AllIngredient.Count() < NumberIngredient)
                 {
-                    bool isOK = false;
-                    foreach(var ingDto in dto.Ingredients)
+                    return;
+                }
+                else
+                {
+                    foreach (var ing in AllIngredient)
                     {
-                        if(ing.IngredientId == ingDto.IngredientId)
+                        bool isOK = false;
+                        foreach (var ingDto in dto.Ingredients)
                         {
-                            isOK = true;
-                            break;
+                            if (ing.IngredientId == ingDto.IngredientId)
+                            {
+                                isOK = true;
+                                break;
+                            }
+                        }
+                        if (!isOK)
+                        {
+                            _DbContext.Recipes_Ingredients.Remove(ing);
+                            _DbContext.SaveChanges();
                         }
                     }
-                    if(!isOK)
+                }
+
+            }
+
+            
+            if (dto.Types != null)
+            {
+                int NumberTypes = 0;
+                foreach (var typeOne in dto.Types)
+                {
+                    NumberTypes++;
+                    var isRecord = _DbContext.Recipes_Types
+                                    .Any(r => r.TypeId == typeOne.TypeId && r.RecipeId == recipeId);
+
+                    if (!isRecord)
                     {
-                        _DbContext.Recipes_Ingredients.Remove(ing);
-                        _DbContext.SaveChanges();
+                        _DbContext.Recipes_Types.Add(new RecipeType
+                        {
+                            RecipeId = recipeId,
+                            TypeId = typeOne.TypeId
+                        });
+                    }
+                    _DbContext.SaveChanges();
+                }
+
+                var AllTypes = _DbContext.Recipes_Types.ToList().FindAll(r => r.RecipeId == recipeId);
+
+                if (AllTypes.Count() < NumberTypes)
+                {
+                    return;
+                }
+                else
+                {
+                    foreach (var ing in AllTypes)
+                    {
+                        bool isOK = false;
+                        foreach (var ingDto in dto.Types)
+                        {
+                            if (ing.TypeId == ingDto.TypeId)
+                            {
+                                isOK = true;
+                                break;
+                            }
+                        }
+                        if (!isOK)
+                        {
+                            _DbContext.Recipes_Types.Remove(ing);
+                            _DbContext.SaveChanges();
+                        }
                     }
                 }
             }
-
         }
 
 
