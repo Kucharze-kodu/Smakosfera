@@ -5,12 +5,15 @@ import { avatar, cooking_book } from "../assets";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 import Button from "./Button";
-import { urlComments, urlAddComment } from "../endpoints";
+import { API_URL } from "../endpoints";
 
 const RecipeDetails = ({ recipes }) => {
   // extract id of recipe from the URL
   const { recipeId } = useParams();
-  const urlComment = urlComments + recipeId;
+  const urlComment = `${API_URL}/api/comment/recipes/${recipeId}`;
+  const urlAddComment = `${API_URL}/api/comment`;
+  const urlAddLike = `${API_URL}/api/like/${recipeId}`;
+  const urlGetLikes = `${API_URL}/api/like/recipes/${recipeId}`;
 
   const { getResJsonName } = useAuth();
   const { getResJsonId } = useAuth();
@@ -21,6 +24,7 @@ const RecipeDetails = ({ recipes }) => {
   const [lastCommentTime, setLastCommentTime] = useState(null);
   const [lastCommentCaption, setLastCommentCaption] = useState(null);
   const [showLastCommentCaption, setShowLastCommentCaption] = useState(true);
+  const [likeNumber, setLikeNumber] = useState(0);
 
   // find a recipe with id...
   const recipe = recipes.find((recipe) => recipe.id === parseInt(recipeId));
@@ -41,6 +45,68 @@ const RecipeDetails = ({ recipes }) => {
         console.log("Błąd przy pobieraniu komentarzy: ", error);
       });
   }, [recipeId]);
+
+  // GET likes
+  useEffect(() => {
+    axios
+      .get(urlGetLikes, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        const likes = response.data;
+        // Update the like number in the state
+        setLikeNumber(likes);
+      })
+      .catch((error) => {
+        console.log("Błąd przy pobieraniu liczby polubień: ", error);
+      });
+  }, [recipeId]);
+
+  // Function to handle adding a like
+  const handleLike = () => {
+    // PUT like
+    axios
+      .put(
+        urlAddLike,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setLikeNumber(response.data);
+        // GET likes
+        const getLikes = () => {
+          axios
+            .get(urlGetLikes, {
+              headers: {
+                Authorization: `Bearer ${getResJsonToken()}`,
+                "Content-Type": "application/json",
+              },
+            })
+            .then((response) => {
+              const likes = response.data;
+              // Update the like number in the state
+              setLikeNumber(likes);
+            })
+            .catch((error) => {
+              console.log("Błąd przy pobieraniu liczby polubień: ", error);
+            });
+        };
+
+        // Call getLikes after successful like addition
+        getLikes();
+      })
+      .catch((er) => {
+        console.log("Błąd przy dodaniu polubienia: ", er);
+      });
+  };
 
   // Function to handle comment input change
   const handleCommentChange = (e) => {
@@ -124,14 +190,37 @@ const RecipeDetails = ({ recipes }) => {
 
   return (
     <div className="recipe_details flex flex-col overflow-auto xs:pb-0 pb-20">
-      <div className="flex xs:flex-row flex-col xs:items-start items-center ">
-        <div className="m-5">
+      <div className="flex flex-col text-center items-center ">
+        <div className="pt-5">
           <img src={cooking_book} alt="Przepis" />
         </div>
         <div className="m-5">
           <div className={`${styles.heading3} text-white`}>{recipe.name}</div>
           <div className={`${styles.paragraph} text-dimWhite`}>
             {recipe.description}
+          </div>
+          <div className={`${styles.paragraph} text-dimWhite my-5`}>
+            Czas przygotowania: <u>{recipe.preparationTime} minut!</u>
+          </div>
+
+          <div
+            className={`${styles.paragraph} xs:m-5 text-center xs:text-left text-dimWhite mb-5`}
+          >
+            <div className={`${styles.heading3} text-white `}>Składniki:</div>
+            <ul className="list-disc list-inside ">
+              {recipe.ingredients.map((ingredient, index) => (
+                <li key={index}>
+                  {ingredient.name}: {ingredient.amount} {ingredient.unit}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div
+            onClick={handleLike}
+            className={`${styles.heading3} border-2 border-dimWhite hover:border-white rounded-lg p-2  text-dimWhite hover:text-white cursor-pointer`}
+          >
+            Ilość polubień: <span className="">{likeNumber.length}</span> 
           </div>
         </div>
       </div>

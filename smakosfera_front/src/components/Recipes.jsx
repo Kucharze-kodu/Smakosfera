@@ -7,11 +7,9 @@ import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
-import { BsHeartFill, BsHeart } from "react-icons/bs";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
-  const [likes, setLikes] = useState([]);
   const [displayedRecipes, setDisplayedRecipes] = useState(8);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -37,8 +35,6 @@ const Recipes = () => {
         setIsDataLoaded(true);
       });
   }, []);
-
-
 
   return (
     <div className="overflow-auto">
@@ -116,6 +112,7 @@ const Recipes = () => {
                   </Link>
 
                   <div className = {`break-words p-1 text-white text-white`}>Ilość polubień: {recipe.likeNumber}</div>
+
                 </div>
               ))}
           </div>
