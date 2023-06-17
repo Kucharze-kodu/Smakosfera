@@ -214,6 +214,22 @@ namespace Smakosfera.Services.Services
             _dbContext.SaveChanges();
         }
 
+        public void ChangePassword(PasswordDto dto)
+        {
+            var user = GetUser();
+
+            var oldPasswordHash = CreateHash(dto.OldPassword);
+
+            if(user.PasswordHash != oldPasswordHash)
+            {
+                throw new BadRequestException("Nie prawidłowe stare hasło");
+            }
+
+            var newPasswordHash = CreateHash(dto.Password);
+            user.PasswordHash = newPasswordHash;
+            _dbContext.SaveChanges();
+        }
+
         private User GetUser()
         {
             var user = _dbContext.Users
@@ -293,7 +309,7 @@ namespace Smakosfera.Services.Services
             StringBuilder stringBuilder = new StringBuilder("");
             stringBuilder.Append("<h1>Witamy w Smakosferze!</h1><br>Poprosiłeś(aś) o zresetowanie hasła. Kliknij poniższy link, aby kontynuować: <form action=\"");
             stringBuilder.Append(_configuration.GetSection("Url").GetSection("URLFrontend").Value);
-            stringBuilder.Append("/");
+            stringBuilder.Append("/ressetpassword/");
             stringBuilder.Append(resetToken.ToString());
             stringBuilder.Append("\" method=\"GET\">\r\n<button>Ustaw nowe hasło</button>\r\n</form>");
 
