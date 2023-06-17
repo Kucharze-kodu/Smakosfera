@@ -14,6 +14,7 @@ namespace Smakosfera.Services.Interfaces
         IEnumerable<RecipeResponseDto> Browse();
         RecipeResponseDto GetRandomRecipe();
         IEnumerable<RecipeResponseDto> BrowseRecipeLike();
+        IEnumerable<RecipeResponseDto> BrowseToConfirmed();
         void Add(RecipeDto dto);
         void Update(int recipeId, RecipeDto dto);
         void Delete(int recipeId);

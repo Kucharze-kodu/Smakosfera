@@ -16,6 +16,7 @@ namespace Smakosfera.Services.Models
         public int DifficultyLevelId { get; set; }
         public int PreparationTime { get; set; }
         public bool CommunityRecipe { get; set; }
+        public int LikeNumber { get; set; }
         public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
     }
 }

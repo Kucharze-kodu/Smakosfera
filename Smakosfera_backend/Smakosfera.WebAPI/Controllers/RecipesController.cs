@@ -36,6 +36,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("ToConfirmed")]
+        public ActionResult<IEnumerable<RecipeResponseDto>> GetAllToConfirmed()
+        {
+            var result = _recipesService.BrowseToConfirmed();
+            return Ok(result);
+        }
+
         [HttpGet("random")]
         public ActionResult<RecipeResponseDto> GetRandom()
         {
