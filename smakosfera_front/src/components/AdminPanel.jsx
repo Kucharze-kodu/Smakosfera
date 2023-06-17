@@ -9,21 +9,45 @@ import LoadingScreen from "./LoadingScreen";
 import ShowUserInfo from "./ShowUserInfo";
 import ShowNotAcceptedRecipes from "./ShowNotAcceptedRecipes";
 import ShowNotAcceptedRecipeInfo from "./ShowNotAcceptedRecipeInfo";
+import axios from "axios";
+import { urlNewsletter } from "../endpoints";
 
 const AdminPanel = ({resetHideButton, setResetHideButton}) => {
   const location = useLocation();
 
   const { getResJsonPermission } = useAuth();
+  const { getResJsonToken } = useAuth();
 
   const [hideButton, setHideButton] = useState(false);
 
-  useEffect(()=>{
-    if(resetHideButton){
+  const [emailMessage, setEmailMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (resetHideButton) {
       setHideButton(false);
       setResetHideButton(false);
     }
-    
   }, [resetHideButton]);
+
+  const SendNewsletter = () => {
+    setLoading(true);
+    const url = urlNewsletter + "/sendEmails";
+    axios
+      .post(url, null, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setEmailMessage(response.data)
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -50,6 +74,25 @@ const AdminPanel = ({resetHideButton, setResetHideButton}) => {
                 color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
               />
             </Link>
+          )}
+          {(!hideButton && getResJsonPermission() === "Admin") && (
+              <Button
+                onClick={() => SendNewsletter()}
+                text="Wyślij newsletter"
+                padding="p-1"
+                margin="mt-4 mx-4"
+                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+              />
+          )}
+          {loading && (
+            <>
+            <h1 className="text-white text-center pt-5 font-black text-4xl">Wysyłanie...</h1>
+            </>
+          ) }
+          {!hideButton && emailMessage && !loading && (
+            <>
+            <h1 className="text-white text-center pt-5 font-black text-4xl">Newsletter wysłany</h1>
+            </>
           )}
           <Routes>
             <Route
