@@ -6,6 +6,7 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 import Button from "./Button";
 import { API_URL } from "../endpoints";
+import { BsHeartFill } from "react-icons/bs";
 
 const RecipeDetails = ({ recipes }) => {
   // extract id of recipe from the URL
@@ -218,9 +219,16 @@ const RecipeDetails = ({ recipes }) => {
 
           <div
             onClick={handleLike}
-            className={`${styles.heading3} border-2 border-dimWhite hover:border-white rounded-lg p-2  text-dimWhite hover:text-white cursor-pointer`}
+            className={`${styles.heading3}  border-2 border-dimWhite hover:border-white rounded-lg p-2  text-dimWhite hover:text-white cursor-pointer`}
           >
-            Ilość polubień: <span className="">{likeNumber.length}</span> 
+            <div
+              className={`${styles.paragraph2} p-3 text-red flex flex-row justify-center items-end`}
+            >
+              <div className="text-[24px]">
+                <BsHeartFill />
+              </div>
+              <div className={`text-[24px] px-2`}>{likeNumber.length}</div>
+            </div>{" "}
           </div>
         </div>
       </div>

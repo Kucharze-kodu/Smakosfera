@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
+import { BsHeartFill } from "react-icons/bs";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -111,8 +112,14 @@ const Recipes = () => {
                     </i>
                   </Link>
 
-                  <div className = {`break-words p-1 text-white text-white`}>Ilość polubień: {recipe.likeNumber}</div>
-
+                  <div className={`${styles.paragraph2} pt-3 text-red flex flex-row justify-center items-end`}>
+                    <div className="text-[24px]">
+                      <BsHeartFill />
+                    </div>
+                    <div className={`text-[24px] px-2`}>
+                      {recipe.likeNumber}
+                    </div>
+                  </div>
                 </div>
               ))}
           </div>

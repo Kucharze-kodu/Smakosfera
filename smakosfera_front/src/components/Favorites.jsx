@@ -7,11 +7,10 @@ import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
-import { BsHeartFill, BsHeart } from "react-icons/bs";
+import { BsHeartFill } from "react-icons/bs";
 
 const Favorites = () => {
   const [recipes, setRecipes] = useState([]);
-  const [likes, setLikes] = useState([]);
   const [displayedRecipes, setDisplayedRecipes] = useState(8);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -37,8 +36,6 @@ const Favorites = () => {
         setIsDataLoaded(true);
       });
   }, []);
-
-
 
   return (
     <div className="overflow-auto">
@@ -114,8 +111,16 @@ const Favorites = () => {
                       ></Button>
                     </i>
                   </Link>
-
-                  <div className = {`break-words p-1 text-white text-white`}>Ilość polubień: {recipe.likeNumber}</div>
+                  <div
+                    className={`${styles.paragraph2} pt-3 text-red flex flex-row justify-center items-end`}
+                  >
+                    <div className="text-[24px]">
+                      <BsHeartFill />
+                    </div>
+                    <div className={`text-[24px] px-2`}>
+                      {recipe.likeNumber}
+                    </div>
+                  </div>{" "}
                 </div>
               ))}
           </div>
