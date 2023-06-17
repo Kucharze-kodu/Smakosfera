@@ -241,7 +241,9 @@ const Home = () => {
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
-                    <Favorites />{" "}
+                    <Favorites 
+                      isDataLoaded={isDataLoaded}
+                    />{" "}
                   </Suspense>
                 }
               ></Route>
