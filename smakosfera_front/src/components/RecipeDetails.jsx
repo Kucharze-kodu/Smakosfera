@@ -10,7 +10,7 @@ import { API_URL } from "../endpoints";
 const RecipeDetails = ({ recipes }) => {
   // extract id of recipe from the URL
   const { recipeId } = useParams();
-  const urlComments = `${API_URL}/api/comment/recipes/${recipeId}`;
+  const urlComment = `${API_URL}/api/comment/recipes/${recipeId}`;
   const urlAddComment = `${API_URL}/api/comment`;
   const urlAddLike = `${API_URL}/api/like/${recipeId}`;
   const urlGetLikes = `${API_URL}/api/like/recipes/${recipeId}`;
@@ -24,7 +24,7 @@ const RecipeDetails = ({ recipes }) => {
   const [lastCommentTime, setLastCommentTime] = useState(null);
   const [lastCommentCaption, setLastCommentCaption] = useState(null);
   const [showLastCommentCaption, setShowLastCommentCaption] = useState(true);
-  const [likeNumber, setLikeNumber] = useState(0); // Add the likeNumber state variable
+  const [likeNumber, setLikeNumber] = useState(0);
 
   // find a recipe with id...
   const recipe = recipes.find((recipe) => recipe.id === parseInt(recipeId));
