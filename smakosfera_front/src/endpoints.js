@@ -16,3 +16,7 @@ export const urlLikes = `${API_URL}/api/like/counter/`;
 export const urlUsers = `${API_URL}/api/user`;
 export const urlNewsletter = `${API_URL}/api/newsletter`;
 export const urlFavoriteRecipes = `${API_URL}/api/recipe/recipe-like`;
+export const urlNotAcceptedRecipes = `${API_URL}/api/recipe/to-confirmed-all`
+export const urlNotAcceptedRecipeInfo = `${API_URL}/api/recipe/to-confirmed-detail`;
+export const urlAcceptRecipe = `${API_URL}/api/recipe/verification`;
+
