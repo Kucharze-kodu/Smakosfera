@@ -28,9 +28,6 @@ namespace Smakosfera.Services.Models
         public bool CommunityRecipe { get; set; } = true; 
         [Required]
         public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
-    
-        [Required]
-        public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
     }
 }
 

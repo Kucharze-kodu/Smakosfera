@@ -84,8 +84,6 @@ namespace Smakosfera.Services.Services
                              .Include(t => t.Types)
                              .ThenInclude(tt => tt.Type)
                              .ToList();
-                             .ThenInclude(cc => cc.Ingredient)
-                             .ToList();
 
             var likes = _DbContext.Likes.ToList()
             .Select(l => new LikeDto

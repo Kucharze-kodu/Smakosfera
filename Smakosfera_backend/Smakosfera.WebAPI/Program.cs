@@ -63,7 +63,6 @@ builder.Services.AddScoped<ILikeService, LikeService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IRecipesService, RecipeService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
-builder.Services.AddScoped<IRecipeIngredientService, RecipeIngredientService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<INewsletterService, NewsletterService>();
 
