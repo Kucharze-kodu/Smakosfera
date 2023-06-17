@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Smakosfera.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,8 +20,15 @@ namespace Smakosfera.Services.Models
         public int DifficultyLevelId { get; set; } = 1;
         [Required]
         public int PreparationTime { get; set; }
+
+        //public string? ImageFileName { get; set; }
+        [Required]
+        public IEnumerable<RecipeTypeDto> Types { get; set; }
+
+        public bool CommunityRecipe { get; set; } = true; 
         [Required]
         public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
     }
-
 }
+
+

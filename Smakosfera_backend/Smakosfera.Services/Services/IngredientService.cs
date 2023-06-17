@@ -15,6 +15,7 @@ namespace Smakosfera.Services.Services
 
         public IngredientService(SmakosferaDbContext dbContext, IUserContextService userContextService)
         {
+
             _DbContext = dbContext;
             _userContextService = userContextService;
         }
@@ -62,13 +63,14 @@ namespace Smakosfera.Services.Services
         }
 
 
-        public IEnumerable<IngredientDto> Browse()
+        public IEnumerable<Ingredient> Browse()
         {
             var date = _DbContext.Ingredients.ToList().FindAll(r => r.IsConfirmed == true);
 
 
-            var result = date.Select(r => new IngredientDto()
+            var result = date.Select(r => new Ingredient()
                              {
+                                 Id = r.Id,      
                                  Name = r.Name
                              });
 

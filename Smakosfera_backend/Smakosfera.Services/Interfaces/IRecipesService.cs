@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Smakosfera.Services.Interfaces
 {
-    public interface IRecipesService    
+    public interface IRecipesService 
     {   
         RecipeResponseDto GetRecipe(int recipeId);
         RecipeResponseDto GetRecipeToConfirmed(int recipeId);
         IEnumerable<RecipeResponseDto> Browse();
+
         RecipeResponseDto GetRandomRecipe();
         IEnumerable<RecipeResponseDto> BrowseRecipeLike();
         IEnumerable<RecipeResponseDto> BrowseToConfirmed();

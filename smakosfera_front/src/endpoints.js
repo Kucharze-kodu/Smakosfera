@@ -1,5 +1,5 @@
-export const API_URL = 'https://smakosfera-backend.azurewebsites.net';
-//const API_URL = 'https://localhost:5173';
+//export const API_URL = 'https://smakosfera-backend.azurewebsites.net';
+export const API_URL = 'https://localhost:7000';
 
 export const urlLogin = `${API_URL}/api/account/login`;
 export const urlRegister = `${API_URL}/api/account/register`;

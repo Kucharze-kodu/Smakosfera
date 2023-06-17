@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
 using Smakosfera.Services.Interfaces;
 using Smakosfera.Services.Models;
@@ -11,6 +12,7 @@ namespace Smakosfera.WebAPI.Controllers
 
     [ApiController]
     [Route("api/recipe")]
+    [Authorize]
     public class RecipesController : ControllerBase
     {
         private readonly IRecipesService _recipesService;

@@ -18,6 +18,7 @@ namespace Smakosfera.DataAccess.Entities
 
         public int PreparationTime { get; set; }
         public bool CommunityRecipe { get; set; } = true;
+
         public bool IsConfirmed { get; set; } = false;
         public string? ImageFileName { get; set; }
 

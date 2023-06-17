@@ -8,7 +8,7 @@ namespace Smakosfera.DataAccess.Entities
 {
     public class Ingredient
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
         public string Name { get; set; }
         public int CreatedById { get; set; }
         public User CreatedBy { get; set; }

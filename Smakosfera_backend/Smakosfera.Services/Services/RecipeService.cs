@@ -27,6 +27,8 @@ namespace Smakosfera.Services.Services
         {
             var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
                                            .ThenInclude(cc => cc.Ingredient)
+                                           .Include(t => t.Types)
+                                           .ThenInclude(tt => tt.Type)
                                            .SingleOrDefault(cc => cc.Id == recipeId);
 
             if (recipe is null)
@@ -54,6 +56,13 @@ namespace Smakosfera.Services.Services
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
                 CommunityRecipe = recipe.CommunityRecipe,
+                //ImageFileName = recipe.ImageFileName,
+                Types = recipe.Types.Select(i => new RecipeTypeDto
+                {
+                    Name = i.Type.Name,
+                    TypeId = i.TypeId
+                }).ToList(),
+
                 LikeNumber = likes.Count(l => l.RecipeId == recipe.Id),
                 Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
                 {
@@ -71,8 +80,10 @@ namespace Smakosfera.Services.Services
         public IEnumerable<RecipeResponseDto> Browse()
         {
             var date = _DbContext.Recipes.Include(c => c.Ingredients)
-                                         .ThenInclude(cc => cc.Ingredient)
-                                         .ToList();
+                             .ThenInclude(cc => cc.Ingredient)
+                             .Include(t => t.Types)
+                             .ThenInclude(tt => tt.Type)
+                             .ToList();
 
             var likes = _DbContext.Likes.ToList()
             .Select(l => new LikeDto
@@ -91,6 +102,13 @@ namespace Smakosfera.Services.Services
                                  DifficultyLevelId = r.DifficultyLevelId,
                                  PreparationTime = r.PreparationTime,
                                  CommunityRecipe = r.CommunityRecipe,
+                                 //ImageFileName = r.ImageFileName,
+                                 Types = r.Types.Select(i => new RecipeTypeDto
+                                 {
+                                     Name = i.Type.Name,
+                                     TypeId = i.TypeId
+                                 }).ToList(),
+
                                  LikeNumber = likes.Count(l => l.RecipeId == r.Id),
                                  Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
                                  {
@@ -154,6 +172,8 @@ namespace Smakosfera.Services.Services
         {
             var date = _DbContext.Recipes.Include(c => c.Ingredients)
                                          .ThenInclude(cc => cc.Ingredient)
+                                         .Include(t => t.Types)
+                                         .ThenInclude(tt => tt.Type)
                                          .ToList();
 
 
@@ -168,6 +188,11 @@ namespace Smakosfera.Services.Services
                                  PreparationTime = r.PreparationTime,
                                  CommunityRecipe = r.CommunityRecipe,
                                  LikeNumber = 0,
+                                 Types = r.Types.Select(i => new RecipeTypeDto
+                                 {
+                                     Name = i.Type.Name,
+                                     TypeId = i.TypeId
+                                 }).ToList(),
                                  Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
                                  {
                                      Name = i.Ingredient.Name,
@@ -189,6 +214,8 @@ namespace Smakosfera.Services.Services
         {
             var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
                                            .ThenInclude(cc => cc.Ingredient)
+                                           .Include(t => t.Types)
+                                           .ThenInclude(tt => tt.Type)
                                            .SingleOrDefault(cc => cc.Id == recipeId);
 
             if (recipe is null)
@@ -204,6 +231,11 @@ namespace Smakosfera.Services.Services
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
                 CommunityRecipe = recipe.CommunityRecipe,
+                Types = recipe.Types.Select(i => new RecipeTypeDto
+                {
+                    Name = i.Type.Name,
+                    TypeId = i.TypeId
+                }).ToList(),
                 Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
                 {
                     Name = i.Ingredient.Name,
@@ -236,6 +268,7 @@ namespace Smakosfera.Services.Services
 
             _DbContext.Recipes.Add(recipe);
             _DbContext.SaveChanges();
+
 
             var recipeId = _DbContext.Recipes.FirstOrDefault(r => r.Name == dto.Name).Id;
 
@@ -270,6 +303,28 @@ namespace Smakosfera.Services.Services
                         _DbContext.SaveChanges();
                     }
                 }
+            }
+
+            if (dto.Types != null)
+            {
+               
+                foreach (var typeOne in dto.Types) 
+                {
+                    var isRecipeTypes = _DbContext.Types.SingleOrDefault(r => r.Id == typeOne.TypeId).Id;
+                    var isRecord  = _DbContext.Recipes_Types
+                                    .Any(r=> r.TypeId  == typeOne.TypeId && r.RecipeId == recipeId);
+
+                    if(!isRecord)
+                    {
+                        _DbContext.Recipes_Types.Add(new RecipeType()
+                        {
+                            RecipeId = recipeId,
+                            TypeId = typeOne.TypeId
+                        });
+                    }
+                    _DbContext.SaveChanges();
+                }
+                
             }
 
         }
@@ -314,7 +369,7 @@ namespace Smakosfera.Services.Services
                     var isRecord = _DbContext.Recipes_Ingredients
                         .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId && r.Amount == ingredientDto.Amount && r.Unit == ingredientDto.Unit);
 
-                    
+
 
                     if (!isRecord)
                     {
@@ -336,35 +391,84 @@ namespace Smakosfera.Services.Services
                         _DbContext.SaveChanges();
                     }
                 }
-            }
 
-            var AllIngredient = _DbContext.Recipes_Ingredients.ToList().FindAll(r => r.RecipeId == recipeId);
+                var AllIngredient = _DbContext.Recipes_Ingredients.ToList().FindAll(r => r.RecipeId == recipeId);
 
-            if(AllIngredient.Count() < NumberIngredient)
-            {
-                return;
-            }
-            else
-            {
-                foreach(var ing in  AllIngredient)
+                if (AllIngredient.Count() < NumberIngredient)
                 {
-                    bool isOK = false;
-                    foreach(var ingDto in dto.Ingredients)
+                    return;
+                }
+                else
+                {
+                    foreach (var ing in AllIngredient)
                     {
-                        if(ing.IngredientId == ingDto.IngredientId)
+                        bool isOK = false;
+                        foreach (var ingDto in dto.Ingredients)
                         {
-                            isOK = true;
-                            break;
+                            if (ing.IngredientId == ingDto.IngredientId)
+                            {
+                                isOK = true;
+                                break;
+                            }
+                        }
+                        if (!isOK)
+                        {
+                            _DbContext.Recipes_Ingredients.Remove(ing);
+                            _DbContext.SaveChanges();
                         }
                     }
-                    if(!isOK)
+                }
+
+            }
+
+            
+            if (dto.Types != null)
+            {
+                int NumberTypes = 0;
+                foreach (var typeOne in dto.Types)
+                {
+                    NumberTypes++;
+                    var isRecord = _DbContext.Recipes_Types
+                                    .Any(r => r.TypeId == typeOne.TypeId && r.RecipeId == recipeId);
+
+                    if (!isRecord)
                     {
-                        _DbContext.Recipes_Ingredients.Remove(ing);
-                        _DbContext.SaveChanges();
+                        _DbContext.Recipes_Types.Add(new RecipeType
+                        {
+                            RecipeId = recipeId,
+                            TypeId = typeOne.TypeId
+                        });
+                    }
+                    _DbContext.SaveChanges();
+                }
+
+                var AllTypes = _DbContext.Recipes_Types.ToList().FindAll(r => r.RecipeId == recipeId);
+
+                if (AllTypes.Count() < NumberTypes)
+                {
+                    return;
+                }
+                else
+                {
+                    foreach (var ing in AllTypes)
+                    {
+                        bool isOK = false;
+                        foreach (var ingDto in dto.Types)
+                        {
+                            if (ing.TypeId == ingDto.TypeId)
+                            {
+                                isOK = true;
+                                break;
+                            }
+                        }
+                        if (!isOK)
+                        {
+                            _DbContext.Recipes_Types.Remove(ing);
+                            _DbContext.SaveChanges();
+                        }
                     }
                 }
             }
-
         }
 
 
