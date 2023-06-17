@@ -29,7 +29,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/ToConfirmedDetail{id}")]
+        [HttpGet("to-confirmed-detail/{id}")]
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult<RecipeResponseDto> GetToConfirmed(int id)
         {
@@ -45,7 +45,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/ToConfirmedAll")]
+        [HttpGet("to-confirmed-all")]
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult<IEnumerable<RecipeResponseDto>> GetAllToConfirmed()
         {
@@ -60,7 +60,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Recipe_Like")]
+        [HttpGet("recipe-like")]
         public ActionResult<RecipeResponseDto> GetRecipeLike()
         {
             var result = _recipesService.BrowseRecipeLike();
@@ -95,7 +95,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Created($"Update Recipe", null);
         }
 
-        [HttpPut("/verification/{id}")]
+        [HttpPut("verification/{id}")]
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult ApplyRecipe([FromRoute] int id)
         {

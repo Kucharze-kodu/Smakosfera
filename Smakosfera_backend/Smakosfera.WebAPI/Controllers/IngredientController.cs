@@ -42,19 +42,19 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("{IdIngredient}")]
+        [HttpPut("{idIngredient}")]
         [Authorize(Roles = "Admin,Moderator")]
-        public ActionResult PostRecipes([FromRoute]int IdIngredient, [FromBody] IngredientDto dto)
+        public ActionResult PostRecipes([FromRoute]int idIngredient, [FromBody] IngredientDto dto)
         {
-            _ingredientService.EditIngredient(IdIngredient, dto);
+            _ingredientService.EditIngredient(idIngredient, dto);
             return Ok();
         }
 
-        [HttpDelete("{IdIngredient}")]
+        [HttpDelete("{idIngredient}")]
         [Authorize(Roles = "Admin,Moderator")]
-        public ActionResult Delete([FromRoute] int IdIngredient)
+        public ActionResult Delete([FromRoute] int idIngredient)
         {
-            _ingredientService.DeleteIngredient(IdIngredient);
+            _ingredientService.DeleteIngredient(idIngredient);
 
             return Ok();
         }
