@@ -280,7 +280,7 @@ const Home = () => {
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
-                    <AdminPanel resetHideButton={resetHideButton} setResetHideButton={setResetHideButton}/>{" "}
+                    <AdminPanel resetHideButton={resetHideButton} isDataLoaded={isDataLoaded} setResetHideButton={setResetHideButton}/>{" "}
                   </Suspense>
                 }
               ></Route>

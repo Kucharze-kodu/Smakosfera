@@ -15,8 +15,8 @@ const ShowUserInfo = (prop) => {
   const button = prop.button;
 
   // Url to get user's info
-  const { idUser } = useParams();
-  const url = urlUsers + "/" + idUser;
+  const { userId } = useParams();
+  const url = urlUsers + "/" + userId;
 
   // Admin's token
   const { getResJsonToken } = useAuth();

@@ -7,6 +7,8 @@ import { Route, Routes, Link, useNavigate, useLocation } from "react-router-dom"
 import { Suspense } from "react";
 import LoadingScreen from "./LoadingScreen";
 import ShowUserInfo from "./ShowUserInfo";
+import ShowNotAcceptedRecipes from "./ShowNotAcceptedRecipes";
+import ShowNotAcceptedRecipeInfo from "./ShowNotAcceptedRecipeInfo";
 
 const AdminPanel = ({resetHideButton, setResetHideButton}) => {
   const location = useLocation();
@@ -28,35 +30,63 @@ const AdminPanel = ({resetHideButton, setResetHideButton}) => {
       {getResJsonPermission() === "Admin" ? (
         <>
           {!hideButton && (
-          <Link to="users">
-            <Button
-              onClick={() => setHideButton(true)}
-              text="Pokaż użytkowników"
-              padding="p-1"
-              margin="mt-4 mx-4"
-              color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
-            />
-          </Link>)}
+            <Link to="users">
+              <Button
+                onClick={() => setHideButton(true)}
+                text="Pokaż użytkowników"
+                padding="p-1"
+                margin="mt-4 mx-4"
+                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+              />
+            </Link>
+          )}
+          {!hideButton && (
+            <Link to="recipes">
+              <Button
+                onClick={() => setHideButton(true)}
+                text="Pokaż niezaakceptowane przepisy"
+                padding="p-1"
+                margin="mt-4 mx-4"
+                color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+              />
+            </Link>
+          )}
           <Routes>
             <Route
               path="users"
               element={
                 <Suspense fallback={<LoadingScreen />}>
                   {" "}
-                  <ShowUsers
+                  <ShowUsers button={setHideButton} />{" "}
+                </Suspense>
+              }
+            ></Route>
+            <Route
+              path="users/:userId"
+              element={
+                <Suspense fallback={<LoadingScreen />}>
+                  {" "}
+                  <ShowUserInfo button={setHideButton} />{" "}
+                </Suspense>
+              }
+            ></Route>
+            <Route
+              path="recipes"
+              element={
+                <Suspense fallback={<LoadingScreen />}>
+                  {" "}
+                  <ShowNotAcceptedRecipes
                     button={setHideButton}
                   />{" "}
                 </Suspense>
               }
             ></Route>
             <Route
-              path="users/:idUser"
+              path="recipes/:recipeId"
               element={
                 <Suspense fallback={<LoadingScreen />}>
                   {" "}
-                  <ShowUserInfo
-                    button={setHideButton}
-                  />{" "}
+                  <ShowNotAcceptedRecipeInfo button={setHideButton} />{" "}
                 </Suspense>
               }
             ></Route>

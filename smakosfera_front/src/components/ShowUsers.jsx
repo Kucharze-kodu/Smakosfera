@@ -12,7 +12,6 @@ const ShowUsers = (prop) => {
   
   const button = prop.button;
   const navigator = useNavigate();
-  const [userInfo, setUserInfo] = useState(null);
 
   const handleRow = (idUser) =>{
     navigator(`/home/admin-panel/users/` + idUser);
@@ -45,7 +44,7 @@ const ShowUsers = (prop) => {
 
   return (
     <>
-      {!loading && !userInfo && (
+      {!loading && (
         <>
           <Link to="/home/admin-panel">
             <Button
@@ -133,7 +132,6 @@ const ShowUsers = (prop) => {
           Trwa pobieranie danych...
         </div>
       )}
-      {userInfo && <ShowUserInfo id={userInfo} button={setUserInfo} />}
     </>
   );
 };
