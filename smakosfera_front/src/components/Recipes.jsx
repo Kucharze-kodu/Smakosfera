@@ -8,7 +8,6 @@ import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
-import { urlLikes } from "../endpoints";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -39,30 +38,7 @@ const Recipes = () => {
       });
   }, []);
 
-  // GET likes for each recipe
-  useEffect(() => {
-    const fetchLikes = async () => {
-      const likesPromises = recipes.map((recipe) =>
-        axios.get(`${urlLikes}${recipe.id}`, {
-          headers: {
-            Authorization: `Bearer ${getResJsonToken()}`,
-            "Content-Type": "application/json",
-          },
-        })
-      );
-      const likesResponses = await Promise.all(likesPromises);
-      const likesData = likesResponses.map((response, index) => ({
-        id: recipes[index].id,
-        count: response.data.count,
-      }));
-      const likesMap = likesData.reduce((map, item) => {
-        map[item.id] = item.count;
-        return map;
-      }, {});
-      setLikes(likesMap);
-    };
-    fetchLikes();
-  }, [recipes]);
+
 
   return (
     <div className="overflow-auto">
@@ -139,7 +115,7 @@ const Recipes = () => {
                     </i>
                   </Link>
 
-                  <div>{likes[recipe.id]}</div>
+                  <div>Ilość polubień: {recipe.likeNumber}</div>
                 </div>
               ))}
           </div>

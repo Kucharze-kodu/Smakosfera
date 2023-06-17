@@ -34,8 +34,6 @@ namespace Smakosfera.Services.Services
             var userInfo = _dbContext.Users.SingleOrDefault(u => u.Id == userId)
                 ?? throw new BadRequestException("Uzytkownik nie istnieje");
 
-            userInfo.Subscription = !userInfo.Subscription;
-
             var emailDto = new EmailDto
             {
                 To = userInfo.Email,
@@ -44,6 +42,8 @@ namespace Smakosfera.Services.Services
                     $"Zapisano cię do newslettera" : $"Wypisano cię z newslettera"
             };
             _emailService.SendEmail(emailDto);
+
+            userInfo.Subscription = !userInfo.Subscription;
             _dbContext.SaveChanges();
         }
 
