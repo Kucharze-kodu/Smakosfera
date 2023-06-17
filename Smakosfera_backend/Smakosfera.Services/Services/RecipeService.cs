@@ -66,7 +66,6 @@ namespace Smakosfera.Services.Services
                                          .ToList();
 
             var likes = _DbContext.Likes.ToList()
-            .FindAll(l => l.UserId == _userContextService.GetUserId)
             .Select(l => new LikeDto
             {
                 RecipeId = l.RecipeId,
@@ -177,6 +176,36 @@ namespace Smakosfera.Services.Services
             return result;
         }
 
+        public RecipeResponseDto GetRecipeToConfirmed(int recipeId)
+        {
+            var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
+                                           .ThenInclude(cc => cc.Ingredient)
+                                           .SingleOrDefault(cc => cc.Id == recipeId);
+
+            if (recipe is null)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            var result = new RecipeResponseDto
+            {
+                Id = recipeId,
+                Name = recipe.Name,
+                Description = recipe.Description,
+                DifficultyLevelId = recipe.DifficultyLevelId,
+                PreparationTime = recipe.PreparationTime,
+                CommunityRecipe = recipe.CommunityRecipe,
+                Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
+                {
+                    Name = i.Ingredient.Name,
+                    IngredientId = i.IngredientId,
+                    Amount = i.Amount,
+                    Unit = i.Unit
+                }).ToList()
+            };
+
+            return result;
+        }
 
         public void Add(RecipeDto dto)
         {

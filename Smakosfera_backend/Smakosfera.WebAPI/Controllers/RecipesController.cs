@@ -29,6 +29,13 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/ToConfirmedDetail{id}")]
+        public ActionResult<RecipeResponseDto> GetToConfirmed(int id)
+        {
+            var result = _recipesService.GetRecipeToConfirmed(id);
+
+            return Ok(result);
+        }
         [HttpGet]
         public ActionResult<IEnumerable<RecipeResponseDto>> GetAll()
         {
@@ -36,7 +43,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("ToConfirmed")]
+        [HttpGet("/ToConfirmedAll")]
         public ActionResult<IEnumerable<RecipeResponseDto>> GetAllToConfirmed()
         {
             var result = _recipesService.BrowseToConfirmed();

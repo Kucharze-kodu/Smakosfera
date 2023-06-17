@@ -11,6 +11,7 @@ namespace Smakosfera.Services.Interfaces
     public interface IRecipesService    
     {   
         RecipeResponseDto GetRecipe(int recipeId);
+        RecipeResponseDto GetRecipeToConfirmed(int recipeId);
         IEnumerable<RecipeResponseDto> Browse();
         RecipeResponseDto GetRandomRecipe();
         IEnumerable<RecipeResponseDto> BrowseRecipeLike();
