@@ -163,7 +163,7 @@ const Home = () => {
                   color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
                 />
               </Link>
-              {getResJsonPermission() === "Admin" && (
+              {(getResJsonPermission() === "Admin" || getResJsonPermission() === "Moderator") && (
                 <Link to="/home/admin-panel">
                   <Button
                     onClick={() => handleResetHideButton()}
@@ -280,7 +280,7 @@ const Home = () => {
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
-                    <AdminPanel resetHideButton={resetHideButton} setResetHideButton={setResetHideButton}/>{" "}
+                    <AdminPanel resetHideButton={resetHideButton} isDataLoaded={isDataLoaded} setResetHideButton={setResetHideButton}/>{" "}
                   </Suspense>
                 }
               ></Route>
