@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from "./AuthContext";
 import { styles } from "../style";
+import { urlNewsletter } from '../endpoints';
 
 const NewsletterSubscription = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const apiUrl = 'https://localhost:7000/api/newsletter';
 
   const {getResJsonToken} = useAuth();
 
@@ -15,7 +15,7 @@ const NewsletterSubscription = () => {
 
   const checkSubscriptionStatus = async () => {
     try {
-      const response = await axios.get(apiUrl,{
+      const response = await axios.get(urlNewsletter,{
         headers: {
           Authorization:`Bearer ${getResJsonToken()}`
           
@@ -29,7 +29,7 @@ const NewsletterSubscription = () => {
 
   const subscribe = async () => {
     try {
-      const response = await axios.post(apiUrl, {},{
+      const response = await axios.post(urlNewsletter, {},{
         headers: {
           "Content-Type": "application/json",
           Authorization:`Bearer ${getResJsonToken()}`
@@ -44,7 +44,7 @@ const NewsletterSubscription = () => {
 
   const unsubscribe = async () => {
     try {
-      const response = await axios.post(apiUrl,{}, {
+      const response = await axios.post(urlNewsletter,{}, {
         headers: {
           Authorization:`Bearer ${getResJsonToken()}`
           

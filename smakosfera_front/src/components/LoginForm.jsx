@@ -88,7 +88,7 @@ const LoginForm = () => {
               value={email}
               id="email"
               name="email"
-              title="Wprowadź email :)"
+              title="Email:"
               className={`${styles.paragraph} text-black bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black hover:text-white focus:text-white focus:bg-black`}
               placeholder="Email:"
               maxLength={100}
@@ -100,7 +100,7 @@ const LoginForm = () => {
               value={password}
               id="password"
               name="password"
-              title="Wprowadź hasło :)"
+              title="Hasło:"
               className={`${styles.paragraph} bg-dark border-[1px] text-left pl-2 mt-3 border-dimWhite w-[100%] hover:bg-black text-black hover:text-white focus:text-white focus:bg-black`}
               placeholder="Hasło:"
               maxLength={250}
@@ -125,6 +125,12 @@ const LoginForm = () => {
             className={`${styles.paragraph} my-1 cursor-pointer opacity-50 text-dimWhite hover:text-white`}
           >
             Nie masz konta?
+          </Link>
+          <Link
+            to="/resetpassword"
+            className={`${styles.paragraph} my-1 cursor-pointer opacity-50 text-dimWhite hover:text-white`}
+          >
+            Nie pamiętasz hasła?
           </Link>
         </div>
       </div>

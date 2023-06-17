@@ -10,9 +10,9 @@ namespace Smakosfera.Services.Interfaces
     public interface IAccountService
     {
         UserInfoDto GetUserInfo();
-        void Update(UserUpdateDto dto);
+        string Update(UserUpdateDto dto);
         void Delete();
-        UserLoginResponseDto GenerateJWT(UserLoginDto dto);
+        UserLoginResponseDto Login(UserLoginDto dto);
         void RegisterUser(UserRegisterDto dto);
         void VerifyUser(string token);
         void ForgotPassword(UserForgotPasswordDto dto);

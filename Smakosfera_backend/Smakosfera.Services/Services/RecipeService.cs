@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Npgsql;
 using Smakosfera.DataAccess.Entities;
 using Smakosfera.DataAccess.Repositories;
@@ -40,6 +41,13 @@ namespace Smakosfera.Services.Services
                 throw new NotAcceptableException("Przepis nie zatwierdzony");
             }
 
+            var likes = _DbContext.Likes.ToList()
+            .Select(l => new LikeDto
+            {
+                RecipeId = l.RecipeId,
+                UserId = l.UserId
+            });
+
             var result = new RecipeResponseDto
             {
                 Id = recipeId,
@@ -48,13 +56,14 @@ namespace Smakosfera.Services.Services
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
                 CommunityRecipe = recipe.CommunityRecipe,
-                ImageFileName = recipe.ImageFileName,
+                //ImageFileName = recipe.ImageFileName,
                 Types = recipe.Types.Select(i => new RecipeTypeDto
                 {
                     Name = i.Type.Name,
                     TypeId = i.TypeId
                 }).ToList(),
 
+                LikeNumber = likes.Count(l => l.RecipeId == recipe.Id),
                 Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
                 {
                     Name = i.Ingredient.Name,
@@ -75,9 +84,19 @@ namespace Smakosfera.Services.Services
                              .Include(t => t.Types)
                              .ThenInclude(tt => tt.Type)
                              .ToList();
+                             .ThenInclude(cc => cc.Ingredient)
+                             .ToList();
+
+            var likes = _DbContext.Likes.ToList()
+            .Select(l => new LikeDto
+            {
+                RecipeId = l.RecipeId,
+                UserId = l.UserId
+            });
+
 
             var result = date.FindAll(r => r.IsConfirmed == true)
-                             .Select(r => new RecipeResponseDto()
+                             .Select(r => new RecipeResponseDto
                              {
                                  Id = r.Id,
                                  Name = r.Name,
@@ -85,13 +104,14 @@ namespace Smakosfera.Services.Services
                                  DifficultyLevelId = r.DifficultyLevelId,
                                  PreparationTime = r.PreparationTime,
                                  CommunityRecipe = r.CommunityRecipe,
-                                 ImageFileName = r.ImageFileName,
+                                 //ImageFileName = r.ImageFileName,
                                  Types = r.Types.Select(i => new RecipeTypeDto
                                  {
                                      Name = i.Type.Name,
                                      TypeId = i.TypeId
                                  }).ToList(),
 
+                                 LikeNumber = likes.Count(l => l.RecipeId == r.Id),
                                  Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
                                  {
                                      Name = i.Ingredient.Name,
@@ -99,7 +119,7 @@ namespace Smakosfera.Services.Services
                                      Amount = i.Amount,
                                      Unit = i.Unit
                                  }).ToList()
-                             });
+                             }).ToList();
 
             if (result.Any() == false)
             {
@@ -127,6 +147,93 @@ namespace Smakosfera.Services.Services
             };
 
             return recipeDto;
+        }
+
+        public IEnumerable<RecipeResponseDto> BrowseRecipeLike()
+        {
+            var likes = _DbContext.Likes.ToList()
+                        .FindAll(l => l.UserId == _userContextService.GetUserId)
+                        .Select(l => new LikeDto
+                        {
+                            RecipeId = l.RecipeId,
+                            UserId = l.UserId
+                        });
+
+            List<RecipeResponseDto> result = new List<RecipeResponseDto>();
+
+            foreach (var like in likes)
+            {
+                var r = GetRecipe(like.RecipeId);
+                result.Add(r);
+            }
+
+            return result;
+        }
+
+        public IEnumerable<RecipeResponseDto> BrowseToConfirmed()
+        {
+            var date = _DbContext.Recipes.Include(c => c.Ingredients)
+                                         .ThenInclude(cc => cc.Ingredient)
+                                         .ToList();
+
+
+
+            var result = date.FindAll(r => r.IsConfirmed == false)
+                             .Select(r => new RecipeResponseDto
+                             {
+                                 Id = r.Id,
+                                 Name = r.Name,
+                                 Description = r.Description,
+                                 DifficultyLevelId = r.DifficultyLevelId,
+                                 PreparationTime = r.PreparationTime,
+                                 CommunityRecipe = r.CommunityRecipe,
+                                 LikeNumber = 0,
+                                 Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
+                                 {
+                                     Name = i.Ingredient.Name,
+                                     IngredientId = i.IngredientId,
+                                     Amount = i.Amount,
+                                     Unit = i.Unit
+                                 }).ToList()
+                             }).ToList();
+
+            if (result.Any() == false)
+            {
+                throw new BadRequestException("Przepisy są nie potwierdzone");
+            }
+
+            return result;
+        }
+
+        public RecipeResponseDto GetRecipeToConfirmed(int recipeId)
+        {
+            var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
+                                           .ThenInclude(cc => cc.Ingredient)
+                                           .SingleOrDefault(cc => cc.Id == recipeId);
+
+            if (recipe is null)
+            {
+                throw new NotFoundException("Przepis nie istnieje");
+            }
+
+            var result = new RecipeResponseDto
+            {
+                Id = recipeId,
+                Name = recipe.Name,
+                Description = recipe.Description,
+                DifficultyLevelId = recipe.DifficultyLevelId,
+                PreparationTime = recipe.PreparationTime,
+                CommunityRecipe = recipe.CommunityRecipe,
+                Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
+                {
+                    Name = i.Ingredient.Name,
+                    IngredientId = i.IngredientId,
+                    Amount = i.Amount,
+                    Unit = i.Unit
+                }).ToList()
+            };
+
+            return result;
         }
 
         public void Add(RecipeDto dto)
@@ -245,7 +352,83 @@ namespace Smakosfera.Services.Services
 
             _DbContext.SaveChanges();
 
+            int NumberIngredient = 0;
+
+            if (dto.Ingredients != null)
+            {
+                foreach (var ingredientDto in dto.Ingredients)
+                {
+                    NumberIngredient++;
+
+                    var isIngredient = _DbContext.Ingredients.Any(r => r.Name == ingredientDto.Name);
+                    if (!isIngredient)
+                    {
+                        _DbContext.Ingredients.Add(new Ingredient()
+                        {
+                            Name = ingredientDto.Name,
+                            CreatedById = _userContextService.GetUserId
+                        });
+                        _DbContext.SaveChanges();
+                    }
+
+                    var ingredientId = _DbContext.Ingredients.FirstOrDefault(r => r.Name == ingredientDto.Name).Id;
+                    var isRecord = _DbContext.Recipes_Ingredients
+                        .Any(r => r.IngredientId == ingredientId && r.RecipeId == recipeId && r.Amount == ingredientDto.Amount && r.Unit == ingredientDto.Unit);
+
+                    
+
+                    if (!isRecord)
+                    {
+                        _DbContext.Recipes_Ingredients.Add(new RecipeIngredient()
+                        {
+                            IngredientId = ingredientId,
+                            RecipeId = recipeId,
+                            Amount = ingredientDto.Amount,
+                            Unit = ingredientDto.Unit
+                        });
+                        _DbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        var Record = _DbContext.Recipes_Ingredients.FirstOrDefault(r => r.IngredientId == ingredientId && r.RecipeId == recipeId);
+                        Record.IngredientId = ingredientId;
+                        Record.Amount = ingredientDto.Amount;
+                        Record.Unit = ingredientDto.Unit;
+                        _DbContext.SaveChanges();
+                    }
+                }
+            }
+
+            var AllIngredient = _DbContext.Recipes_Ingredients.ToList().FindAll(r => r.RecipeId == recipeId);
+
+            if(AllIngredient.Count() < NumberIngredient)
+            {
+                return;
+            }
+            else
+            {
+                foreach(var ing in  AllIngredient)
+                {
+                    bool isOK = false;
+                    foreach(var ingDto in dto.Ingredients)
+                    {
+                        if(ing.IngredientId == ingDto.IngredientId)
+                        {
+                            isOK = true;
+                            break;
+                        }
+                    }
+                    if(!isOK)
+                    {
+                        _DbContext.Recipes_Ingredients.Remove(ing);
+                        _DbContext.SaveChanges();
+                    }
+                }
+            }
+
         }
+
+
         public void Delete(int recipeId)
         {
             var result = _DbContext.Recipes.SingleOrDefault(c => c.Id == recipeId);

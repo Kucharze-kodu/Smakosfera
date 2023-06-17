@@ -45,8 +45,8 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public ActionResult ToggleLike([FromBody] int RecipeId)
+        [HttpPut("{RecipeId}")]
+        public ActionResult ToggleLike([FromRoute] int RecipeId)
         {
             _likeService.Toggle(RecipeId);
 

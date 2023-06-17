@@ -7,11 +7,10 @@ import { Link } from "react-router-dom";
 import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
-import { BsHeartFill, BsHeart } from "react-icons/bs";
+import { BsHeartFill } from "react-icons/bs";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
-  const [likes, setLikes] = useState([]);
   const [displayedRecipes, setDisplayedRecipes] = useState(8);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
@@ -37,31 +36,6 @@ const Recipes = () => {
         setIsDataLoaded(true);
       });
   }, []);
-
-  // GET likes for each recipe
-  useEffect(() => {
-    const fetchLikes = async () => {
-      const likesPromises = recipes.map((recipe) =>
-        axios.get(`https://localhost:7000/api/like/counter/${recipe.id}`, {
-          headers: {
-            Authorization: `Bearer ${getResJsonToken()}`,
-            "Content-Type": "application/json",
-          },
-        })
-      );
-      const likesResponses = await Promise.all(likesPromises);
-      const likesData = likesResponses.map((response, index) => ({
-        id: recipes[index].id,
-        count: response.data.count,
-      }));
-      const likesMap = likesData.reduce((map, item) => {
-        map[item.id] = item.count;
-        return map;
-      }, {});
-      setLikes(likesMap);
-    };
-    fetchLikes();
-  }, [recipes]);
 
   return (
     <div className="overflow-auto">
@@ -138,7 +112,14 @@ const Recipes = () => {
                     </i>
                   </Link>
 
-                  <div>{likes[recipe.id]}</div>
+                  <div className={`${styles.paragraph2} pt-3 text-red flex flex-row justify-center items-end`}>
+                    <div className="text-[24px]">
+                      <BsHeartFill />
+                    </div>
+                    <div className={`text-[24px] px-2`}>
+                      {recipe.likeNumber}
+                    </div>
+                  </div>
                 </div>
               ))}
           </div>

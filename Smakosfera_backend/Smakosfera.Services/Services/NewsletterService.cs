@@ -34,9 +34,17 @@ namespace Smakosfera.Services.Services
             var userInfo = _dbContext.Users.SingleOrDefault(u => u.Id == userId)
                 ?? throw new BadRequestException("Uzytkownik nie istnieje");
 
+            var emailDto = new EmailDto
+            {
+                To = userInfo.Email,
+                Subject = $"Wiadomość newslettera serwisu Smakosfera",
+                Body = (userInfo.Subscription == false) ?
+                    $"Zapisano cię do newslettera" : $"Wypisano cię z newslettera"
+            };
+            _emailService.SendEmail(emailDto);
+
             userInfo.Subscription = !userInfo.Subscription;
             _dbContext.SaveChanges();
-           
         }
 
         public OutputNewsletterDto GetUserInfo()

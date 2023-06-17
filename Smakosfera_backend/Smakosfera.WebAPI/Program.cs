@@ -9,19 +9,22 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Smakosfera.Services.Settings;
 using Microsoft.AspNetCore.Authorization;
+using System.Configuration;
+using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 
-var frontend_url = "http://localhost:5173";
+// var frontend_url = "http://localhost:5173";
 
 var builder = WebApplication.CreateBuilder(args);
 
+var frontendUrl = builder.Configuration.GetSection("Url").GetSection("URLFrontend").Value;
 // Configure the Cors policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: frontend_url,
+    options.AddPolicy( "frontend",
         policy =>
         {
-            policy.WithOrigins(frontend_url).AllowAnyMethod().AllowAnyHeader();
+            policy.WithOrigins(frontendUrl).AllowAnyMethod().AllowAnyHeader();
         });
 });
 
@@ -49,12 +52,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add URL Host 
-var urlBackend = new HostSettings();
 
-//urlBackend.Url = builder.Configuration.GetSection("Host").GetSection("URL").Value; // (COMMENT THIS IN DEVELOPMENT)
-urlBackend.Url = builder.Configuration.GetSection("Host").GetSection("URLBackend").Value; // (COMMENT THIS IN HOSTING)
-builder.Services.AddSingleton(urlBackend);
 
 
 
@@ -74,7 +72,7 @@ builder.Services.AddScoped<INewsletterService, NewsletterService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SmakosferaDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"),
     r => r.MigrationsAssembly("Smakosfera.WebAPI")));
 
 
@@ -106,10 +104,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseCors(frontend_url);
+app.UseCors("frontend");
 
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+

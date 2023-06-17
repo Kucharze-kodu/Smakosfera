@@ -1,40 +1,159 @@
 import { styles } from "../style";
+import axios from "axios";
+import { urlFavoriteRecipes } from "../endpoints";
+import { useEffect, useState } from "react";
+import Button from "./Button";
+import { Link } from "react-router-dom";
+import { cooking_book } from "../assets";
+import ScrollAnimation from "react-animate-on-scroll";
+import { useAuth } from "./AuthContext";
+import { BsHeartFill } from "react-icons/bs";
 
 const Favorites = () => {
+  const [recipes, setRecipes] = useState([]);
+  const [displayedRecipes, setDisplayedRecipes] = useState(8);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  const handleShowMore = () => {
+    setDisplayedRecipes((prevCount) => prevCount + 8);
+  };
+
+  // Check if user is logged in
+  const { isLoggedIn } = useAuth();
+  const { getResJsonToken } = useAuth();
+
+  // GET recipes
+  useEffect(() => {
+    axios
+      .get(urlFavoriteRecipes, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setRecipes(response.data);
+        setIsDataLoaded(true);
+      });
+  }, []);
+
   return (
-    <>
-      {/* Favorites section */}
-      <div className={`${styles.paragraph} text-dimWhite p-2 `}>
-        Donec semper varius nulla. Maecenas imperdiet non enim a vulputate.
-        Donec non mattis arcu. Proin fermentum tellus at elit sodales, nec
-        accumsan quam vulputate. Aliquam mattis, nisi ut vulputate varius, nibh
-        purus interdum risus, vitae faucibus nulla lectus non erat. Sed varius
-        vulputate velit, nec finibus quam convallis vel. Phasellus aliquam eros
-        est. Donec quam ex, porta non viverra at, gravida vel neque. Ut at ante
-        a eros tincidunt fermentum eu ac erat. In hac habitasse platea dictumst.
-        Phasellus fringilla condimentum tortor, sit amet euismod tellus lobortis
-        non. Fusce ligula lacus, maximus ut nunc consequat, scelerisque pulvinar
-        odio. Fusce feugiat risus eget massa efficitur tempus. Morbi risus enim,
-        pharetra ac pharetra vel, dignissim vehicula ex. Mauris fermentum, eros
-        in euismod dapibus, mi tellus consequat metus, et consectetur erat
-        ligula quis odio. Pellentesque aliquam vitae elit bibendum gravida.
-        Quisque id cursus lorem. Sed sed vulputate odio. Nulla mattis tempus
-        fringilla. Integer massa dolor, posuere a sapien vel, rutrum iaculis
-        tortor. Duis consequat arcu vel risus fermentum, sed tempor felis
-        laoreet. Nam non euismod ante. In dui purus, iaculis id lobortis non,
-        tincidunt porta quam. Cras eget egestas lectus, sit amet volutpat diam.
-        Integer tortor lorem, rutrum eu enim at, tempus pretium risus.
-        Suspendisse eget scelerisque purus. Phasellus varius, diam sit amet
-        rutrum lobortis, diam libero volutpat lectus, a sollicitudin nunc erat
-        ut diam. Vivamus scelerisque imperdiet vestibulum. Nulla pulvinar
-        laoreet dui, et venenatis leo. Praesent mi tortor, ullamcorper sit amet
-        risus eu, feugiat suscipit urna. Aliquam hendrerit eros ligula, id
-        dictum tortor venenatis eu. Nunc lobortis feugiat ipsum. Donec risus
-        sapien, volutpat sit amet libero dignissim, elementum semper ligula. Sed
-        aliquam eu massa eget rutrum. Morbi vitae accumsan augue. Mauris ex
-        eros, vestibulum cursus ante a, bibendum egestas urna.
+    <div className="overflow-auto">
+      {/* Searchbar */}
+      <div className={`${styles.paragraph} text-gray hover:text-black p-2 `}>
+        <form>
+          <div className={`relative `}>
+            <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
+              <svg
+                aria-hidden="true"
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="search"
+              name="search"
+              className="rounded-lg w-full pr-[5.3rem] placeholder:text-gray  hover:text-black text-gray  pl-10 p-2 border-[1px] border-dimWhite hover:border-white"
+              placeholder="Wyszukaj przepis..."
+            />
+            <button
+              type="submit"
+              className="hover:text-black text-gray absolute right-3 top-2 ring-0 border-0 hover:border-0 focus:border-0 outline-none hover:outline-none focus:outline-none"
+            >
+              Search
+            </button>
+          </div>
+        </form>
       </div>
-    </>
+
+      {/* Recipes section */}
+      {isDataLoaded && (
+        <ScrollAnimation animateIn="fadeIn" duration={1}>
+          <div
+            className={`flex flex-col h-full xs:grid xs:grid-cols-4 xs:gap-4 xs:mx-2 rounded-lg`}
+          >
+            {recipes
+              .slice(0, isLoggedIn() ? displayedRecipes : 8)
+              .map((recipe) => (
+                <div
+                  key={recipe.id}
+                  className="recipe flex flex-col justify-between overflow-y-scroll border-y xs:border text-center py-4 border-dimWhite"
+                >
+                  <Link to={`/home/${recipe.id}`}>
+                    <img
+                      className="mx-auto px-2"
+                      src={cooking_book}
+                      alt="przepis"
+                    />
+                  </Link>
+                  <h5
+                    className={`${styles.heading3} break-words p-1 text-white`}
+                  >
+                    {recipe.name}
+                  </h5>
+                  <Link to={`/home/${recipe.id}`}>
+                    <i>
+                      <Button
+                        text="Pokaż przepis!"
+                        padding="p-1"
+                        margin="mx-4"
+                        color="border-dimWhite hover:border-white  text-dimWhite hover:text-white"
+                      ></Button>
+                    </i>
+                  </Link>
+                  <div
+                    className={`${styles.paragraph2} pt-3 text-red flex flex-row justify-center items-end`}
+                  >
+                    <div className="text-[24px]">
+                      <BsHeartFill />
+                    </div>
+                    <div className={`text-[24px] px-2`}>
+                      {recipe.likeNumber}
+                    </div>
+                  </div>{" "}
+                </div>
+              ))}
+          </div>
+        </ScrollAnimation>
+      )}
+
+      {isLoggedIn() == false && (
+        <div
+          className={`text-center p-5 ${styles.paragraph} text-dimWhite hover:text-white`}
+        >
+          <Link to="/login">
+            Aby zobaczyć więcej przepisów musisz się zalogować...
+          </Link>
+        </div>
+      )}
+
+      {isLoggedIn() && (
+        <div
+          className={`text-center xs:p-5 pt-5 pb-32 ${styles.paragraph} text-dimWhite`}
+        >
+          {displayedRecipes >= recipes.length ? (
+            <div>Koniec przepisów...</div>
+          ) : (
+            <div
+              onClick={handleShowMore}
+              className="cursor-pointer hover:text-white"
+            >
+              Wyświetl więcej przepisów...
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

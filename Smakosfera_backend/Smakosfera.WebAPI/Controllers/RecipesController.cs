@@ -24,17 +24,34 @@ namespace Smakosfera.WebAPI.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<RecipeDto> Get(int id)
+        public ActionResult<RecipeResponseDto> Get(int id)
         {
             var result = _recipesService.GetRecipe(id);
 
             return Ok(result);
         }
 
+        [HttpGet("to-confirmed-detail/{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult<RecipeResponseDto> GetToConfirmed(int id)
+        {
+            var result = _recipesService.GetRecipeToConfirmed(id);
+
+            return Ok(result);
+        }
+
         [HttpGet]
-        public ActionResult<IEnumerable<Recipe>> GetAll()
+        public ActionResult<IEnumerable<RecipeResponseDto>> GetAll()
         {
             var result = _recipesService.Browse();
+            return Ok(result);
+        }
+
+        [HttpGet("to-confirmed-all")]
+        [Authorize(Roles = "Admin,Moderator")]
+        public ActionResult<IEnumerable<RecipeResponseDto>> GetAllToConfirmed()
+        {
+            var result = _recipesService.BrowseToConfirmed();
             return Ok(result);
         }
 
@@ -45,9 +62,16 @@ namespace Smakosfera.WebAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("recipe-like")]
+        public ActionResult<RecipeResponseDto> GetRecipeLike()
+        {
+            var result = _recipesService.BrowseRecipeLike();
+            return Ok(result);
+        }
+
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "User,Admin,Moderator")]
         public ActionResult PostRecipes([FromBody] RecipeDto dto)
         {
             _recipesService.Add(dto);
@@ -55,6 +79,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPut("{idRecipe}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Update([FromRoute] int idRecipe, [FromBody] RecipeDto dto)
         {
             _recipesService.Update(idRecipe, dto);
@@ -64,6 +89,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult Delete([FromRoute] int id)
         {
             _recipesService.Delete(id);
@@ -71,7 +97,7 @@ namespace Smakosfera.WebAPI.Controllers
             return Created($"Update Recipe", null);
         }
 
-        [HttpPut("/verification/{id}")]
+        [HttpPut("verification/{id}")]
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult ApplyRecipe([FromRoute] int id)
         {

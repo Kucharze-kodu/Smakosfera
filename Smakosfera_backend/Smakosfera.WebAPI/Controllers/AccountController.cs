@@ -31,8 +31,8 @@ namespace Smakosfera.WebAPI.Controllers
         [Authorize]
         public ActionResult Update([FromBody] UserUpdateDto dto)
         {
-            _accountService.Update(dto);
-            return Ok();
+            var result = _accountService.Update(dto);
+            return Ok(result);
         }
 
         [HttpDelete]
@@ -46,7 +46,7 @@ namespace Smakosfera.WebAPI.Controllers
         [HttpPost("login")]
         public ActionResult Login([FromBody] UserLoginDto dto)
         {
-            var result = _accountService.GenerateJWT(dto);
+            var result = _accountService.Login(dto);
             return Ok(result);
         }
 

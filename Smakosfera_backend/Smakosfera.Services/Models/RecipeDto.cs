@@ -25,8 +25,13 @@ namespace Smakosfera.Services.Models
         [Required]
         public IEnumerable<RecipeTypeDto> Types { get; set; }
 
-        public bool CommunityRecipe { get; set; } = true; // zmiany?
+        public bool CommunityRecipe { get; set; } = true; 
+        [Required]
+        public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
+    
         [Required]
         public IEnumerable<RecipeIngredientDto> Ingredients { get; set; }
     }
 }
+
+
