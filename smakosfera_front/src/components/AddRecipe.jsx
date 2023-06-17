@@ -65,7 +65,7 @@ const DodawaniePrzepisu = () => {
   };
 
   const options = [
-    { value: 'Vegetarian'  , label: 'Vegetarian' },
+    { value: 1, label: 'Vegetarian' },
     { value: 2, label: 'Vegan' },
     { value: 3, label: 'Meat' },
     { value: 4, label: 'Fast food' },
@@ -105,7 +105,7 @@ const DodawaniePrzepisu = () => {
           description: opis,
           difficultyLevelId: trudnosc,
           preparationTime: czas,
-          types: selectedTypes.map((type) => ({ typeId: type })),
+          types: selectedTypes.map((type,name) => ({ typeId: type ,name:"" })),
           ingredients: skladnik.map(({ nazwa, ilosc, jednostka }) => ({
             name: nazwa,
             amount: ilosc,
