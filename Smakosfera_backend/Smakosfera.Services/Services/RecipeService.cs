@@ -172,6 +172,8 @@ namespace Smakosfera.Services.Services
         {
             var date = _DbContext.Recipes.Include(c => c.Ingredients)
                                          .ThenInclude(cc => cc.Ingredient)
+                                         .Include(t => t.Types)
+                                         .ThenInclude(tt => tt.Type)
                                          .ToList();
 
 
@@ -186,6 +188,11 @@ namespace Smakosfera.Services.Services
                                  PreparationTime = r.PreparationTime,
                                  CommunityRecipe = r.CommunityRecipe,
                                  LikeNumber = 0,
+                                 Types = r.Types.Select(i => new RecipeTypeDto
+                                 {
+                                     Name = i.Type.Name,
+                                     TypeId = i.TypeId
+                                 }).ToList(),
                                  Ingredients = r.Ingredients.Select(i => new RecipeIngredientDto
                                  {
                                      Name = i.Ingredient.Name,
@@ -207,6 +214,8 @@ namespace Smakosfera.Services.Services
         {
             var recipe = _DbContext.Recipes.Include(c => c.Ingredients)
                                            .ThenInclude(cc => cc.Ingredient)
+                                           .Include(t => t.Types)
+                                           .ThenInclude(tt => tt.Type)
                                            .SingleOrDefault(cc => cc.Id == recipeId);
 
             if (recipe is null)
@@ -222,6 +231,11 @@ namespace Smakosfera.Services.Services
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
                 CommunityRecipe = recipe.CommunityRecipe,
+                Types = recipe.Types.Select(i => new RecipeTypeDto
+                {
+                    Name = i.Type.Name,
+                    TypeId = i.TypeId
+                }).ToList(),
                 Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
                 {
                     Name = i.Ingredient.Name,
@@ -312,24 +326,6 @@ namespace Smakosfera.Services.Services
                 }
                 
             }
-
-            //try
-            //{
-            //    _DbContext.Recipes.Add(one);
-            //    _DbContext.SaveChanges();
-            //}
-            //catch (DbUpdateException ex)
-            //{
-            //    if (ex.InnerException is PostgresException postgresException)
-            //    {
-
-            //        throw new NotFoundException("ta sama nazwa");
-            //    }
-            //    else
-            //    {
-            //        throw new NotFoundException("nie ma takiego levelu trudnosci");
-            //    }
-            //}
 
         }
 
