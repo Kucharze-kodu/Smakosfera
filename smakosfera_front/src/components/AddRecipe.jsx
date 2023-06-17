@@ -4,6 +4,7 @@ import { urlRecipes } from "../endpoints";
 import { urlIngredient } from "../endpoints";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import Select from 'react-select';
 
 
 
@@ -12,6 +13,7 @@ const DodawaniePrzepisu = () => {
   const [Nazwa, setNazwa] = useState("");
   const [skladnik, setskladnik] = useState([{ nazwa: "", ilosc: "", jednostka: "" }]);
   const [trudnosc, setTrudnosc] = useState("");
+  const [selectedTypes, setSelectedTypes] = useState([]);
   const [opis, setOpis] = useState("");
   const [czas, setCzas] = useState("");
   const [ingredientList, setIngredientList] = useState([]);
@@ -62,6 +64,19 @@ const DodawaniePrzepisu = () => {
     setTrudnosc(event.target.value);
   };
 
+  const options = [
+    { value: 'Vegetarian'  , label: 'Vegetarian' },
+    { value: 2, label: 'Vegan' },
+    { value: 3, label: 'Meat' },
+    { value: 4, label: 'Fast food' },
+    { value: 5, label: 'Inne' },
+   
+  ];
+
+  const handleTypeSelect = (selectedOptions) => {
+    setSelectedTypes(selectedOptions.map((option) => option.value));
+  };
+
   const handleOpis = (event) => {
     setOpis(event.target.value);
   };
@@ -90,6 +105,7 @@ const DodawaniePrzepisu = () => {
           description: opis,
           difficultyLevelId: trudnosc,
           preparationTime: czas,
+          types: selectedTypes.map((type) => ({ typeId: type })),
           ingredients: skladnik.map(({ nazwa, ilosc, jednostka }) => ({
             name: nazwa,
             amount: ilosc,
@@ -107,6 +123,7 @@ const DodawaniePrzepisu = () => {
         setCzas("");
         setOpis("");
         setTrudnosc("");
+        setTyp("");
       } 
       else if (res.status === 201)
       {
@@ -115,6 +132,7 @@ const DodawaniePrzepisu = () => {
         setCzas("");
         setOpis("");
         setTrudnosc("");
+        setTyp("");
       }
       else {
         console.log("Błąd!");
@@ -181,7 +199,7 @@ const DodawaniePrzepisu = () => {
 
             <div>
               <div className={`${styles.paragraph} my-2 text-dimWhite`}>
-                Wybierz trudność przepisu:
+                Wybierz atrybuty przepisu:
               </div>
               <select
                 type="number"
@@ -194,6 +212,8 @@ const DodawaniePrzepisu = () => {
                 <option value={2}>Średnie</option>
                 <option value={3}>Trudne</option>
               </select>
+              
+              
 
               <input
                 type="number"
@@ -203,7 +223,20 @@ const DodawaniePrzepisu = () => {
                 className="xs:w-48 w-full xs:mt-0 mt-2 px-4 py-2 mx-1 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                 placeholder="Czas przygotowania:"
               />
+              
             </div>
+            <div>
+            <Select
+              isMulti
+              placeholder="Typy:"
+              className="w-full px-4 py-2 -++ rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+              options={options}
+              value={selectedTypes.map((type) => options.find((option) => option.value === type))}
+              getOptionLabel={(option) => option.label} 
+              onChange={handleTypeSelect}
+            />
+            </div>
+            
 
             <div className={`${styles.paragraph} my-2 text-dimWhite`}>
               Wybierz składniki:
