@@ -21,6 +21,9 @@ const ShowUserInfo = (prop) => {
   // Admin's token
   const { getResJsonToken } = useAuth();
 
+  // Admin's permission
+  const { getResJsonPermission } = useAuth();
+
   // Variable to redirect
   const navigate = useNavigate();
 
@@ -124,7 +127,14 @@ const ShowUserInfo = (prop) => {
   // Render
   return (
     <>
-      {!isPending && (
+      {getResJsonPermission() !== "Admin" && (
+        <>
+          <div className={`${styles.paragraph} my-48 xs:my-auto text-center text-dimWhite`}>
+            Nie masz uprawnień do wyświetlania tej strony!
+          </div>
+        </>
+      )}
+      {(!isPending && getResJsonPermission() === "Admin") && (
         <>
           <Link to="/home/admin-panel/users">
             <Button
@@ -287,7 +297,7 @@ const ShowUserInfo = (prop) => {
           )}
         </>
       )}
-      {isPending && (
+      {(isPending && getResJsonPermission() === "Admin") && (
         <div
           className={`${styles.paragraph} my-48 xs:my-auto items-center justify-center xs:justify-start text-center text-dimWhite`}
         >

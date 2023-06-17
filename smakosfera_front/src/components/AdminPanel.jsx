@@ -27,9 +27,9 @@ const AdminPanel = ({resetHideButton, setResetHideButton}) => {
 
   return (
     <>
-      {getResJsonPermission() === "Admin" ? (
+      {(getResJsonPermission() === "Admin" || getResJsonPermission() === "Moderator") ? (
         <>
-          {!hideButton && (
+          {(!hideButton && getResJsonPermission() === "Admin") && (
             <Link to="users">
               <Button
                 onClick={() => setHideButton(true)}

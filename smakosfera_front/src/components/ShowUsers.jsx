@@ -9,15 +9,15 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 
 const ShowUsers = (prop) => {
-  
   const button = prop.button;
   const navigator = useNavigate();
 
-  const handleRow = (idUser) =>{
+  const handleRow = (idUser) => {
     navigator(`/home/admin-panel/users/` + idUser);
-  }
+  };
 
   const { getResJsonToken } = useAuth();
+  const { getResJsonPermission } = useAuth();
 
   const [users, setUsers] = useState(null);
   const [error, setError] = useState(null);
@@ -44,7 +44,14 @@ const ShowUsers = (prop) => {
 
   return (
     <>
-      {!loading && (
+      {getResJsonPermission() !== "Admin" && (
+        <>
+          <div className={`${styles.paragraph} my-48 xs:my-auto text-center text-dimWhite`}>
+            Nie masz uprawnień do wyświetlania tej strony!
+          </div>
+        </>
+      )}
+      {(!loading && getResJsonPermission() === "Admin") && (
         <>
           <Link to="/home/admin-panel">
             <Button
@@ -94,8 +101,7 @@ const ShowUsers = (prop) => {
                         scope="row"
                         className="px-6 py-3 font-medium whitespace-nowrap text-white"
                       >
-                          <div className="w-[80px]">{user.id}</div>
-                        
+                        <div className="w-[80px]">{user.id}</div>
                       </td>
                       <td className="px-6 py-3">
                         <Link to={"/home/admin-panel/users/" + user.id}>
@@ -125,7 +131,7 @@ const ShowUsers = (prop) => {
         </>
       )}
 
-      {loading && (
+      {loading && getResJsonPermission() === "Admin" && (
         <div
           className={`${styles.paragraph} my-48 xs:my-auto items-center justify-center xs:justify-start text-center text-dimWhite`}
         >
