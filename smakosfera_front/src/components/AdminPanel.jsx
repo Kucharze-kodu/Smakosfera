@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styles } from "../style";
 import Button from "./Button";
 import ShowUsers from "./ShowUsers";
 import { useAuth } from "./AuthContext";
-import { Route, Routes, Link, useNavigate } from "react-router-dom";
+import { Route, Routes, Link, useNavigate, useLocation } from "react-router-dom";
 import { Suspense } from "react";
 import LoadingScreen from "./LoadingScreen";
 import ShowUserInfo from "./ShowUserInfo";
 
-const AdminPanel = () => {
+const AdminPanel = ({resetHideButton, setResetHideButton}) => {
+  const location = useLocation();
+
   const { getResJsonPermission } = useAuth();
 
   const [hideButton, setHideButton] = useState(false);
+
+  useEffect(()=>{
+    if(resetHideButton){
+      setHideButton(false);
+      setResetHideButton(false);
+    }
+    
+  }, [resetHideButton]);
 
   return (
     <>

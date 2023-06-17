@@ -6,29 +6,52 @@ import { avatar } from "../assets";
 import { useAuth } from "./AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ReactModal from "react-modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const ShowUserInfo = (prop) => {
+
+  // Function to return
   const button = prop.button;
+
+  // Url to get user's info
   const { idUser } = useParams();
   const url = urlUsers + "/" + idUser;
+
+  // Admin's token
   const { getResJsonToken } = useAuth();
+
+  // Variable to redirect
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(false);
+  // Variables for ban functionality
+  const [isOpenBanWindow, setIsOpenBanWindow] = useState(false);
   const [banTime, setBanTime] = useState(0);
 
-  const handleCloseModal = () => {
-    setIsOpen(false);
+  // Function to close ban window
+  const handleCloseBanWindow = () => {
+    setIsOpenBanWindow(false);
   };
 
+  // Variables for change permission functionality
+  const [isOpenPermissionWindow, setIsOpenPermissionWindow] = useState(false);
+  const [permission, setPermission] = useState("User");
+
+  // Function to close permission window
+  const handleClosePermissionWindow = () => {
+    setIsOpenPermissionWindow(false);
+  }
+
+  // Variables for user's data
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(true);
 
+  // Triggers
+  const [isBanTriggered, setIsBanTriggered] = useState(false);
+  const [isPermissionTriggered, setIsPermissionTriggered] = useState(false);
   
-
+  // Function to delete user
   const Delete = () => {
     fetch(url, {
       method: "DELETE",
@@ -41,8 +64,9 @@ const ShowUserInfo = (prop) => {
     });
   };
 
-  const Ban = () => {
-    handleCloseModal();
+  // Function to ban user
+  const Ban = useCallback(() => {
+    handleCloseBanWindow();
     axios
       .put(url, banTime, {
         headers: {
@@ -51,17 +75,35 @@ const ShowUserInfo = (prop) => {
         },
       })
       .then((response) => {
-        console.log(response);
-       
-        // Wykonaj odpowiednie działania na podstawie danych odpowiedzi
+        setIsBanTriggered(!isBanTriggered);
       })
       .catch((error) => {
         console.error(error);
-        // Obsłuż błąd żądania
       });
-  };
+  }, [getResJsonToken, handleCloseBanWindow, url, banTime]);
 
+  // Function to change permission
+  const ChangePermission = useCallback(() => {
+    handleClosePermissionWindow();
+    const permissionUrl = url + "/permission";
+    axios
+      .put(permissionUrl, permission, {
+        headers: {
+          Authorization: `Bearer ${getResJsonToken()}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setIsPermissionTriggered(!isPermissionTriggered);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [getResJsonToken, handleClosePermissionWindow, url, permission])
+
+  // Fetch user's data
   useEffect(() => {
+    button(true);
     axios
       .get(url, {
         headers: {
@@ -77,15 +119,15 @@ const ShowUserInfo = (prop) => {
       .catch((error) => {
         setError(error);
       });
-  }, [Ban]);
+  }, [isBanTriggered, isPermissionTriggered]);
 
+  // Render
   return (
     <>
       {!isPending && (
         <>
           <Link to="/home/admin-panel/users">
             <Button
-              onClick={() => {}}
               text="Powrót"
               padding="p-1"
               margin="mt-4 mx-4"
@@ -93,9 +135,10 @@ const ShowUserInfo = (prop) => {
             />
           </Link>
 
+          {/*Ban window*/}
           <ReactModal
-            isOpen={isOpen}
-            onRequestClose={handleCloseModal}
+            isOpen={isOpenBanWindow}
+            onRequestClose={() => handleCloseBanWindow()}
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
             contentLabel="Okienko"
             ariaHideApp={false}
@@ -115,7 +158,41 @@ const ShowUserInfo = (prop) => {
                 Zbanuj
               </button>
               <button
-                onClick={handleCloseModal}
+                onClick={() => handleCloseBanWindow()}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              >
+                Anuluj
+              </button>
+            </div>
+          </ReactModal>
+
+          {/*Permission window*/}
+          <ReactModal
+            isOpen={isOpenPermissionWindow}
+            onRequestClose={() => handleClosePermissionWindow()}
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+            contentLabel="Okienko"
+            ariaHideApp={false}
+          >
+            <div className="bg-white p-4 rounded-lg shadow-lg">
+              <h1 className="font-bold pb-2 text-center">Uprawnienia:</h1>
+              <select
+                value={permission}
+                onChange={(e) => setPermission(e.target.value)}
+                className="block w-full px-4 py-2 mb-3 border border-gray-300 bg-white text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="Admin">Admin</option>
+                <option value="Moderator">Moderator</option>
+                <option value="User">User</option>
+              </select>
+              <button
+                onClick={() => ChangePermission()}
+                className="px-4 py-2 mr-2 bg-green-600 text-white rounded hover:bg-green-800 focus:outline-none focus:bg-green-700"
+              >
+                Zatwierdź
+              </button>
+              <button
+                onClick={() => handleClosePermissionWindow()}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
                 Anuluj
@@ -186,7 +263,7 @@ const ShowUserInfo = (prop) => {
                   hover:border-black hover:outline-red  rounded-lg"
                 />
                 <Button
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => setIsOpenBanWindow(true)}
                   text="Zbanuj"
                   padding="p-1"
                   margin="mt-4 mx-4"
@@ -196,7 +273,7 @@ const ShowUserInfo = (prop) => {
                   hover:border-black hover:outline-green  rounded-lg"
                 />
                 <Button
-                  onClick={() => ChangePermission()}
+                  onClick={() => setIsOpenPermissionWindow(true)}
                   text="Zmień uprawnienia"
                   padding="p-1"
                   margin="mt-4 mx-4"

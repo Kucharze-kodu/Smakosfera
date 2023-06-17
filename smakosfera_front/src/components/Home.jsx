@@ -41,6 +41,12 @@ const Home = () => {
   const { getResJsonToken } = useAuth();
   const { getResJsonPermission } = useAuth();
 
+  // Admin panel reset state
+  const [resetHideButton, setResetHideButton] = useState(false);
+  const handleResetHideButton = () => {
+    setResetHideButton(true);
+  }
+
   // GET recipes
   useEffect(() => {
     axios
@@ -160,6 +166,7 @@ const Home = () => {
               {getResJsonPermission() === "Admin" && (
                 <Link to="/home/admin-panel">
                   <Button
+                    onClick={() => handleResetHideButton()}
                     text="Panel admina"
                     padding="p-1"
                     margin="mt-4 mx-4"
@@ -265,12 +272,13 @@ const Home = () => {
                   </Suspense>
                 }
               ></Route>
+              
               <Route
                 path="admin-panel/*"
                 element={
                   <Suspense fallback={<LoadingScreen />}>
                     {" "}
-                    <AdminPanel />{" "}
+                    <AdminPanel resetHideButton={resetHideButton} setResetHideButton={setResetHideButton}/>{" "}
                   </Suspense>
                 }
               ></Route>

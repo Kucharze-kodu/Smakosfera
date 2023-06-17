@@ -25,6 +25,7 @@ const ShowUsers = (prop) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    button(true);
     axios
       .get(urlUsers, {
         headers: {
@@ -40,7 +41,7 @@ const ShowUsers = (prop) => {
       .catch((error) => {
         setError(error);
       });
-  });
+  }, []);
 
   return (
     <>
