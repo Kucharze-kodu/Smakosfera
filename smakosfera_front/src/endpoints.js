@@ -4,7 +4,7 @@ export const API_URL = 'https://smakosfera-backend.azurewebsites.net';
 export const urlLogin = `${API_URL}/api/account/login`;
 export const urlRegister = `${API_URL}/api/account/register`;
 export const urlRecipes = `${API_URL}/api/recipe`;
-export const urlIngredient = `${API_URL}/api/Ingredient`;
+export const urlIngredient = `${API_URL}/api/ingredient`;
 export const urlAddIngredient = `${API_URL}/api/ingredient`;
 export const urlAccountInfo = `${API_URL}/api/account`;
 export const urlNameChange = `${API_URL}/api/account`;
@@ -19,3 +19,4 @@ export const urlFavoriteRecipes = `${API_URL}/api/recipe/recipe-like`;
 export const urlNotAcceptedRecipes = `${API_URL}/api/recipe/to-confirmed-all`
 export const urlNotAcceptedRecipeInfo = `${API_URL}/api/recipe/to-confirmed-detail`;
 export const urlAcceptRecipe = `${API_URL}/api/recipe/verification`;
+

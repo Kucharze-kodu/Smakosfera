@@ -39,6 +39,13 @@ namespace Smakosfera.Services.Services
                 throw new NotAcceptableException("Przepis nie zatwierdzony");
             }
 
+            var likes = _DbContext.Likes.ToList()
+            .Select(l => new LikeDto
+            {
+                RecipeId = l.RecipeId,
+                UserId = l.UserId
+            });
+
             var result = new RecipeResponseDto
             {
                 Id = recipeId,
@@ -47,6 +54,7 @@ namespace Smakosfera.Services.Services
                 DifficultyLevelId = recipe.DifficultyLevelId,
                 PreparationTime = recipe.PreparationTime,
                 CommunityRecipe = recipe.CommunityRecipe,
+                LikeNumber = likes.Count(l => l.RecipeId == recipe.Id),
                 Ingredients = recipe.Ingredients.Select(i => new RecipeIngredientDto
                 {
                     Name = i.Ingredient.Name,
