@@ -8,6 +8,7 @@ import { cooking_book } from "../assets";
 import ScrollAnimation from "react-animate-on-scroll";
 import { useAuth } from "./AuthContext";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
+import { urlLikes } from "../endpoints";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -42,7 +43,7 @@ const Recipes = () => {
   useEffect(() => {
     const fetchLikes = async () => {
       const likesPromises = recipes.map((recipe) =>
-        axios.get(`https://localhost:7000/api/like/counter/${recipe.id}`, {
+        axios.get(`${urlLikes}${recipe.id}`, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
             "Content-Type": "application/json",

@@ -59,6 +59,10 @@ export const AuthProvider = ({ children }) => {
     return resJsonToken;
   }
 
+  const getResJsonPermission = () => {
+    return resJsonPermission;
+  }
+
   // Delete cookies
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -76,7 +80,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     // send context betwwen diferent components
-    <AuthContext.Provider value={{ isLoggedIn, handleLogout, getResJsonName, getResJsonId, getResJsonToken }}>
+    <AuthContext.Provider value={{ isLoggedIn, handleLogout, getResJsonName, getResJsonId, getResJsonToken, getResJsonPermission }}>
       {children}
     </AuthContext.Provider>
   );
