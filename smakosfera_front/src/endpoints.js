@@ -15,3 +15,4 @@ export const urlAddComment = `${API_URL}/api/comment`;
 export const urlLikes = `${API_URL}/api/like/counter/`;
 export const urlUsers = `${API_URL}/api/user`;
 export const urlNewsletter = `${API_URL}/api/newsletter`;
+export const urlFavoriteRecipes = `${API_URL}/api/recipe/Recipe_Like`;

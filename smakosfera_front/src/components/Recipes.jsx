@@ -110,6 +110,9 @@ const Recipes = () => {
                       ></Button>
                     </i>
                   </Link>
+
+                  <div className = {`break-words p-1 text-white text-white`}>Ilość polubień: {recipe.likeNumber}</div>
+
                 </div>
               ))}
           </div>
