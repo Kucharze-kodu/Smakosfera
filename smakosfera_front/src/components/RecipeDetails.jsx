@@ -318,6 +318,14 @@ const RecipeDetails = ({ recipes }) => {
     }
   }
 
+  const displayAverageRating = () => {
+    if (averageRate == "0.0") {
+      return "Brak ocen";
+    } else {
+      return `Średnia ocena: ${averageRate}`;
+    }
+  }
+
 
   return (
     <div className="recipe_details flex flex-col overflow-auto xs:pb-0 pb-20">
@@ -373,7 +381,7 @@ const RecipeDetails = ({ recipes }) => {
             ))}
           </div>
           <div className={`${styles.heading3} text-white`}>
-            Średnia ocena: {averageRate}
+            {displayAverageRating()}
           </div>
         </div>
       </div>
