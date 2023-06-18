@@ -63,6 +63,14 @@ const MyAccount = () => {
             Zmień email
           </Link>
         </div>
+        <div className={`${styles.paragraph} text-dimWhite p-2 hover:text-white`}>
+          <Link
+            to="/changepassword"
+            className={`${styles.paragraph} my-1 cursor-pointer text-[24px] opacity-50`}
+            >
+            Zmień swoje hasło
+          </Link>
+        </div>
 
       </>
           ) : (

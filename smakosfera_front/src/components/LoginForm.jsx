@@ -127,7 +127,7 @@ const LoginForm = () => {
             Nie masz konta?
           </Link>
           <Link
-            to="/resetpassword"
+            to="/emailresetpassword"
             className={`${styles.paragraph} my-1 cursor-pointer opacity-50 text-dimWhite hover:text-white`}
           >
             Nie pamiętasz hasła?

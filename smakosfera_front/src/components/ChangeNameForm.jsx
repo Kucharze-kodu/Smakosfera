@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import axios from 'axios';
 import { urlNameChange } from "../endpoints";
+import { useCookies } from "react-cookie";
 
 const whiteSpaceText = '\u00A0';
 
-const RegisterForm = () => {
+const ChangeNameForm = () => {
   const[newName, setNewName] = useState("");
   const[newSurname, setNewSurname] = useState("");
   const[message, setMessage] = useState("");
@@ -19,34 +20,46 @@ const RegisterForm = () => {
     const { getResJsonToken } = useAuth();
     const { getResJsonId } = useAuth();
     const { handleLogout } = useAuth();
+    
+    const [cookieToken, setCookieToken] = useCookies(["resJson_token"]);
+    const [cookieName, setCookieName] = useCookies(["resJson_name"]);
+  
+      // current time
+      const currentDate = new Date();
+      // current time + 30 days
+      const expirationDate = new Date(
+        currentDate.getTime() + 24 * 60 * 60 * 1000 * 30);
 
-  let handleSubmit = async (e) => {
-    e.preventDefault();
-    try{
-      let res = await fetch(urlNameChange, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${getResJsonToken()}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({  
-          name: newName,
-          surname: newSurname,
-        }),
-      });
+    let handleSubmit = async (e) => {
+      e.preventDefault();
+      const newNameObj = {
+        name: newName,
+        surname: newSurname,
+      };
+      axios
+        .put(urlNameChange, newNameObj,{
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          }
+        })
+        .then((response) => {
+          setIsPopupOpen(true);
+          setCookieToken("resJson_token", response.data, {
+            path: "/",
+            expires: expirationDate,
+          });
+          setCookieName("resJson_name", newName, {
+            path: "/",
+            expires: expirationDate,
+          });
+        })
+        .catch((error) => {
+          console.log("Błąd: ", error);
+          setMessage("Coś poszło nie tak!");
+        })
+        };
 
-      // let resJson = await res.json();
-      
-      if(res.status === 200){
-        setIsPopupOpen(true);
-      }
-      else{
-        setMessage("Coś poszło nie tak!");
-      }
-    }
-     catch (error) {
-    }
-  };
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
       <div className="flex md:flex-row flex-col h-[90%] md:h-[75%] w-full border-[2px] border-white mx-5 lg:mx-48">
@@ -63,16 +76,13 @@ const RegisterForm = () => {
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Nazwa została zmieniona pomyślnie! Prosimy o ponowne zalogowanie się!
+                    Nazwa została zmieniona pomyślnie!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
                       {whiteSpaceText}
                     </div>
-                <div className="link-container"
-                onClick={handleLogout}
-                >
-                  
+                <div className="link-container" >
                   <Link
                     to="/home/my-account"
                     className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
@@ -136,4 +146,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ChangeNameForm;

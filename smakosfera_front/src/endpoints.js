@@ -9,7 +9,8 @@ export const urlAddIngredient = `${API_URL}/api/ingredient`;
 export const urlAccountInfo = `${API_URL}/api/account`;
 export const urlNameChange = `${API_URL}/api/account`;
 export const urlEmailChange = `${API_URL}/api/account`;
-export const urlResetPassowrd = `${API_URL}/api/account/forgot-password`;
+export const urlResetPassword = `${API_URL}/api/account/forgot-password`;
+export const urlResetPassword2 = `${API_URL}/api/account/reset-password/`;
 export const urlComments = `${API_URL}/api/comment/recipes/`;
 export const urlAddComment = `${API_URL}/api/comment`;
 export const urlLikes = `${API_URL}/api/like/counter/`;
@@ -19,4 +20,5 @@ export const urlFavoriteRecipes = `${API_URL}/api/recipe/recipe-like`;
 export const urlNotAcceptedRecipes = `${API_URL}/api/recipe/to-confirmed-all`
 export const urlNotAcceptedRecipeInfo = `${API_URL}/api/recipe/to-confirmed-detail`;
 export const urlAcceptRecipe = `${API_URL}/api/recipe/verification`;
+export const urlPasswordChange = `${API_URL}/api/account/password`;
 

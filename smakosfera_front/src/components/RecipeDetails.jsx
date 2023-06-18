@@ -320,7 +320,7 @@ const RecipeDetails = ({ recipes }) => {
   }
 
   const displayAverageRating = () => {
-    if (averageRate == "0,0") {
+    if (averageRate == "0,0" || averageRate == "0.0") {
       return "Brak ocen";
     } else {
       return `Średnia ocena: ${averageRate}`;
