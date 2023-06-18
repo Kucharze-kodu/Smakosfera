@@ -11,7 +11,6 @@ namespace Smakosfera.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/rate")]
-    [Authorize]
     public class RateController : ControllerBase
     {
         private readonly IRateService _rateService;
@@ -38,6 +37,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult SetRate([FromBody] RateDto rateDto)
         {
             _rateService.Set(rateDto);
@@ -46,6 +46,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpDelete("{RecipeId}")]
+        [Authorize]
         public ActionResult DeleteRate([FromRoute] int RecipeId)
         {
             _rateService.DeleteByRecipeId(RecipeId);
