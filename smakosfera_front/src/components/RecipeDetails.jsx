@@ -6,7 +6,8 @@ import axios from "axios";
 import { useAuth } from "./AuthContext";
 import Button from "./Button";
 import { API_URL } from "../endpoints";
-import { BsHeartFill } from "react-icons/bs";
+import { IconContext } from "react-icons";
+import { BsHeartFill, BsFillStarFill } from "react-icons/bs";
 
 const RecipeDetails = ({ recipes }) => {
   // extract id of recipe from the URL
@@ -15,6 +16,9 @@ const RecipeDetails = ({ recipes }) => {
   const urlAddComment = `${API_URL}/api/comment`;
   const urlAddLike = `${API_URL}/api/like/${recipeId}`;
   const urlGetLikes = `${API_URL}/api/like/recipes/${recipeId}`;
+  const urlRate = `${API_URL}/api/rate`;
+  const urlAverageRate = `${API_URL}/api/rate/average/${recipeId}`
+  const urlRemoveRate = `${API_URL}/api/rate/${recipeId}`;
 
   const { getResJsonName } = useAuth();
   const { getResJsonId } = useAuth();
@@ -26,6 +30,8 @@ const RecipeDetails = ({ recipes }) => {
   const [lastCommentCaption, setLastCommentCaption] = useState(null);
   const [showLastCommentCaption, setShowLastCommentCaption] = useState(true);
   const [likeNumber, setLikeNumber] = useState(0);
+  const [averageRate, setAverageRate] = useState("");
+  const [userRate, setUserRate] = useState(0);
 
   // find a recipe with id...
   const recipe = recipes.find((recipe) => recipe.id === parseInt(recipeId));
@@ -65,6 +71,114 @@ const RecipeDetails = ({ recipes }) => {
         console.log("Błąd przy pobieraniu liczby polubień: ", error);
       });
   }, [recipeId]);
+
+    // GET average rate
+    useEffect(() => {
+      axios
+        .get(urlAverageRate, {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          const rate = response.data.averageRating;
+          // Update the average rate in the state
+          setAverageRate(rate);
+        })
+        .catch((error) => {
+          console.log("Błąd przy pobieraniu średniej oceny: ", error);
+        });
+    }, [recipeId]);
+  
+    // GET user rating
+    useEffect(() => {
+      axios
+        .get(urlRate, {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          const rate = response.data.rating;
+          // Update the user rate in the state
+          setUserRate(rate);
+        })
+        .catch((error) => {
+          console.log("Błąd przy pobieraniu oceny użytkownika: ", error);
+        });
+    }, [recipeId]);
+
+  const handleRate = (newRate) => {
+    // Create a new rate object
+
+    if (newRate == userRate) {
+      var request = axios
+        .delete(urlRemoveRate, {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+    }
+    else {
+      const newRateObj = {
+        recipeId: recipeId,
+        rating: newRate,
+      };
+
+      var request = axios
+        .post(urlRate, newRateObj, {
+          headers: {
+            Authorization: `Bearer ${getResJsonToken()}`,
+            "Content-Type": "application/json",
+          },
+        })
+    }
+
+    request.then((response) => {
+        const getRating = () => {
+          axios.get(urlRate,{
+            headers: {
+              Authorization: `Bearer ${getResJsonToken()}`,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            const rate = response.data.rating;
+            setUserRate(rate);
+          })
+          .catch((error) => {
+            console.log("Błąd przy pobieraniu oceny użytkownika: ", error);
+          });
+        };
+        // update user rating
+        getRating();
+        const getAverageRating = () => {
+          axios.get(urlAverageRate, {
+            headers: {
+              Authorization: `Bearer ${getResJsonToken()}`,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            const rate = response.data.averageRating;
+            setAverageRate(rate);
+          })
+          .catch((error) => {
+            console.log("Błąd przy pobieraniu średniej oceny użytkownika: ", error);
+          });
+        };
+        // update average rating
+        getAverageRating();
+      })
+      .catch((error) => {
+        console.log("Błąd przy dodaniu oceny: ", error);
+      });
+  }
+
+
 
   // Function to handle adding a like
   const handleLike = () => {
@@ -108,6 +222,7 @@ const RecipeDetails = ({ recipes }) => {
         console.log("Błąd przy dodaniu polubienia: ", er);
       });
   };
+
 
   // Function to handle comment input change
   const handleCommentChange = (e) => {
@@ -189,6 +304,16 @@ const RecipeDetails = ({ recipes }) => {
     );
   }
 
+  const handleRatingSymbol = (rating) => {
+    if(rating > userRate) {
+      return "white";
+    }
+    else {
+      return "gold";
+    }
+  }
+
+
   return (
     <div className="recipe_details flex flex-col overflow-auto xs:pb-0 pb-20">
       <div className="flex flex-col text-center items-center ">
@@ -229,6 +354,21 @@ const RecipeDetails = ({ recipes }) => {
               </div>
               <div className={`text-[24px] px-2`}>{likeNumber.length}</div>
             </div>{" "}
+          </div>
+          <div className="flex px-2 justify-center">
+            {[1, 2, 3, 4, 5].map((rating) => (
+            <div
+              onClick={() => handleRate(rating)}
+              className={`${styles.heading} scale-50 no-border rounded-lg cursor-pointer`}
+            >
+              <IconContext.Provider value={{color: handleRatingSymbol(rating)}}>
+                <BsFillStarFill />
+              </IconContext.Provider>
+            </div>
+            ))}
+          </div>
+          <div className={`${styles.heading3} text-white`}>
+            Średnia ocena: {averageRate}
           </div>
         </div>
       </div>
