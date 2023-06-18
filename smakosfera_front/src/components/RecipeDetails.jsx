@@ -111,9 +111,9 @@ const RecipeDetails = ({ recipes }) => {
     }, [recipeId]);
 
   const handleRate = (newRate) => {
-    // Create a new rate object
-
+    // check whether to set or delete rating
     if (newRate == userRate) {
+      // DELETE rating
       var request = axios
         .delete(urlRemoveRate, {
           headers: {
@@ -123,11 +123,12 @@ const RecipeDetails = ({ recipes }) => {
         })
     }
     else {
+       // Create a new rate object
       const newRateObj = {
         recipeId: recipeId,
         rating: newRate,
       };
-
+      // POST rating
       var request = axios
         .post(urlRate, newRateObj, {
           headers: {
@@ -137,6 +138,7 @@ const RecipeDetails = ({ recipes }) => {
         })
     }
 
+    // Update rating data regardless of used request
     request.then((response) => {
         const getRating = () => {
           axios.get(urlRate,{
@@ -304,6 +306,7 @@ const RecipeDetails = ({ recipes }) => {
     );
   }
 
+  // Function to return appropriate rating symbol color based on given rating
   const handleRatingSymbol = (rating) => {
     if(rating > userRate) {
       return "white";
