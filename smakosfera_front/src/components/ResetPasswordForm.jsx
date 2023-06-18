@@ -1,49 +1,42 @@
 import { styles } from "../style";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { logo } from "../assets";
-import { useEffect, useState } from "react";
-import { useAuth } from "./AuthContext";
-import { urlResetPassowrd } from "../endpoints";
+import { useState } from "react";
 import axios from 'axios';
+import { urlResetPassword2 } from "../endpoints";
 
 const whiteSpaceText = '\u00A0';
 
-const RegisterForm = () => {
-  const[newEmail, setNewEmail] = useState("");
+const ResetPasswordForm = () => {
+  const[password, setPassword] = useState("");
+  const[confirmPassword, setConfrimPassword] = useState("");
   const[message, setMessage] = useState("");
   const[isPopupOpen, setIsPopupOpen] = useState(false);
+  const{token} = useParams();
 
-    // Check if user is logged in
-    const { isLoggedIn } = useAuth();
-    const { getResJsonToken } = useAuth();
-    const { getResJsonId } = useAuth();
-  
-  let handleSubmit = async (e) => {
-    e.preventDefault();
-    try{
-      let res = await fetch(urlResetPassowrd, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getResJsonToken()}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({  
-          email: newEmail,
-        }),
-      });
-
-      // let resJson = await res.json();
-      
-      if(res.status === 200){
-        setIsPopupOpen(true);
-      }
-      else{
-        setMessage("Konto o takim emailu nie istnieje!");
-      }
-    }
-     catch (error) {
-    }
-  };
+    let handleSubmit = async (e) => {
+      e.preventDefault();
+      const newPasswordObj = {
+        newPassword: password,
+        confirmNewPassword: confirmPassword,
+      };
+      axios
+        .post(urlResetPassword2 + token, newPasswordObj,{
+          headers: {
+            Authorization:{
+                "Content-Type": "application/json",
+              }
+            }
+        })
+        .then((response) => {
+          console.log(response.data);
+          setIsPopupOpen(true);
+        })
+        .catch((error) => {
+          console.log("Błąd: ", error);
+          setMessage("Coś poszło nie tak!");
+        })
+        };
 
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
@@ -61,7 +54,7 @@ const RegisterForm = () => {
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Na twoją skrzynkę został wysłany link resetujący hasło!
+                    Hasło zostało zmienione pomyślnie!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
@@ -69,7 +62,7 @@ const RegisterForm = () => {
                     </div>
                 <div className="link-container">
                   <Link
-                    to="/"
+                    to="/login"
                     className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
                   >
                     OK
@@ -79,18 +72,30 @@ const RegisterForm = () => {
             </div>
           ) : (
         <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
-        <div className={`${styles.heading4} text-white `}>Podaj swój email!</div>
+        <div className={`${styles.heading4} text-white `}>Zmień hasło!</div>
         <input
-              type="email"
-              value={newEmail}
-              id="email"
-              name="email"
-              title="Email:"
+                type="password"
+                value={password}
+                id="password2"
+                name="password"
+                title="Nowe hasło:"
+                className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
+                placeholder="Nowe hasło:"
+                maxLength={256}
+                required
+                onChange={(e) => setPassword(e.target.value)}
+            ></input>
+        <input
+              type="password"
+              value={confirmPassword}
+              id="password3"
+              name="password"
+              title="Powtórz nowe hasło:"
               className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
-              placeholder="Nowy Email:"
+              placeholder="Powtórz nowe hasło:"
               maxLength={256}
               required
-              onChange={(e) => setNewEmail(e.target.value)}
+              onChange={(e) => setConfrimPassword(e.target.value)}
             ></input>
             <button
                 type="submit"
@@ -100,12 +105,13 @@ const RegisterForm = () => {
               </button>
               <div className="">{message ? <p>{message}</p> : null}</div>
               <Link
-              to="/home/my-account"
+              to="/login"
               className={`${styles.paragraph} my-1 cursor-pointer opacity-50`}
               >
               Powrót
               </Link>
               </form>
+
               )}
         </div>
       </div>
@@ -113,4 +119,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ResetPasswordForm;
