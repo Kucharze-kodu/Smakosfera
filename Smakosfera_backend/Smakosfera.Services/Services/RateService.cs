@@ -49,7 +49,7 @@ namespace Smakosfera.Services.Services
             _ = _dbContext.Recipes.ToList().FindAll(r => r.Id == RecipeId)
                ?? throw new BadRequestException("Podany przepis nie istnieje");
 
-            var averageRating = (ratesForRecipe is null) ?
+            var averageRating = (ratesForRecipe.Any() == false) ?
                 0.0 :
                 ratesForRecipe.Select(r => r.Number).Average();
 

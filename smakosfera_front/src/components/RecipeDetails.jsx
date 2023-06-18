@@ -111,10 +111,12 @@ const RecipeDetails = ({ recipes }) => {
     }, [recipeId]);
 
   const handleRate = (newRate) => {
+
+    let request;
     // check whether to set or delete rating
     if (newRate == userRate) {
       // DELETE rating
-      var request = axios
+      request = axios
         .delete(urlRemoveRate, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
@@ -129,7 +131,7 @@ const RecipeDetails = ({ recipes }) => {
         rating: newRate,
       };
       // POST rating
-      var request = axios
+      request = axios
         .post(urlRate, newRateObj, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
