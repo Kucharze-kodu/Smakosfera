@@ -16,7 +16,8 @@ const RecipeDetails = ({ recipes }) => {
   const urlAddComment = `${API_URL}/api/comment`;
   const urlAddLike = `${API_URL}/api/like/${recipeId}`;
   const urlGetLikes = `${API_URL}/api/like/recipes/${recipeId}`;
-  const urlRate = `${API_URL}/api/rate`;
+  const urlGetRate = `${API_URL}/api/rate/${recipeId}`;
+  const urlPostRate = `${API_URL}/api/rate`;
   const urlAverageRate = `${API_URL}/api/rate/average/${recipeId}`
   const urlRemoveRate = `${API_URL}/api/rate/${recipeId}`;
 
@@ -94,7 +95,7 @@ const RecipeDetails = ({ recipes }) => {
     // GET user rating
     useEffect(() => {
       axios
-        .get(urlRate, {
+        .get(urlGetRate, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
             "Content-Type": "application/json",
@@ -132,7 +133,7 @@ const RecipeDetails = ({ recipes }) => {
       };
       // POST rating
       request = axios
-        .post(urlRate, newRateObj, {
+        .post(urlPostRate, newRateObj, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
             "Content-Type": "application/json",
@@ -143,7 +144,7 @@ const RecipeDetails = ({ recipes }) => {
     // Update rating data regardless of used request
     request.then((response) => {
         const getRating = () => {
-          axios.get(urlRate,{
+          axios.get(urlGetRate,{
             headers: {
               Authorization: `Bearer ${getResJsonToken()}`,
               "Content-Type": "application/json",
@@ -319,7 +320,7 @@ const RecipeDetails = ({ recipes }) => {
   }
 
   const displayAverageRating = () => {
-    if (averageRate == "0.0") {
+    if (averageRate == "0,0") {
       return "Brak ocen";
     } else {
       return `Średnia ocena: ${averageRate}`;

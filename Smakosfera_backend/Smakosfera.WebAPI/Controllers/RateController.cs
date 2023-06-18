@@ -21,10 +21,10 @@ namespace Smakosfera.WebAPI.Controllers
             _rateService = rateService;
         }
 
-        [HttpGet()]
-        public ActionResult<UserRateDto> Get()
+        [HttpGet("{RecipeId}")]
+        public ActionResult<UserRateDto> Get([FromRoute] int RecipeId)
         {
-            var rating = _rateService.GetRating();
+            var rating = _rateService.GetRating(RecipeId);
 
             return Ok(rating);
         }

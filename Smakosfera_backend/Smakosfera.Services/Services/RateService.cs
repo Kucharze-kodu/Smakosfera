@@ -25,12 +25,12 @@ namespace Smakosfera.Services.Services
             _userContextService = userContextService;
         }
 
-        public UserRateDto GetRating()
+        public UserRateDto GetRating(int RecipeId)
         {
             var userId = _userContextService.GetUserId;
-            var rate = _dbContext.Rates.SingleOrDefault(r => r.UserId == userId);
+            var rate = _dbContext.Rates.SingleOrDefault(r => r.UserId == userId && r.RecipeId == RecipeId);
 
-            var rating = ((rate is null) ? 0 : rate.Number);
+            var rating = (rate is null) ? 0 : rate.Number;
 
             var result = new UserRateDto
             {
