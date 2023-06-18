@@ -443,7 +443,7 @@ const RecipeDetails = ({ recipes }) => {
                   <div className={`${styles.heading3} text-white`}>
                     {comment.userName}
                   </div>
-                  <div className={`${styles.paragraph2} text-dimWhite`}>
+                  <div className={`${styles.paragraph2} text-dimWhite whitespace-nowrap`}>
                     {comment.creationDate}
                   </div>
                 </div>
