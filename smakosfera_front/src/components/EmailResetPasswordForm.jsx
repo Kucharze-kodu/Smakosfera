@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { logo } from "../assets";
 import { useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { urlEmailChange } from "../endpoints";
+import { urlResetPassword } from "../endpoints";
 import axios from 'axios';
-import { useCookies } from "react-cookie";
 
 const whiteSpaceText = '\u00A0';
 
-const ChangeEmailForm = () => {
+const EmailResetPassword = () => {
   const[newEmail, setNewEmail] = useState("");
   const[message, setMessage] = useState("");
   const[isPopupOpen, setIsPopupOpen] = useState(false);
@@ -18,40 +17,33 @@ const ChangeEmailForm = () => {
     const { isLoggedIn } = useAuth();
     const { getResJsonToken } = useAuth();
     const { getResJsonId } = useAuth();
-    const { handleLogout } = useAuth();
-    
-    const [cookieToken, setCookieToken] = useCookies(["resJson_token"]);
   
-      // current time
-      const currentDate = new Date();
-      // current time + 30 days
-      const expirationDate = new Date(
-        currentDate.getTime() + 24 * 60 * 60 * 1000 * 30);
-
   let handleSubmit = async (e) => {
     e.preventDefault();
-    const newEmailObj = {
-      email: newEmail,
-    };
-    axios
-      .put(urlEmailChange, newEmailObj,{
+    try{
+      let res = await fetch(urlResetPassword, {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${getResJsonToken()}`,
           "Content-Type": "application/json",
-        }
-      })
-      .then((response) => {
+        },
+        body: JSON.stringify({  
+          email: newEmail,
+        }),
+      });
+
+      // let resJson = await res.json();
+      
+      if(res.status === 200){
         setIsPopupOpen(true);
-        setCookieToken("resJson_token", response.data, {
-          path: "/",
-          expires: expirationDate,
-        });
-      })
-      .catch((error) => {
-        console.log("Błąd: ", error);
-        setMessage("Coś poszło nie tak!");
-      })
-      };
+      }
+      else{
+        setMessage("Konto o takim emailu nie istnieje!");
+      }
+    }
+     catch (error) {
+    }
+  };
 
   return (
     <div className={`${styles.background} flex flex-row items-center`}>
@@ -69,7 +61,7 @@ const ChangeEmailForm = () => {
               <div className="popup-content">
                 <div className="text-container">
                   <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
-                    Email został zmieniony pomyślnie!
+                    Na twoją skrzynkę został wysłany link resetujący hasło!
                     </div>
                 </div>
                     <div style={{ lineHeight: '1.75' }} className={`${styles.heading5}`}>
@@ -77,19 +69,17 @@ const ChangeEmailForm = () => {
                     </div>
                 <div className="link-container">
                   <Link
-                    to="/home/my-account"
+                    to="/"
                     className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
                   >
-                    
                     OK
                   </Link>
                 </div>
               </div>
             </div>
           ) : (
-            isLoggedIn() ? (
         <form onSubmit={handleSubmit} className="flex flex-col w-[75%] ">
-        <div className={`${styles.heading4} text-white `}>Zmień email!</div>
+        <div className={`${styles.heading4} text-white `}>Podaj swój email!</div>
         <input
               type="email"
               value={newEmail}
@@ -97,7 +87,7 @@ const ChangeEmailForm = () => {
               name="email"
               title="Email:"
               className={`${styles.paragraph3} bg-dark border-[1px] text-left pl-2 mr-1 mt-3 border-dimWhite w-[100%] text-black hover:text-white focus:text-white hover:bg-black focus:bg-black`}
-              placeholder="Nowy email:"
+              placeholder="Twój email:"
               maxLength={256}
               required
               onChange={(e) => setNewEmail(e.target.value)}
@@ -106,7 +96,7 @@ const ChangeEmailForm = () => {
                 type="submit"
                 className={`${styles.paragraph} p-5 mt-3 sm:min-w-[25%] min-w-[100%] border-[1px] focus:border-white hover:border-white border-dimWhite w-[100%] hover:bg-black bg-black rounded-[15px] `}
               >
-                Zmień!
+                Wyślij!
               </button>
               <div className="">{message ? <p>{message}</p> : null}</div>
               <Link
@@ -116,11 +106,6 @@ const ChangeEmailForm = () => {
               Powrót
               </Link>
               </form>
-              ) : (
-                <div className={`${styles.paragraph} my-48 xs:my-auto text-dimWhite`}>
-                  Nie masz uprawnień do wyświetlania tej strony!
-                </div>
-              )
               )}
         </div>
       </div>
@@ -128,4 +113,4 @@ const ChangeEmailForm = () => {
   );
 };
 
-export default ChangeEmailForm;
+export default EmailResetPassword;
