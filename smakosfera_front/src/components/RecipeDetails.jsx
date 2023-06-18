@@ -16,7 +16,8 @@ const RecipeDetails = ({ recipes }) => {
   const urlAddComment = `${API_URL}/api/comment`;
   const urlAddLike = `${API_URL}/api/like/${recipeId}`;
   const urlGetLikes = `${API_URL}/api/like/recipes/${recipeId}`;
-  const urlRate = `${API_URL}/api/rate`;
+  const urlGetRate = `${API_URL}/api/rate/${recipeId}`;
+  const urlPostRate = `${API_URL}/api/rate`;
   const urlAverageRate = `${API_URL}/api/rate/average/${recipeId}`
   const urlRemoveRate = `${API_URL}/api/rate/${recipeId}`;
 
@@ -94,7 +95,7 @@ const RecipeDetails = ({ recipes }) => {
     // GET user rating
     useEffect(() => {
       axios
-        .get(urlRate, {
+        .get(urlGetRate, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
             "Content-Type": "application/json",
@@ -111,10 +112,12 @@ const RecipeDetails = ({ recipes }) => {
     }, [recipeId]);
 
   const handleRate = (newRate) => {
+
+    let request;
     // check whether to set or delete rating
     if (newRate == userRate) {
       // DELETE rating
-      var request = axios
+      request = axios
         .delete(urlRemoveRate, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
@@ -129,8 +132,8 @@ const RecipeDetails = ({ recipes }) => {
         rating: newRate,
       };
       // POST rating
-      var request = axios
-        .post(urlRate, newRateObj, {
+      request = axios
+        .post(urlPostRate, newRateObj, {
           headers: {
             Authorization: `Bearer ${getResJsonToken()}`,
             "Content-Type": "application/json",
@@ -141,7 +144,7 @@ const RecipeDetails = ({ recipes }) => {
     // Update rating data regardless of used request
     request.then((response) => {
         const getRating = () => {
-          axios.get(urlRate,{
+          axios.get(urlGetRate,{
             headers: {
               Authorization: `Bearer ${getResJsonToken()}`,
               "Content-Type": "application/json",
@@ -316,6 +319,14 @@ const RecipeDetails = ({ recipes }) => {
     }
   }
 
+  const displayAverageRating = () => {
+    if (averageRate == "0,0") {
+      return "Brak ocen";
+    } else {
+      return `Średnia ocena: ${averageRate}`;
+    }
+  }
+
 
   return (
     <div className="recipe_details flex flex-col overflow-auto xs:pb-0 pb-20">
@@ -371,7 +382,7 @@ const RecipeDetails = ({ recipes }) => {
             ))}
           </div>
           <div className={`${styles.heading3} text-white`}>
-            Średnia ocena: {averageRate}
+            {displayAverageRating()}
           </div>
         </div>
       </div>

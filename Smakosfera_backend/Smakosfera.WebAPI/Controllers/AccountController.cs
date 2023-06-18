@@ -82,8 +82,8 @@ namespace Smakosfera.WebAPI.Controllers
         [HttpPut("password")]
         public ActionResult ChangePassword([FromBody] PasswordDto dto)
         {
-            _accountService.ChangePassword(dto);
-            return Ok("Pomyślnie zmieniono hasło");
+            var tokenDto = _accountService.ChangePassword(dto);
+            return Ok(tokenDto);
         }
     }
 }

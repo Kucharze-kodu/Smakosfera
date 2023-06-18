@@ -10,7 +10,7 @@ namespace Smakosfera.Services.Interfaces
 {
     public interface IRateService
     {
-        UserRateDto GetRating();
+        UserRateDto GetRating(int RecipeId);
 
         RecipeRateDto GetAverage(int RecipeId);
 

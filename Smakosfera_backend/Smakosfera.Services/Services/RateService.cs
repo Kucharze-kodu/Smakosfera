@@ -25,12 +25,12 @@ namespace Smakosfera.Services.Services
             _userContextService = userContextService;
         }
 
-        public UserRateDto GetRating()
+        public UserRateDto GetRating(int RecipeId)
         {
             var userId = _userContextService.GetUserId;
-            var rate = _dbContext.Rates.SingleOrDefault(r => r.UserId == userId);
+            var rate = _dbContext.Rates.SingleOrDefault(r => r.UserId == userId && r.RecipeId == RecipeId);
 
-            var rating = ((rate is null) ? 0 : rate.Number);
+            var rating = (rate is null) ? 0 : rate.Number;
 
             var result = new UserRateDto
             {
@@ -49,7 +49,7 @@ namespace Smakosfera.Services.Services
             _ = _dbContext.Recipes.ToList().FindAll(r => r.Id == RecipeId)
                ?? throw new BadRequestException("Podany przepis nie istnieje");
 
-            var averageRating = (ratesForRecipe is null) ?
+            var averageRating = (ratesForRecipe.Any() == false) ?
                 0.0 :
                 ratesForRecipe.Select(r => r.Number).Average();
 
