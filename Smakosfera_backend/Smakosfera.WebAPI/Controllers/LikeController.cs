@@ -11,7 +11,6 @@ namespace Smakosfera.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/like")]
-    [Authorize]
     public class LikeController : ControllerBase
     {
         private readonly ILikeService _likeService;
@@ -46,6 +45,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPut("{RecipeId}")]
+        [Authorize]
         public ActionResult ToggleLike([FromRoute] int RecipeId)
         {
             _likeService.Toggle(RecipeId);

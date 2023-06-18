@@ -11,7 +11,6 @@ namespace Smakosfera.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/comment")]
-    [Authorize]
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -37,6 +36,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult PostComment([FromBody] CommentDto comment)
         {
             _commentService.Add(comment);
@@ -44,6 +44,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpPut("{CommentId}")]
+        [Authorize]
         public ActionResult Update([FromRoute] int CommentId, [FromBody] CommentDto comment)
         {
             _commentService.Update(CommentId, comment);
@@ -51,6 +52,7 @@ namespace Smakosfera.WebAPI.Controllers
         }
 
         [HttpDelete("{CommentId}")]
+        [Authorize]
         public ActionResult Delete(int CommentId)
         {
             _commentService.Delete(CommentId);
