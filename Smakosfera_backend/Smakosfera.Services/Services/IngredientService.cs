@@ -63,14 +63,13 @@ namespace Smakosfera.Services.Services
         }
 
 
-        public IEnumerable<Ingredient> Browse()
+        public IEnumerable<IngredientDto> Browse()
         {
             var date = _DbContext.Ingredients.ToList().FindAll(r => r.IsConfirmed == true);
 
 
-            var result = date.Select(r => new Ingredient()
-                             {
-                                 Id = r.Id,      
+            var result = date.Select(r => new IngredientDto()
+                             { 
                                  Name = r.Name
                              });
 

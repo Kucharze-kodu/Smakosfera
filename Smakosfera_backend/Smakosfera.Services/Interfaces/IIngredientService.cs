@@ -11,7 +11,7 @@ namespace Smakosfera.Services.Interfaces
     public interface IIngredientService
     {
         IngredientDto GetIngredient(int ingredientId);
-        IEnumerable<Ingredient> Browse();
+        IEnumerable<IngredientDto> Browse();
         void AddIngredient(IngredientDto dto);
         void EditIngredient(int Id, IngredientDto dto);
         void DeleteIngredient(int Id);
