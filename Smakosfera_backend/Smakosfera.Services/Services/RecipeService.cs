@@ -302,7 +302,7 @@ namespace Smakosfera.Services.Services
                         });
                         _DbContext.SaveChanges();
                     }
-                }
+                }   
             }
 
             if (dto.Types != null)
@@ -310,7 +310,6 @@ namespace Smakosfera.Services.Services
                
                 foreach (var typeOne in dto.Types) 
                 {
-                    var isRecipeTypes = _DbContext.Types.SingleOrDefault(r => r.Id == typeOne.TypeId).Id;
                     var isRecord  = _DbContext.Recipes_Types
                                     .Any(r=> r.TypeId  == typeOne.TypeId && r.RecipeId == recipeId);
 
