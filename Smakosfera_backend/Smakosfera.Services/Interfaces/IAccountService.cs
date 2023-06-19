@@ -14,7 +14,7 @@ namespace Smakosfera.Services.Interfaces
         void Delete();
         UserLoginResponseDto Login(UserLoginDto dto);
         void RegisterUser(UserRegisterDto dto);
-        void VerifyUser(string token);
+        string VerifyUser(string token);
         void ForgotPassword(UserForgotPasswordDto dto);
         void ResetPassword(string token, UserResetPasswordDto dto);
         string ChangePassword(PasswordDto dto);
