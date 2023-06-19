@@ -61,7 +61,7 @@ namespace Smakosfera.WebAPI.Controllers
         public ActionResult VerifyAccount([FromRoute] string token)
         {
             var url = _accountService.VerifyUser(token);
-            return Redirect(url);
+            return Ok("Konto zostało aktywowane");
         }
 
         [HttpPost("forgot-password")]
