@@ -163,7 +163,7 @@ namespace Smakosfera.Services.Services
 
         }
 
-        public void VerifyUser(string token)
+        public string VerifyUser(string token)
         {
             var user = _dbContext.Users
                 .FirstOrDefault(r => r.VerifacationToken == token);
@@ -176,6 +176,9 @@ namespace Smakosfera.Services.Services
             user.VerifiedAt = DateTime.UtcNow;
             user.VerifacationToken = null;
             _dbContext.SaveChanges();
+
+            var urlFront = _configuration.GetSection("Url").GetSection("URLFrontend").Value + "/login";
+            return urlFront;
         }
 
         public void ForgotPassword(UserForgotPasswordDto dto)
